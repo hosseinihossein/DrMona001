@@ -35,3 +35,86 @@ body {
   margin: 0;
   height: 100%;
 }
+
+body.dark-mode{
+  color-scheme: dark;
+}
+
+.noPaddingBtn{
+  @include mat.button-overrides((
+    protected-horizontal-padding:0,
+    protected-icon-spacing:0,
+    protected-icon-offset:0,
+    filled-horizontal-padding:0,
+    filled-icon-spacing:0,
+    filled-icon-offset:0,
+    text-horizontal-padding:0,
+    text-icon-spacing:0,
+    text-icon-offset:0,
+    outlined-horizontal-padding:0,
+    outlined-icon-spacing:0,
+    outlined-icon-offset:0,
+    tonal-horizontal-padding:0,
+    tonal-icon-spacing:0,
+    tonal-icon-offset:0,
+  ));
+}
+
+.warning{
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-error),
+  ));
+}
+
+/*app-nav-bar {
+  @include mat.toolbar-overrides((
+    standard-height:56px,
+  ));
+}
+
+.navbar-matMenu{
+  @include mat.menu-overrides((
+    item-hover-state-layer-color: var(--mat-sys-surface-container-low),
+    item-focus-state-layer-color: var(--mat-sys-surface-container-low),
+    container-color: var(--mat-sys-primary-container),
+    divider-color: var(--mat-sys-on-primary-container),
+  ));
+}*/
+
+:root{
+  @include mat.dialog-overrides((
+    container-max-width: 90vw,
+  ));
+}
+
+:root {
+  @include mat.expansion-overrides((
+    header-expanded-state-height: fit-content,
+    header-collapsed-state-height: fit-content,
+  ));
+}
+
+.small-form-field{
+  @include mat.form-field-overrides((
+    container-height: 36px,
+    filled-with-label-container-padding-top: 8px,
+    filled-with-label-container-padding-bottom: 0,
+    subscript-text-line-height: 14px,
+    subscript-text-size: 12px,
+  ));
+}
+
+.small-radio-button{
+  @include mat.radio-overrides((
+    label-text-size: 12px,
+    state-layer-size: 24px,
+    touch-target-size: 24px,
+    label-text-line-height: 12px,
+  ));
+}
+
+.smallTags{
+  @include mat.chips-overrides((
+    label-text-size: 12px,
+  ));
+}
