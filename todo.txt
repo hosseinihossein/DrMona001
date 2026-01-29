@@ -1,0 +1,3 @@
+- add dialogs and set for identity
+- create identity controller in asp app and test the app
+- 

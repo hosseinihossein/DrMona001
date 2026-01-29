@@ -85,6 +85,20 @@ export class IdentityService {
     this.token.set(null);
     console.log("user logout!");
   }
+
+  getUserImageAddress(userModel:{guid:string, integrityVersion:number, hasImage:boolean}|null):string|null{
+    if(userModel?.hasImage && userModel.guid){
+      return `/api/Identity/UserImage?userGuid=${userModel.guid}&v=${userModel.integrityVersion}`;
+    }
+    return null;
+  }
+
+  requestUserModel(userGuid:string){
+    return this.httpClient.get<Identity_UserModel>(`/api/Identity/GetUserModel?userGuid=${userGuid}`);
+  }
+  requestUserList(){
+    return this.httpClient.get<Identity_UserModel[]>("/api/Identity/GetUserList");
+  }
   
 }
 

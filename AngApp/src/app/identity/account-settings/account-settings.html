@@ -1,1 +1,67 @@
-<p>account-settings works!</p>
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <div style="float: inline-start;position: relative;">
+            @if(userImgSrc()){
+            <img [ngSrc]="userImgSrc()!" priority width="100" height="100" alt="user image" id="user-profile-img">
+            }
+            @else {
+            <mat-icon style="font-size: 100px;width: 100px;height: 100px;">account_circle</mat-icon>
+            }
+            <button matIconButton class="edit-btn" style="bottom: -8px;left: -8px;" matTooltip="Edit user image"
+                (click)="openEditImageDialog()">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+
+        <div style="float: inline-start;position: relative;">
+            <mat-card-title>
+                {{identityService.userModel()?.userName ?? "DrMona"}}
+                <button matIconButton class="edit-btn" style="transform: translateY(-4px);" matTooltip="Edit Username"
+                    (click)="openEditUsernameDialog()">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                {{identityService.userModel()?.realName ?? "مونا بیشه"}}
+                <button matIconButton class="edit-btn" style="transform: translateY(-4px);" matTooltip="Edit Full Name"
+                    (click)="openEditEmailDialog()">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </mat-card-subtitle>
+
+        </div>
+
+    </mat-card-header>
+
+    <mat-card-content>
+        <p>
+            {{identityService.userModel()?.description ?? "About me ..."}}
+            <button matIconButton class="edit-btn" style="transform: translateY(-4px);" matTooltip="Edit description"
+                (click)="openEditDescriptionDialog()">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </p>
+        @if(errorResponse()){
+        <p style="color:var(--mat-sys-on-error-container);font-size: 12px;">
+            * {{errorResponse()}}
+        </p>
+        }
+    </mat-card-content>
+
+    <mat-card-actions align="start">
+        <button matFab extended (click)="openChangePasswordDialog()">
+            <mat-icon>key</mat-icon>
+            Change Password
+        </button>
+    </mat-card-actions>
+
+    <!--mat-card-actions align="end">
+        <button matButton="elevated" class="noPaddingBtn" (click)="toggleEditMode()"
+            [matTooltip]="editMode() ? 'Exit from edit mode' : 'Enter edit mode'">
+            <mat-icon>{{editMode() ? 'edit_off' : 'edit'}}</mat-icon>
+        </button>
+    </mat-card-actions-->
+
+
+</mat-card>

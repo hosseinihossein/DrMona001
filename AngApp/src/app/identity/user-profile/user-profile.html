@@ -1,1 +1,48 @@
-<p>user-profile works!</p>
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <div style="float: inline-start;position: relative;">
+            @if(userImgSrc()){
+            <img [ngSrc]="userImgSrc()!" priority width="100" height="100" alt="user image" id="user-profile-img">
+            }
+            @else {
+            <mat-icon style="font-size: 100px;width: 100px;height: 100px;">account_circle</mat-icon>
+            }
+        </div>
+
+        <div style="float: inline-start;position: relative;">
+            <mat-card-title>
+                {{userModel()?.userName ?? "DrMona"}}
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                {{userModel()?.realName ?? "مونا بیشه"}}
+            </mat-card-subtitle>
+
+        </div>
+
+    </mat-card-header>
+
+    <mat-card-content>
+        <p>
+            {{userModel()?.description ?? "About me ..."}}
+        </p>
+    </mat-card-content>
+
+    <!--mat-card-actions align="start">
+        <button matFab extended (click)="openChangePasswordDialog()">
+            <mat-icon>key</mat-icon>
+            Change Password
+        </button>
+    </mat-card-actions-->
+
+    @if(isMyProfile()){
+    <mat-card-actions align="end">
+        <a [routerLink]="['/user-account-settings']" matButton="elevated" class="noPaddingBtn"
+            matTooltip="Edit user account">
+            <mat-icon>edit</mat-icon>
+        </a>
+    </mat-card-actions>
+    }
+
+
+</mat-card>
