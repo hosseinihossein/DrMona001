@@ -1,19 +1,21 @@
 <mat-dialog-content>
 
-    @if(!data.enableEdit){
-    <div id="file-box" class="clearfix">
-        <span #fileName>{{selectedFile()?.name}}</span>
-        <button matButton="elevated" id="selectButton" (click)="fileInput.click()">Select New File</button>
-        <input type="file" hidden #fileInput (change)="onSelectFile($event)">
+    <div id="img-box" class="clearfix">
+        @if(previewImgSrc()){
+        <img [src]="previewImgSrc()" [alt]="data.title" #previewImg>
+        }
+        @if(!data.enableEdit){
+        <button matButton="elevated" id="selectButton" (click)="fileInput.click()">Select New Image</button>
+        <input type="file" hidden #fileInput (change)="onSelectImage($event)">
+        }
     </div>
-    }
 
     <mat-form-field>
         <mat-label>Title</mat-label>
         <input matInput [formControl]="titleControl">
         @if(titleControl.invalid && (titleControl.dirty || titleControl.touched) && titleControl.errors){
         <mat-error>
-            {{titleControl.errors|json}}
+            {{titleControl.errors | json}}
         </mat-error>
         }
         <!--@if(titleControl.invalid && (titleControl.dirty || titleControl.touched) &&
@@ -25,18 +27,18 @@
         @if(titleControl.invalid && (titleControl.dirty || titleControl.touched) &&
         titleControl.hasError("maxlength")){
         <mat-error>
-            title cannot be more than {{singletoneModes.elementTitle_MaxLength()}} characters long!
+            title cannot be more than {{singletonModes.elementTitle_MaxLength()}} characters long!
         </mat-error>
         }
         @if(titleControl.invalid && (titleControl.dirty || titleControl.touched) &&
         titleControl.hasError("minlength")){
         <mat-error>
-            title cannot be less than {{singletoneModes.elementTitle_MinLength()}} characters!
+            title cannot be less than {{singletonModes.elementTitle_MinLength()}} characters!
         </mat-error>
         }-->
-        @if(fileSizeError()){
+        @if(imageSizeError()){
         <mat-error>
-            {{fileSizeError()}}
+            {{imageSizeError()}}
         </mat-error>
         }
     </mat-form-field>
@@ -44,10 +46,8 @@
     @if(data.enableEdit){
     <mat-dialog-actions align="end" style="float:inline-end;">
         <button matButton mat-dialog-close>Cancel</button>
-        <button matButton="filled" [mat-dialog-close]="titleControl.value"
-            [disabled]="data.title === titleControl.value || titleControl.invalid">
-            Submit
-        </button>
+        <button matButton="filled" [disabled]="data.title === titleControl.value || titleControl.invalid"
+            [mat-dialog-close]="titleControl.value">Submit</button>
     </mat-dialog-actions>
     <mat-dialog-actions align="start">
         <button matButton="filled" class="warning" mat-dialog-close="Delete">Delete</button>

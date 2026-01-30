@@ -6,9 +6,9 @@ import { tap } from 'rxjs';
   providedIn: 'root',
 })
 export class IdentityService {
-  private token_StorageKey = "jwt_token";
-  private user_StorageKey = "user_model";
-  private tokenExpiration_StorageKey = "token_expire";
+  private token_StorageKey = "DrMona_jwt_token";
+  private user_StorageKey = "DrMona_user_model";
+  private tokenExpiration_StorageKey = "DrMona_token_expire";
   private httpClient = inject(HttpClient);
 
   isAuthenticated = signal(false);
@@ -99,6 +99,60 @@ export class IdentityService {
   requestUserList(){
     return this.httpClient.get<Identity_UserModel[]>("/api/Identity/GetUserList");
   }
+
+  requestChangeUserName(username:string){
+    const formData = new FormData();
+    formData.append("username",username);
+    return this.httpClient.post<{success:boolean, token:string}>(
+      `/api/Identity/SubmitUserName`, formData
+      ).pipe(tap({
+        next: res => {
+          this.token.set(res.token);
+          localStorage.setItem(this.token_StorageKey, res.token);
+        },
+      })
+    );
+  }
+  requestChangeFullName(fullName:string){
+    const formData = new FormData();
+    formData.append("fullName",fullName);
+    return this.httpClient.post<{success:boolean}>(
+      `/api/Identity/SubmitFullName`, formData
+    );
+  }
+  requestChangeDescription(description:string){
+    const formData = new FormData();
+    formData.append("description",description);
+    return this.httpClient.post<{success:boolean}>(
+      `/api/Identity/SubmitDescription`, formData
+    );
+  }
+  requestChangePassword(currentPassword:string, newPassword:string){
+    const formData = new FormData();
+    formData.append("currentPassword", currentPassword);
+    formData.append("newPassword", newPassword);
+    return this.httpClient.post<{success:boolean, token:string}>(
+      `/api/Identity/ChangePassword`, formData
+      ).pipe(tap({
+        next: res => {
+          this.token.set(res.token);
+          localStorage.setItem(this.token_StorageKey, res.token);
+        },
+      })
+    );
+  }
+  requestSubmitUserImage(file: File){
+    const formData = new FormData();
+    formData.append('userImageFile', file);
+    return this.httpClient.post<{success: boolean, hasImage: boolean, integrityVersion:number}>(
+      "/api/Identity/SubmitUserImage", formData
+    );
+  }
+  requestDeleteUserImage(){
+    return this.httpClient.delete<{success:boolean}>(
+      "/api/Identity/DeleteUserImage"
+    );
+  }
   
 }
 
@@ -107,7 +161,7 @@ export class Identity_UserModel
   constructor(userModel?:Identity_UserModel){
     this.guid = userModel?.guid ?? "";
     this.userName = userModel?.userName ?? "";
-    this.realName = userModel?.realName ?? "";
+    this.fullName = userModel?.fullName ?? "";
     this.description = userModel?.description ?? "";
     this.hasImage = userModel?.hasImage ?? false;
     this.integrityVersion = userModel?.integrityVersion ?? 0;
@@ -115,7 +169,7 @@ export class Identity_UserModel
   }
   guid: string;
   userName: string;
-  realName: string;
+  fullName: string;
   description: string;
   hasImage:boolean;
   integrityVersion:number;

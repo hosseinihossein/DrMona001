@@ -14,7 +14,7 @@ import { SingletonService } from '../shared/services/singleton-service';
 @Component({
   selector: 'app-nav-bar',
   imports: [MatIcon, MatToolbar, MatIconButton, MatMenu, MatMenuItem, AccountDropdown, MatTooltip, 
-    RouterLink,NgOptimizedImage,
+    RouterLink,
   ],
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.css'

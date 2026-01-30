@@ -3,6 +3,11 @@
         <mat-label>{{data.label}}</mat-label>
         <textarea matInput [value]="data.value" [formControl]="myText" placeholder="Write here.." rows="5">
         </textarea>
+        @if(myText.invalid && (myText.dirty || myText.touched) && myText.errors){
+        <mat-error>
+            {{myText.errors | json}}
+        </mat-error>
+        }
     </mat-form-field>
     <mat-dialog-actions align="end" style="float:inline-end;">
         <button matButton mat-dialog-close>Cancel</button>

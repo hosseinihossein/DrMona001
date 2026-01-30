@@ -23,9 +23,9 @@
             </mat-card-title>
 
             <mat-card-subtitle>
-                {{identityService.userModel()?.realName ?? "مونا بیشه"}}
+                {{identityService.userModel()?.fullName ?? "مونا بیشه"}}
                 <button matIconButton class="edit-btn" style="transform: translateY(-4px);" matTooltip="Edit Full Name"
-                    (click)="openEditEmailDialog()">
+                    (click)="openEditFullNameDialog()">
                     <mat-icon>edit</mat-icon>
                 </button>
             </mat-card-subtitle>
@@ -42,11 +42,6 @@
                 <mat-icon>edit</mat-icon>
             </button>
         </p>
-        @if(errorResponse()){
-        <p style="color:var(--mat-sys-on-error-container);font-size: 12px;">
-            * {{errorResponse()}}
-        </p>
-        }
     </mat-card-content>
 
     <mat-card-actions align="start">
@@ -56,12 +51,8 @@
         </button>
     </mat-card-actions>
 
-    <!--mat-card-actions align="end">
-        <button matButton="elevated" class="noPaddingBtn" (click)="toggleEditMode()"
-            [matTooltip]="editMode() ? 'Exit from edit mode' : 'Enter edit mode'">
-            <mat-icon>{{editMode() ? 'edit_off' : 'edit'}}</mat-icon>
-        </button>
-    </mat-card-actions-->
-
+    @if(displayWaitSpinner()){
+    <app-wait-spinner></app-wait-spinner>
+    }
 
 </mat-card>

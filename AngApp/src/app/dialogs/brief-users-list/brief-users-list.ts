@@ -1,23 +1,20 @@
-import { AfterViewInit, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogContent, MatDialogModule } from "@angular/material/dialog";
-import { LibraryService, OwnerModel } from '../../services/library-service';
+import { AfterViewInit, Component, computed, inject, signal } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
 import { NgOptimizedImage } from "@angular/common";
-import { SingletonModes } from '../../services/singleton-modes';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ReviewService } from '../../review/review-service';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
+import { IdentityService } from '../../identity/identity-service';
 
 @Component({
   selector: 'app-brief-users-list',
-  imports: [MatDialogModule, NgOptimizedImage, MatIcon, RouterLink,MatButton,MatFormField,MatInput,
-    MatLabel,WaitSpinner,ReactiveFormsModule
+  imports: [/*MatDialogModule, NgOptimizedImage, MatIcon, RouterLink,MatButton,MatFormField,MatInput,
+    MatLabel,WaitSpinner,ReactiveFormsModule*/
   ],
   templateUrl: './brief-users-list.html',
   styleUrl: './brief-users-list.css',
@@ -25,7 +22,8 @@ import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
     'style':"padding:16px;position:relative;"
   }
 })
-export class BriefUsersList implements AfterViewInit {
+export class BriefUsersList /*implements AfterViewInit*/ {
+/*
   readonly data = inject<{
     label?:string, 
     subjectGuid:string, 
@@ -33,9 +31,8 @@ export class BriefUsersList implements AfterViewInit {
     type:"Like"|"ThumbsUp"|"ThumbsDown"|"Follower"|"Following"|"InFavorOfLibrary"|"InFavorOfShelf"|"InFavorOfDocument",
   }>(MAT_DIALOG_DATA);
 
-  readonly singleton = inject(SingletonModes);
-  reviewService = inject(ReviewService);
-  libraryService = inject(LibraryService);
+  identityService = inject(IdentityService);
+  //patientService = inject(PatientService);
 
   users = signal<OwnerModel[]>([]);
   displayMore = computed(()=>this.users().length < this.data.totalNumberOfItems);
@@ -110,5 +107,5 @@ export class BriefUsersList implements AfterViewInit {
       }
     }
   }
-
+*/
 }

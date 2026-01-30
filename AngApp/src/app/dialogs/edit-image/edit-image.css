@@ -3,8 +3,6 @@ mat-form-field{
 }
 mat-dialog-content{
     width: 400px;
-    position: relative;
-    overflow: hidden;
 }
 button#selectButton{
     margin: 88px 8px 0px;
@@ -17,9 +15,5 @@ button#selectButton{
     width: 150px;
     height: 150px;
     object-fit: contain;
-    float: left;
-}
-mat-dialog-actions button.warning{
-    display: block;
     float: left;
 }

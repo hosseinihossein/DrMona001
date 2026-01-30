@@ -4,7 +4,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
-import { WindowService } from '../../services/window-service';
+import { WindowService } from '../../shared/services/window-service';
 
 @Component({
   selector: 'app-large-img',

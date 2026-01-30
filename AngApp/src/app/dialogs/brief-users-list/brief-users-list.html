@@ -1,3 +1,4 @@
+<!--
 @if(data.label){
 <p mat-dialog-title>
     {{data.label}}({{data.totalNumberOfItems}})
@@ -13,8 +14,8 @@
         <span style="position: absolute;font-size: 12px;right: 0;">{{$index+1}}</span>
         <a [routerLink]="['/proile',user.guid]" mat-dialog-close>
             <div id="user-div">
-                @if(singleton.getUserImageAddress(user)){
-                <img [ngSrc]="singleton.getUserImageAddress(user)!" width="50" height="50" alt="user image">
+                @if(identityService.getUserImageAddress(user)){
+                <img [ngSrc]="identityService.getUserImageAddress(user)!" width="50" height="50" alt="user image">
                 }
                 @else {
                 <mat-icon style="font-size: 50px;width: 50px;height: 50px;">account_circle</mat-icon>
@@ -35,4 +36,4 @@
         }
         <button matButton mat-dialog-close>Ok</button>
     </mat-dialog-actions>
-</mat-dialog-content>
+</mat-dialog-content-->
