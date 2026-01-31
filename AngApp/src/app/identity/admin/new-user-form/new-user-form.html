@@ -51,7 +51,20 @@
     }
 </mat-form-field>
 
-<button matButton="elevated" id="submit-btn"
+<mat-form-field>
+    <mat-label>Roles</mat-label>
+    <mat-select [formControl]="selectedRoles" multiple>
+        @for (role of allRoles(); track role) {
+        <mat-option [value]="role">{{role}}</mat-option>
+        }
+    </mat-select>
+</mat-form-field>
+
+@if(displayWaitSpinner()){
+<app-wait-spinner></app-wait-spinner>
+}
+
+<button matButton="elevated" id="submit-btn" (click)="submitNewUser()"
     [disabled]="fullname_FormControl.invalid || username_FormControl.invalid || password_FormControl.invalid">
     Submit
 </button>

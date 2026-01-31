@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AspApp.Validators;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -55,7 +56,7 @@ public class Identity_UserDbModel : IdentityUser<int>
 }*/
 
 //*********************************** Form models ************************************
-public class Identity_LoginFormModel
+public class Identity_Login_FormModel
 {
     [StringLength(32)]
     public string Username { get; set; } = string.Empty;
@@ -64,21 +65,43 @@ public class Identity_LoginFormModel
     public string Password { get; set; } = string.Empty;
 }
 
-public class Identity_NewUserFormModel
+public class Identity_NewUser_FormModel
 {
     [StringLength(32, MinimumLength = 3)]
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     [StringLength(32, MinimumLength = 3)]
-    [EmailAddress]
     public string FullName { get; set; } = string.Empty;
 
     [StringLength(32, MinimumLength = 5)]
     public string Password { get; set; } = string.Empty;
+    [MaxStringArrayLength(16, 32)]
+    public string[] Roles { get; set; } = [];
+}
+public class Identity_EditUser_FormModel
+{
+    public Guid UserGuid { get; set; }
+
+    [StringLength(32, MinimumLength = 3)]
+    public string UserName { get; set; } = string.Empty;
+
+    [StringLength(32, MinimumLength = 5)]
+    public string Password { get; set; } = string.Empty;
+    [MaxStringArrayLength(16, 32)]
+    public string[] Roles { get; set; } = [];
 }
 
 //*********************************** View models ************************************
-
+public class Identity_User_ViewModel
+{
+    public Guid Guid { get; set; }
+    public string UserName { get; set; } = null!;
+    public string? FullName { get; set; }
+    public string? Description { get; set; }
+    public bool HasImage { get; set; }
+    public int IntegrityVersion { get; set; }
+    public string[] Roles { get; set; } = [];
+}
 
 /******************************** Custom Token Provider *******************************/
 public class CustomTokenProvider : DataProtectorTokenProvider<Identity_UserDbModel>

@@ -1,6 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
+import { Identity_NewUser_FormModel } from './admin/new-user-form/new-user-form';
+import { Identity_EditUser_FormModel } from './admin/edit-user-form/edit-user-form';
 
 @Injectable({
   providedIn: 'root',
@@ -86,6 +88,24 @@ export class IdentityService {
     console.log("user logout!");
   }
 
+  requestCreateNewUser(formModel:Identity_NewUser_FormModel){
+    return this.httpClient.post<{success:boolean}>(
+      "/api/Identity/SubmitNewUser", formModel
+    );
+  }
+  requestAllRoles(){
+    return this.httpClient.get<string[]>("/api/Identity/GetAllRoles");
+  }
+  requestUserRoles(userGuid:string){
+    let httpParams = new HttpParams().set("userGuid",userGuid);
+    return this.httpClient.get<string[]>("/api/Identity/GetUserRoles",{params:httpParams});
+  }
+  requestEditUser(formModel:Identity_EditUser_FormModel){
+    return this.httpClient.post<{success:boolean}>(
+      "/api/Identity/SubmitEditUser", formModel
+    );
+  }
+
   getUserImageAddress(userModel:{guid:string, integrityVersion:number, hasImage:boolean}|null):string|null{
     if(userModel?.hasImage && userModel.guid){
       return `/api/Identity/UserImage?userGuid=${userModel.guid}&v=${userModel.integrityVersion}`;
@@ -161,16 +181,16 @@ export class Identity_UserModel
   constructor(userModel?:Identity_UserModel){
     this.guid = userModel?.guid ?? "";
     this.userName = userModel?.userName ?? "";
-    this.fullName = userModel?.fullName ?? "";
-    this.description = userModel?.description ?? "";
+    this.fullName = userModel?.fullName;
+    this.description = userModel?.description;
     this.hasImage = userModel?.hasImage ?? false;
     this.integrityVersion = userModel?.integrityVersion ?? 0;
     this.roles = userModel?.roles.map(r=>r) ?? [];
   }
   guid: string;
   userName: string;
-  fullName: string;
-  description: string;
+  fullName?: string|null;
+  description?: string|null;
   hasImage:boolean;
   integrityVersion:number;
   roles: string[];
