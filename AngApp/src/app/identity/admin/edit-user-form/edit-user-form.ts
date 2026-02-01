@@ -84,6 +84,12 @@ export class EditUserForm {
         }
       },
     });
+
+    this.identityService.getCsrf().subscribe({
+      next: res => {
+        console.log("csrf received.");
+      },
+    });
     
   }
 

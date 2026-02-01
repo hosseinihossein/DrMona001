@@ -132,6 +132,7 @@ public class IdentityController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Identity_Admins")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> SubmitNewUser([FromBody] Identity_NewUser_FormModel formModel)
     {
         if (ModelState.IsValid)
@@ -157,7 +158,7 @@ public class IdentityController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Identity_Admins")]
-    public async Task<IActionResult> GetAllRoles([FromServices] RoleManager<IdentityRole<int>> roleManager)
+    public async Task<IActionResult> GetAllRoles([FromServices] RoleManager<Identity_RoleDbModel> roleManager)
     {
         string[] roles = await roleManager.Roles.Select(role => role.Name!).ToArrayAsync();
         return Ok(roles);
@@ -189,6 +190,7 @@ public class IdentityController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Identity_Admins")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> SubmitEditUser([FromBody] Identity_EditUser_FormModel formModel)
     {
         if (ModelState.IsValid)
@@ -219,5 +221,150 @@ public class IdentityController : ControllerBase
         }
         return BadRequest(ModelState);
     }
+
+
+
+
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SubmitUsername([FromQuery][StringLength(32)] string username)
+    {
+        //fetch and create
+        Identity_UserDbModel user = (await userManager.FindByNameAsync(User.Identity!.Name!))!;
+
+        var result = await userManager.SetUserNameAsync(user, username);
+        if (result.Succeeded)
+        {
+            //update user and its normalized username
+            //await userManager.UpdateAsync(user);
+            string token = await userManager.GenerateUserTokenAsync(user, "customTokenProvider", "login");
+            return Ok(new { success = true, token });
+        }
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError("Username", error.Description);
+        }
+        return BadRequest(ModelState);
+    }
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SubmitFullName([FromQuery][StringLength(32)] string fullName)
+    {
+        //fetch and create
+        Identity_UserDbModel user = (await userManager.FindByNameAsync(User.Identity!.Name!))!;
+
+        user.FullName = fullName;
+        var result = await userManager.UpdateAsync(user);
+        if (result.Succeeded)
+        {
+            return Ok(new { success = true });
+        }
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError("FullName", error.Description);
+        }
+        return BadRequest(ModelState);
+    }
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SubmitDescription([FromQuery][StringLength(32)] string description)
+    {
+        //fetch and create
+        Identity_UserDbModel user = (await userManager.FindByNameAsync(User.Identity!.Name!))!;
+
+        user.Description = description;
+        var result = await userManager.UpdateAsync(user);
+        if (result.Succeeded)
+        {
+            return Ok(new { success = true });
+        }
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError("Description", error.Description);
+        }
+        return BadRequest(ModelState);
+    }
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword([FromQuery][StringLength(32)] string currentPassword,
+    [FromQuery][StringLength(32)] string newPassword)
+    {
+        Identity_UserDbModel user = (await userManager.FindByNameAsync(User.Identity!.Name!))!;
+
+        var result = await userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        if (result.Succeeded)
+        {
+            string token = await userManager.GenerateUserTokenAsync(user, "customTokenProvider", "login");
+            return Ok(new { success = true, token });
+        }
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError("ChangePassword", error.Description);
+        }
+        return BadRequest(ModelState);
+    }
+    [HttpPost]
+    [Authorize]
+    [RequestSizeLimit(128 * 1024)]//128 KB
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SubmitUserImage([FromForm] UserImageFile_FormModel formModel)
+    {
+        if (ModelState.IsValid)
+        {
+            Identity_UserDbModel user = (await userManager.FindByNameAsync(User.Identity!.Name!))!;
+
+            DirectoryInfo userDirectoryInfo = Directory.CreateDirectory(
+                 Path.Combine(Storage_Users.FullName, user.UserGuid.ToString("N"))
+            );
+            string userImagePath = Path.Combine(userDirectoryInfo.FullName, "image");
+            using (FileStream fs = System.IO.File.Create(userImagePath))
+            {
+                await formModel.UserImageFile.CopyToAsync(fs);
+            }
+
+            user.HasImage = true;
+            user.IntegrityVersion++;
+
+            //save
+            await userManager.UpdateAsync(user);
+
+            return Ok(new { success = true, user.HasImage, user.IntegrityVersion });
+        }
+        return BadRequest(ModelState);
+    }
+    public class UserImageFile_FormModel
+    {
+        public IFormFile UserImageFile { get; set; } = null!;
+    }
+    [HttpDelete]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteUserImage()
+    {
+        Identity_UserDbModel user = (await userManager.FindByNameAsync(User.Identity!.Name!))!;
+
+        string userImagePath =
+        Path.Combine(Storage_Users.FullName, user.UserGuid.ToString("N"), "image");
+
+        if (System.IO.File.Exists(userImagePath))
+        {
+            System.IO.File.Delete(userImagePath);
+
+            //edit user
+            user.HasImage = false;
+            user.IntegrityVersion = 0;
+
+            await userManager.UpdateAsync(user);
+        }
+
+        return Ok(new { success = true });
+    }
+
+
 
 }

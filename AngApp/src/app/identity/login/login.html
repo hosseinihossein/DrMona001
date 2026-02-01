@@ -15,6 +15,9 @@
     username_FormControl.invalid && username_FormControl.hasError("maxlength")){
     <mat-error>username must be less than 32 characters long!</mat-error>
     }
+    @if(username_FormControl.invalid && username_FormControl.hasError("loginError")){
+    <mat-error>{{username_FormControl.getError("loginError")}}</mat-error>
+    }
 </mat-form-field>
 
 <mat-form-field>
@@ -36,8 +39,16 @@
     password_FormControl.invalid && password_FormControl.hasError("maxlength")){
     <mat-error>username must be less than 32 characters long!</mat-error>
     }
+    @if(password_FormControl.invalid && password_FormControl.hasError("loginError")){
+    <mat-error>{{password_FormControl.getError("loginError")}}</mat-error>
+    }
 </mat-form-field>
 
-<button matButton="elevated" id="login-btn" [disabled]="username_FormControl.invalid || password_FormControl.invalid">
+<button matButton="elevated" id="login-btn" (click)="login()"
+    [disabled]="username_FormControl.invalid || password_FormControl.invalid">
     Login
 </button>
+
+@if(displayWaitSpinner()){
+<app-wait-spinner></app-wait-spinner>
+}

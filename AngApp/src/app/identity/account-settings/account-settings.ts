@@ -26,7 +26,13 @@ export class AccountSettings {
   userImgSrc = computed(()=>this.identityService.getUserImageAddress(this.identityService.userModel()));
   displayWaitSpinner = signal(false);
 
-  constructor(){}
+  constructor(){
+    this.identityService.getCsrf().subscribe({
+      next: res => {
+        console.log("csrf received.");
+      },
+    });
+  }
 
   openEditImageDialog(){
     this.dialog.open(EditImage,{data:{

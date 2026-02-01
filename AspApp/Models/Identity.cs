@@ -13,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace AspApp.Models;
 
-public class Identity_DbContext : IdentityDbContext<Identity_UserDbModel, IdentityRole<int>, int>
+public class Identity_DbContext : IdentityDbContext<Identity_UserDbModel, Identity_RoleDbModel, int>
 {
     public Identity_DbContext(DbContextOptions<Identity_DbContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,13 +47,13 @@ public class Identity_UserDbModel : IdentityUser<int>
     public bool HasImage { get; set; } = false;
 }
 
-/*public class Identity_RoleDbModel : IdentityRole<int>
+public class Identity_RoleDbModel : IdentityRole<int>
 {
     public Identity_RoleDbModel() : base() { }
     public Identity_RoleDbModel(string roleName) : base(roleName) { }
     [MaxLength(128)]
     public string Description { get; set; } = string.Empty;
-}*/
+}
 
 //*********************************** Form models ************************************
 public class Identity_Login_FormModel
@@ -64,7 +64,6 @@ public class Identity_Login_FormModel
     [StringLength(32)]
     public string Password { get; set; } = string.Empty;
 }
-
 public class Identity_NewUser_FormModel
 {
     [StringLength(32, MinimumLength = 3)]

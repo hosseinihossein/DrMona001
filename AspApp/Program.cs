@@ -4,7 +4,6 @@ using AspApp.Filters;
 using AspApp.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +37,7 @@ public class Program
 
 
         //******************* Identity_DbContext *******************
-        builder.Services.AddDbContext<IdentityDbContext>(opts =>
+        builder.Services.AddDbContext<Identity_DbContext>(opts =>
         {
             opts.UseMySql(builder.Configuration["ConnectionStrings_MySql:IdentityConnection"],
             new MySqlServerVersion(new Version(8, 0, 42)), options =>
@@ -52,7 +51,7 @@ public class Program
 
 
         //******************* Identity *******************
-        builder.Services.AddIdentity<Identity_UserDbModel, IdentityRole<int>>(options =>
+        builder.Services.AddIdentity<Identity_UserDbModel, Identity_RoleDbModel>(options =>
         {
             options.User.RequireUniqueEmail = false;
             options.User.AllowedUserNameCharacters =
@@ -218,7 +217,7 @@ public class Program
                 //************************** Seed DataBases **************************
                 //***** Create "admin" Identity *****
                 UserManager<Identity_UserDbModel> userManager = scope.ServiceProvider.GetRequiredService<UserManager<Identity_UserDbModel>>();
-                RoleManager<IdentityRole<int>> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+                RoleManager<Identity_RoleDbModel> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Identity_RoleDbModel>>();
 
                 Identity_UserDbModel? admin = await userManager.FindByNameAsync("admin");
                 if (admin == null)
@@ -244,12 +243,12 @@ public class Program
                 //***** Seed Roles *****
                 if (await roleManager.FindByNameAsync("Identity_Admins") == null)
                 {
-                    await roleManager.CreateAsync(new IdentityRole<int>("Identity_Admins"));
+                    await roleManager.CreateAsync(new Identity_RoleDbModel("Identity_Admins"));
                     await userManager.AddToRoleAsync(admin, "Identity_Admins");
                 }
                 if (await roleManager.FindByNameAsync("Backup_Admins") == null)
                 {
-                    await roleManager.CreateAsync(new IdentityRole<int>("Backup_Admins"));
+                    await roleManager.CreateAsync(new Identity_RoleDbModel("Backup_Admins"));
                     await userManager.AddToRoleAsync(admin, "Backup_Admins");
                 }
 
@@ -264,7 +263,7 @@ public class Program
         app.MapControllers();
         app.MapDefaultControllerRoute();
 
-        app.Map("/angularapp/browser/{*catchAll}", async (HttpContext context/*, IAntiforgery antiforgery*/) =>
+        app.Map("/{*catchAll}", async (HttpContext context) =>
         {
             string? catchAll = context.Request.RouteValues["catchAll"]?.ToString();
             if (!string.IsNullOrWhiteSpace(catchAll))
@@ -300,7 +299,7 @@ public class Program
 
 
         //******************* app.Run ******************
-        Console.WriteLine("app.Run();");
+        Console.WriteLine("app is running");
         app.Run();
     }
 }

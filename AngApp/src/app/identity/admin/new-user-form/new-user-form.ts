@@ -59,6 +59,13 @@ export class NewUserForm {
         }
       },
     });
+
+    this.identityService.getCsrf().subscribe({
+      next: res => {
+        console.log("csrf received.");
+      },
+    });
+    
   }
 
   changeVisibility(){

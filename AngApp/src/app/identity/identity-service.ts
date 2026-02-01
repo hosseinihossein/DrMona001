@@ -59,7 +59,7 @@ export class IdentityService {
     formData.append('username', username);
     formData.append('password', password);
     return this.httpClient.post<{token:string, expiresInHours:string, user: Identity_UserModel}>(
-      "/api/Identity/login", formData
+      "/api/Identity/Login", formData
     ).pipe(
       tap({
         next: res => {
@@ -88,24 +88,6 @@ export class IdentityService {
     console.log("user logout!");
   }
 
-  requestCreateNewUser(formModel:Identity_NewUser_FormModel){
-    return this.httpClient.post<{success:boolean}>(
-      "/api/Identity/SubmitNewUser", formModel
-    );
-  }
-  requestAllRoles(){
-    return this.httpClient.get<string[]>("/api/Identity/GetAllRoles");
-  }
-  requestUserRoles(userGuid:string){
-    let httpParams = new HttpParams().set("userGuid",userGuid);
-    return this.httpClient.get<string[]>("/api/Identity/GetUserRoles",{params:httpParams});
-  }
-  requestEditUser(formModel:Identity_EditUser_FormModel){
-    return this.httpClient.post<{success:boolean}>(
-      "/api/Identity/SubmitEditUser", formModel
-    );
-  }
-
   getUserImageAddress(userModel:{guid:string, integrityVersion:number, hasImage:boolean}|null):string|null{
     if(userModel?.hasImage && userModel.guid){
       return `/api/Identity/UserImage?userGuid=${userModel.guid}&v=${userModel.integrityVersion}`;
@@ -120,11 +102,29 @@ export class IdentityService {
     return this.httpClient.get<Identity_UserModel[]>("/api/Identity/GetUserList");
   }
 
+  requestCreateNewUser(formModel:Identity_NewUser_FormModel){
+    return this.httpClient.post<{success:boolean}>(
+      "/api/Identity/SubmitNewUser", formModel
+    );
+  }
+  requestEditUser(formModel:Identity_EditUser_FormModel){
+    return this.httpClient.post<{success:boolean}>(
+      "/api/Identity/SubmitEditUser", formModel
+    );
+  }
+
+  requestAllRoles(){
+    return this.httpClient.get<string[]>("/api/Identity/GetAllRoles");
+  }
+  requestUserRoles(userGuid:string){
+    let httpParams = new HttpParams().set("userGuid",userGuid);
+    return this.httpClient.get<string[]>("/api/Identity/GetUserRoles",{params:httpParams});
+  }
+
   requestChangeUserName(username:string){
-    const formData = new FormData();
-    formData.append("username",username);
+    let httpParams = new HttpParams().set("username",username);
     return this.httpClient.post<{success:boolean, token:string}>(
-      `/api/Identity/SubmitUserName`, formData
+      `/api/Identity/SubmitUserName`, null,{params:httpParams}
       ).pipe(tap({
         next: res => {
           this.token.set(res.token);
@@ -134,25 +134,23 @@ export class IdentityService {
     );
   }
   requestChangeFullName(fullName:string){
-    const formData = new FormData();
-    formData.append("fullName",fullName);
+    let httpParams = new HttpParams().set("fullName",fullName);
     return this.httpClient.post<{success:boolean}>(
-      `/api/Identity/SubmitFullName`, formData
+      `/api/Identity/SubmitFullName`, null,{params:httpParams}
     );
   }
   requestChangeDescription(description:string){
-    const formData = new FormData();
-    formData.append("description",description);
+    let httpParams = new HttpParams().set("description",description);
     return this.httpClient.post<{success:boolean}>(
-      `/api/Identity/SubmitDescription`, formData
+      `/api/Identity/SubmitDescription`, null,{params:httpParams}
     );
   }
   requestChangePassword(currentPassword:string, newPassword:string){
-    const formData = new FormData();
-    formData.append("currentPassword", currentPassword);
-    formData.append("newPassword", newPassword);
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set("currentPassword",currentPassword);
+    httpParams = httpParams.set("newPassword",newPassword);
     return this.httpClient.post<{success:boolean, token:string}>(
-      `/api/Identity/ChangePassword`, formData
+      `/api/Identity/ChangePassword`, null,{params:httpParams}
       ).pipe(tap({
         next: res => {
           this.token.set(res.token);
