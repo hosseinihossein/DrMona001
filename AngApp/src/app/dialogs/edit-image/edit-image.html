@@ -4,13 +4,13 @@
         @if(previewImgSrc()){
         <img [src]="previewImgSrc()" [alt]="data.title" #previewImg>
         }
-        @if(!data.enableEdit){
+        @if(!data.value){
         <button matButton="elevated" id="selectButton" (click)="fileInput.click()">Select New Image</button>
         <input type="file" hidden #fileInput (change)="onSelectImage($event)">
         }
     </div>
 
-    <mat-form-field>
+    <mat-form-field [style]="data.displayTitle?'':'display:none;'">
         <mat-label>Title</mat-label>
         <input matInput [formControl]="titleControl">
         @if(titleControl.invalid && (titleControl.dirty || titleControl.touched) && titleControl.errors){

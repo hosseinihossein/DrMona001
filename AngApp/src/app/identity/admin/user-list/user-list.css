@@ -11,3 +11,7 @@ img.userProfileImage{
     overflow: hidden;
     object-fit: contain;
 }
+
+th,td{
+    text-align: center;
+}

@@ -40,17 +40,18 @@
 
 <mat-form-field>
     <mat-label>Roles</mat-label>
-    <mat-select [formControl]="selectedRoles" multiple>
+    <mat-select [formControl]="selectedRoles_FormControl" multiple>
         @for (role of allRoles(); track role) {
         <mat-option [value]="role">{{role}}</mat-option>
         }
     </mat-select>
 </mat-form-field>
 
+<button matButton="elevated" id="submit-btn" (click)="submitEditUser()"
+    [disabled]="username_FormControl.invalid || password_FormControl.invalid">
+    Submit
+</button>
+
 @if(displayWaitSpinner()){
 <app-wait-spinner></app-wait-spinner>
 }
-
-<button matButton="elevated" id="submit-btn" [disabled]="username_FormControl.invalid || password_FormControl.invalid">
-    Submit
-</button>

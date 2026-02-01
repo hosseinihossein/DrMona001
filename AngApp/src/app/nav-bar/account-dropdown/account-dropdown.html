@@ -1,6 +1,6 @@
 <button matIconButton [matMenuTriggerFor]="menu()" [style]="imgSrc() ? imgBtnStyle : ''">
     @if(imgSrc()){
-    <img [ngSrc]="imgSrc()!" priority width="48" height="48" alt="user image"
+    <img [ngSrc]="imgSrc()!" priority width="40" height="40" alt="user image"
         [matTooltip]="identityService.userModel()?.userName">
     }
     @else if(identityService.isAuthenticated()){

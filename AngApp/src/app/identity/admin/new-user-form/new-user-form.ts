@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
@@ -9,6 +9,7 @@ import { IdentityService } from '../../identity-service';
 import { MatDialog } from '@angular/material/dialog';
 import { Result } from '../../../dialogs/result/result';
 import { WaitSpinner } from '../../../shared/wait-spinner/wait-spinner';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-user-form',
@@ -21,6 +22,7 @@ import { WaitSpinner } from '../../../shared/wait-spinner/wait-spinner';
 export class NewUserForm {
   identityService = inject(IdentityService);
   dialog = inject(MatDialog);
+  router = inject(Router);
 
   hidePassword = signal(true);
   allRoles = signal<string[]>([]);
@@ -49,7 +51,7 @@ export class NewUserForm {
       Validators.maxLength(32),
     ]
   });
-  selectedRoles = new FormControl<string[]>([],{nonNullable:true});
+  selectedRoles_FormControl = new FormControl<string[]>([],{nonNullable:true});
 
   constructor(){
     this.identityService.requestAllRoles().subscribe({
@@ -64,6 +66,12 @@ export class NewUserForm {
       next: res => {
         console.log("csrf received.");
       },
+    });
+
+    effect(()=>{
+      if(!this.identityService.isAuthenticated()){
+        this.router.navigate(["/"]);
+      }
     });
     
   }
@@ -83,7 +91,7 @@ export class NewUserForm {
           fullName: this.fullname_FormControl.value,
           userName: this.username_FormControl.value,
           password: this.password_FormControl.value,
-          roles: this.selectedRoles.value,
+          roles: this.selectedRoles_FormControl.value,
         }
         this.identityService.requestCreateNewUser(formModel).subscribe({
           next: res => {
@@ -95,7 +103,12 @@ export class NewUserForm {
                 description: [
                   `User '${formModel.userName}' submitted successfully.`
                 ],
-              }});
+              }}).afterClosed().subscribe(()=>{
+                this.fullname_FormControl.reset();
+                this.username_FormControl.reset();
+                this.password_FormControl.reset();
+                this.selectedRoles_FormControl.reset();
+              });
             }
           },
           error: err => {

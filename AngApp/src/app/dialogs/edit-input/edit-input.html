@@ -1,13 +1,8 @@
 <mat-dialog-content>
     <mat-form-field>
         <mat-label>{{data.label}}</mat-label>
-        <input matInput [formControl]="myInput">
-        @if(myInput.invalid && (myInput.dirty || myInput.touched) && myInput.errors){
-        <mat-error>
-            {{myInput.errors | json}}
-        </mat-error>
-        }
-        <!--
+        <input matInput [formControl]="myInput" [class]="data.persian?'persian-font':''">
+
         @if(myInput.invalid && (myInput.dirty || myInput.touched) && myInput.hasError("required")){
         <mat-error>
             {{data.label}} is required!
@@ -15,14 +10,14 @@
         }
         @if(myInput.invalid && (myInput.dirty || myInput.touched) && myInput.hasError("maxlength")){
         <mat-error>
-            {{data.label}} cannot be more than {{singleton.elementTitle_MaxLength()}} characters long!
+            {{data.label}} cannot be more than 128 characters long!
         </mat-error>
         }
         @if(myInput.invalid && (myInput.dirty || myInput.touched) && myInput.hasError("minlength")){
         <mat-error>
-            {{data.label}} cannot be less than {{singleton.elementTitle_MinLength()}} characters!
+            {{data.label}} cannot be less than 3 characters!
         </mat-error>
-        }-->
+        }
     </mat-form-field>
     <mat-dialog-actions align="end" style="float:inline-end;">
         <button matButton mat-dialog-close>Cancel</button>

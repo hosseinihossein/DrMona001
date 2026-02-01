@@ -1,3 +1,10 @@
+<div>
+    <a matButton="outlined" [routerLink]="['/new-user']">
+        <mat-icon>person_add</mat-icon>
+        Add New User
+    </a>
+</div>
+
 <table mat-table [dataSource]="dataSource()" matSort matSortDisableClear matSortDirection="desc">
 
     <!-- UserImage Column -->
@@ -17,7 +24,7 @@
     <!-- Fullname Column -->
     <ng-container matColumnDef="FullName">
         <th mat-header-cell *matHeaderCellDef> FullName </th>
-        <td mat-cell *matCellDef="let userModel"> {{userModel.realName}} </td>
+        <td mat-cell *matCellDef="let userModel"> {{userModel.fullName}} </td>
     </ng-container>
 
     <!-- UserName Column -->
@@ -37,7 +44,7 @@
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let userModel" style="text-wrap: nowrap;">
             <button matMiniFab style="color:var(--mat-sys-on-error-container);margin: 0 4px;"
-                (click)="deleteUser(userModel.userGuid, userModel.userName)" matTooltip="Delete User">
+                (click)="deleteUser(userModel.guid, userModel.userName)" matTooltip="Delete User">
                 <mat-icon>delete</mat-icon>
             </button>
             <a matMiniFab [routerLink]="['/edit-user', userModel.guid]" matTooltip="Edit User" style="margin: 0 4px;">
@@ -55,3 +62,7 @@
         <td class="mat-cell" colspan="4">No data matching the filter!</td>
     </tr>
 </table>
+
+@if(displayWaitSpinner()){
+<app-wait-spinner></app-wait-spinner>
+}

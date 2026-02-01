@@ -23,6 +23,7 @@ export class EditUserForm {
   identityService = inject(IdentityService);
   actiatedRoute = inject(ActivatedRoute);
   dialog = inject(MatDialog);
+  router = inject(Router);
 
   userGuid = signal<string|null>(null);
   userModel = signal<Identity_UserModel|null>(null);
@@ -46,7 +47,7 @@ export class EditUserForm {
       Validators.maxLength(32),
     ]
   });
-  selectedRoles = new FormControl<string[]>([],{nonNullable:true});
+  selectedRoles_FormControl = new FormControl<string[]>([],{nonNullable:true});
 
   constructor(){
     this.actiatedRoute.paramMap.subscribe(params=>{
@@ -69,11 +70,17 @@ export class EditUserForm {
         this.identityService.requestUserRoles(this.userGuid()!).subscribe({
           next: res => {
             if(res){
-              this.selectedRoles.setValue(res);
+              this.selectedRoles_FormControl.setValue(res);
             }
           }
         });
         
+      }
+    });
+
+    effect(()=>{
+      if(!this.identityService.isAuthenticated()){
+        this.router.navigate(["/"]);
       }
     });
 
@@ -108,7 +115,7 @@ export class EditUserForm {
           userGuid: this.userGuid()!,
           userName: this.username_FormControl.value,
           password: this.password_FormControl.value,
-          roles: this.selectedRoles.value,
+          roles: this.selectedRoles_FormControl.value,
         }
         this.identityService.requestEditUser(formModel).subscribe({
           next: res => {
@@ -120,7 +127,9 @@ export class EditUserForm {
                 description: [
                   `User '${formModel.userName}' edited successfully.`
                 ],
-              }});
+              }}).afterClosed().subscribe(()=>{
+                this.router.navigate(["/user-profile",this.userGuid()])
+              });
             }
           },
           error: err => {

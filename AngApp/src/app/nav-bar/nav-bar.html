@@ -20,14 +20,20 @@
 
     <mat-menu #account class="navbar-matMenu">
         @if(identityService.isAuthenticated()){
-        <a mat-menu-item [routerLink]="['/dashboard']">
+        <!--a mat-menu-item [routerLink]="['/dashboard']">
             <mat-icon>space_dashboard</mat-icon>
             Dashboard
-        </a>
-        <a mat-menu-item [routerLink]="['/profile',identityService.userModel()?.guid]">
-            <mat-icon>article_person</mat-icon>
+        </a-->
+        <a mat-menu-item [routerLink]="['/user-profile',identityService.userModel()?.guid]">
+            <mat-icon>account_box</mat-icon>
             Profile
         </a>
+        @if(identityService.userModel()?.roles?.includes("Identity_Admins")){
+        <a mat-menu-item [routerLink]="['/user-list']">
+            <mat-icon>user_attributes</mat-icon>
+            User List
+        </a>
+        }
         <a mat-menu-item (click)="identityService.logout()">
             <mat-icon>logout</mat-icon>
             Logout
@@ -38,10 +44,10 @@
             <mat-icon>login</mat-icon>
             Login
         </a>
-        <a mat-menu-item [routerLink]="['/signup']">
+        <!--a mat-menu-item [routerLink]="['/signup']">
             <mat-icon>person_add</mat-icon>
             Create a new account
-        </a>
+        </a-->
         }
     </mat-menu>
 

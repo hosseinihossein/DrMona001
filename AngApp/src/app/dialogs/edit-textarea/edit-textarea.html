@@ -1,11 +1,17 @@
 <mat-dialog-content>
     <mat-form-field>
         <mat-label>{{data.label}}</mat-label>
-        <textarea matInput [value]="data.value" [formControl]="myText" placeholder="Write here.." rows="5">
+        <textarea matInput [value]="data.value" [formControl]="myText" placeholder="Write here.." rows="5"
+            [class]="data.persian?'persian-font':''">
         </textarea>
-        @if(myText.invalid && (myText.dirty || myText.touched) && myText.errors){
+        @if(myText.invalid && (myText.dirty || myText.touched) && myText.hasError("required")){
         <mat-error>
-            {{myText.errors | json}}
+            {{data.label}} is required!
+        </mat-error>
+        }
+        @if(myText.invalid && (myText.dirty || myText.touched) && myText.hasError("maxlength")){
+        <mat-error>
+            {{data.label}} cannot be more than 128 characters long!
         </mat-error>
         }
     </mat-form-field>

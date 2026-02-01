@@ -1,8 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
 import { Identity_NewUser_FormModel } from './admin/new-user-form/new-user-form';
 import { Identity_EditUser_FormModel } from './admin/edit-user-form/edit-user-form';
+import { Identity_UserListModel } from './admin/user-list/user-list';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,12 @@ export class IdentityService {
     this.isAuthenticated.set(this.hasRecord());
     this.userModel.set(this.getUserModelFromLocalStorage());
     this.token.set(this.getTokenFromLocalStorage());
+
+    effect(()=>{
+      if(this.userModel()){
+        localStorage.setItem(this.user_StorageKey, JSON.stringify(this.userModel()));
+      }
+    });
   }
 
   private hasRecord():boolean{
@@ -99,7 +106,7 @@ export class IdentityService {
     return this.httpClient.get<Identity_UserModel>(`/api/Identity/GetUserModel?userGuid=${userGuid}`);
   }
   requestUserList(){
-    return this.httpClient.get<Identity_UserModel[]>("/api/Identity/GetUserList");
+    return this.httpClient.get<Identity_UserListModel[]>("/api/Identity/GetUserList");
   }
 
   requestCreateNewUser(formModel:Identity_NewUser_FormModel){
@@ -110,6 +117,12 @@ export class IdentityService {
   requestEditUser(formModel:Identity_EditUser_FormModel){
     return this.httpClient.post<{success:boolean}>(
       "/api/Identity/SubmitEditUser", formModel
+    );
+  }
+  requestDeleteUser(userGuid:string){
+    let httpParams = new HttpParams().set("userGuid",userGuid);
+    return this.httpClient.delete<{success:boolean}>(
+      "/api/Identity/DeleteUser",{params:httpParams}
     );
   }
 
@@ -127,8 +140,10 @@ export class IdentityService {
       `/api/Identity/SubmitUserName`, null,{params:httpParams}
       ).pipe(tap({
         next: res => {
-          this.token.set(res.token);
-          localStorage.setItem(this.token_StorageKey, res.token);
+          if(res && res.success && res.token){
+            this.token.set(res.token);
+            localStorage.setItem(this.token_StorageKey, res.token);
+          }
         },
       })
     );

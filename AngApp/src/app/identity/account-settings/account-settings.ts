@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Identity_UserModel, IdentityService } from '../identity-service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
@@ -12,6 +12,7 @@ import { Result } from '../../dialogs/result/result';
 import { EditInput } from '../../dialogs/edit-input/edit-input';
 import { EditTextarea } from '../../dialogs/edit-textarea/edit-textarea';
 import { EditImage } from '../../dialogs/edit-image/edit-image';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-settings',
@@ -22,6 +23,7 @@ import { EditImage } from '../../dialogs/edit-image/edit-image';
 export class AccountSettings {
   identityService = inject(IdentityService);
   dialog = inject(MatDialog);
+  router = inject(Router);
 
   userImgSrc = computed(()=>this.identityService.getUserImageAddress(this.identityService.userModel()));
   displayWaitSpinner = signal(false);
@@ -32,6 +34,12 @@ export class AccountSettings {
         console.log("csrf received.");
       },
     });
+
+    effect(()=>{
+      if(!this.identityService.isAuthenticated()){
+        this.router.navigate(["/"]);
+      }
+    });
   }
 
   openEditImageDialog(){
@@ -39,7 +47,7 @@ export class AccountSettings {
       value: this.userImgSrc(),
       title: "User Image",
       imageSize: 128 * 1024,// 128 KB
-      enableEdit:true,
+      enableEdit:this.userImgSrc() ? true : false,
     }}).afterClosed().subscribe(result=>{
 
       if(result && result.file){
@@ -140,6 +148,7 @@ export class AccountSettings {
       this.dialog.open(EditInput,{data:{
         label:"Edit Full Name",
         value:this.identityService.userModel()?.fullName,
+        persian:true,
       }}).afterClosed().subscribe((result:string)=>{
         if(result){
           this.displayWaitSpinner.set(true);
@@ -175,6 +184,7 @@ export class AccountSettings {
       this.dialog.open(EditTextarea,{data:{
         label:"Edit Description",
         value:this.identityService.userModel()?.description,
+        persian:true,
       }}).afterClosed().subscribe((result:string)=>{
         if(result){
           this.displayWaitSpinner.set(true);

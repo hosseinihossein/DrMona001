@@ -9,13 +9,17 @@ import { MatInput } from '@angular/material/input';
 @Component({
   selector: 'app-edit-textarea',
   imports: [MatDialogContent, MatLabel, MatFormField, MatDialogActions, MatDialogClose, MatButton, 
-    MatInput, ReactiveFormsModule,MatError,JsonPipe],
+    MatInput, ReactiveFormsModule,MatError],
   templateUrl: './edit-textarea.html',
   styleUrl: './edit-textarea.css'
 })
 export class EditTextarea {
   //readonly dialogRef = inject(MatDialogRef<EditTextarea>);
-  readonly data = inject<{label:string, value:string, enableDelete?:boolean}>(MAT_DIALOG_DATA);
+  readonly data = inject<{
+    label:string, 
+    value:string, 
+    enableDelete?:boolean
+    persian:boolean}>(MAT_DIALOG_DATA);
 
   myText = new FormControl(this.data.value,{
     nonNullable:true,

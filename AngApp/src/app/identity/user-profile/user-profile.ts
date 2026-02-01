@@ -23,7 +23,7 @@ export class UserProfile {
   userGuid = signal<string|null>(null);
   userModel = signal<Identity_UserModel|null>(null);
   isMyProfile = computed(()=>this.identityService.userModel()?.guid === this.userGuid());
-  userImgSrc = computed(()=>this.identityService.getUserImageAddress(this.identityService.userModel()));
+  userImgSrc = computed(()=>this.identityService.getUserImageAddress(this.userModel()));
 
   constructor(){
     this.actiatedRoute.paramMap.subscribe(params=>{
@@ -44,6 +44,7 @@ export class UserProfile {
           next: res => {
             if(res){
               this.userModel.set(res);
+              //console.log(JSON.stringify(this.userModel()));
             }
           },
         });

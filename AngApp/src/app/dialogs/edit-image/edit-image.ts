@@ -16,7 +16,12 @@ import { JsonPipe } from '@angular/common';
 })
 export class EditImage {
   //readonly dialogRef = inject(MatDialogRef<EditImageTitle>);
-  readonly data = inject<{value:string|null, title:string, enableEdit?:boolean, imageSize?:number}>(MAT_DIALOG_DATA);
+  readonly data = inject<{
+    value:string|null, 
+    title:string, 
+    enableEdit?:boolean, 
+    imageSize?:number, 
+    displayTitle?:boolean}>(MAT_DIALOG_DATA);
   
   selectedFile = signal<File | null>(null);
   previewImgSrc = signal(this.data.value);

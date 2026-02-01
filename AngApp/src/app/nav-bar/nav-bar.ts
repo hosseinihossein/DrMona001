@@ -10,6 +10,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { WindowService } from '../shared/services/window-service';
 import { IdentityService } from '../identity/identity-service';
 import { SingletonService } from '../shared/services/singleton-service';
+import { UserList } from '../identity/admin/user-list/user-list';
 
 @Component({
   selector: 'app-nav-bar',

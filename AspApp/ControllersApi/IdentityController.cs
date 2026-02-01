@@ -130,6 +130,24 @@ public class IdentityController : ControllerBase
         return Ok(user_ViewModel);
     }
 
+    [HttpGet]
+    [Authorize(Roles = "Identity_Admins")]
+    public async Task<IActionResult> GetUserList()
+    {
+        var userList = await userManager.Users
+        .Select(user => new
+        {
+            Guid = user.UserGuid,
+            user.UserName,
+            user.HasImage,
+            user.IntegrityVersion,
+            user.FullName,
+        })
+        .ToArrayAsync();
+
+        return Ok(userList);
+    }
+
     [HttpPost]
     [Authorize(Roles = "Identity_Admins")]
     [ValidateAntiForgeryToken]
@@ -222,6 +240,40 @@ public class IdentityController : ControllerBase
         return BadRequest(ModelState);
     }
 
+    [HttpDelete]
+    [Authorize(Roles = "Identity_Admins")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteUser([FromQuery][StringLength(32)] string userGuid)
+    {
+        if (!Guid.TryParseExact(userGuid, "N", out Guid userGuid_Guid))
+        {
+            ModelState.AddModelError("Try Parse Guid", "Couldn't parse the specified string guid!");
+            return BadRequest(ModelState);
+        }
+
+        Identity_UserDbModel? user =
+        await userManager.Users
+        .FirstOrDefaultAsync(u => u.UserGuid == userGuid_Guid);
+
+        if (user is null)
+        {
+            ModelState.AddModelError("user", "the specified user Not found!");
+            return BadRequest(ModelState);
+        }
+
+        var result = await userManager.DeleteAsync(user);
+        if (result.Succeeded)
+        {
+            return Ok(new { success = true });
+        }
+
+        foreach (IdentityError error in result.Errors)
+        {
+            ModelState.AddModelError("Deleting User", error.Description);
+        }
+        return BadRequest(ModelState);
+    }
+
 
 
 
@@ -248,6 +300,7 @@ public class IdentityController : ControllerBase
         }
         return BadRequest(ModelState);
     }
+
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
@@ -268,10 +321,11 @@ public class IdentityController : ControllerBase
         }
         return BadRequest(ModelState);
     }
+
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> SubmitDescription([FromQuery][StringLength(32)] string description)
+    public async Task<IActionResult> SubmitDescription([FromQuery][StringLength(4000)] string description)
     {
         //fetch and create
         Identity_UserDbModel user = (await userManager.FindByNameAsync(User.Identity!.Name!))!;
@@ -288,6 +342,7 @@ public class IdentityController : ControllerBase
         }
         return BadRequest(ModelState);
     }
+
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
@@ -308,6 +363,7 @@ public class IdentityController : ControllerBase
         }
         return BadRequest(ModelState);
     }
+
     [HttpPost]
     [Authorize]
     [RequestSizeLimit(128 * 1024)]//128 KB
@@ -341,6 +397,7 @@ public class IdentityController : ControllerBase
     {
         public IFormFile UserImageFile { get; set; } = null!;
     }
+
     [HttpDelete]
     [Authorize]
     [ValidateAntiForgeryToken]
@@ -365,6 +422,18 @@ public class IdentityController : ControllerBase
         return Ok(new { success = true });
     }
 
+    [HttpGet]
+    public IActionResult UserImage([FromQuery][StringLength(32)] string userGuid)
+    {
+        string userImagePath =
+        Path.Combine(Storage_Users.FullName, userGuid, "image");
+        if (System.IO.File.Exists(userImagePath))
+        {
+            return PhysicalFile(userImagePath, "application/octet-stream", "userImage", true);
+        }
+
+        return NotFound("User Image Not Found!");
+    }
 
 
 }
