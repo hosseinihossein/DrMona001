@@ -13,19 +13,23 @@ a{
     background-color: var(--mat-sys-outline-variant);
 }
 
-#submit-spinner-layout{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /*backdrop-filter: blur(5px);*/
-    z-index: 1;
-}
-mat-spinner#submit-spinner{
-    display: block;
+mat-card{
+    width: 100%;
     margin: auto;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+    display: block;
+}
+
+img.patient-img{
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+mat-card-title{
+    margin: 16px;
+}
+mat-card-subtitle{
+    margin: 0 16px;
 }

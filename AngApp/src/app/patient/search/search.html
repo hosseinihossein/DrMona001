@@ -1,0 +1,35 @@
+<form (submit)="search()">
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input type="text" matInput [formControl]="name_FormControl">
+        @if((name_FormControl.dirty || name_FormControl.touched) &&
+        name_FormControl.invalid && name_FormControl.hasError("maxlength")){
+        <mat-error>Name must be less than 32 characters long!</mat-error>
+        }
+        @if(name_FormControl.invalid && name_FormControl.hasError("searchError")){
+        <mat-error>{{name_FormControl.getError("searchError")}}</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>National Id</mat-label>
+        <input type="text" matInput [formControl]="nid_FormControl">
+        @if((nid_FormControl.dirty || nid_FormControl.touched) &&
+        nid_FormControl.invalid && nid_FormControl.hasError("maxlength")){
+        <mat-error>National id can not be more than 10 characters long!</mat-error>
+        }
+        @if(nid_FormControl.invalid && nid_FormControl.hasError("searchError")){
+        <mat-error>{{nid_FormControl.getError("searchError")}}</mat-error>
+        }
+    </mat-form-field>
+
+    <button matButton="elevated" id="login-btn" type="submit"
+        [disabled]="name_FormControl.invalid || nid_FormControl.invalid">
+        <mat-icon>search</mat-icon>
+        Search
+    </button>
+</form>
+
+@if(displayWaitSpinner()){
+<app-wait-spinner></app-wait-spinner>
+}

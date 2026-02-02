@@ -264,6 +264,15 @@ public class IdentityController : ControllerBase
         var result = await userManager.DeleteAsync(user);
         if (result.Succeeded)
         {
+            //delete user storage directory
+            string userDirPath =
+            Path.Combine(Storage_Users.FullName, user.UserGuid.ToString("N"));
+
+            if (System.IO.Directory.Exists(userDirPath))
+            {
+                System.IO.Directory.Delete(userDirPath, true);
+            }
+
             return Ok(new { success = true });
         }
 

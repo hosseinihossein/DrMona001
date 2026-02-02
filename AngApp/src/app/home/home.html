@@ -1,1 +1,9 @@
-<p>home works!</p>
+@if(identitySerice.userModel()?.roles?.includes("Patient_Admins")){
+<div>
+    <a matButton="outlined" [routerLink]="['/new-patient']">
+        <mat-icon>person_add</mat-icon>
+        Add New Patient
+    </a>
+</div>
+}
+<app-search></app-search>

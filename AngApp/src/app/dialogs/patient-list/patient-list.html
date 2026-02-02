@@ -1,0 +1,55 @@
+@if(data.label){
+<p mat-dialog-title>
+    {{data.label}}({{data.patients.length}})
+</p>
+}
+<mat-dialog-content>
+    @for(patient of data.patients; track patient.guid){
+    <div style="position: relative;">
+        <span style="position: absolute;font-size: 12px;right: 0;">{{$index+1}}</span>
+        <a [routerLink]="['/patient-proile',patient.guid]" mat-dialog-close>
+            <!--div id="user-div">
+                @if(patientService.getUserImageAddress(person)){
+                <img [ngSrc]="patientService.getUserImageAddress(person)!" width="48" height="48" alt="user image">
+                }
+                @else {
+                <mat-icon style="font-size: 48px;width: 48px;height: 48px;">account_circle</mat-icon>
+                }
+                <span> {{person.fullName}}</span>
+            </div-->
+            <mat-card appearance="outlined">
+                <mat-card-header>
+
+                    <div style="float: inline-start;position: relative;">
+                        @if(this.patientService.getPatientImageAddress(patient)){
+                        <img [ngSrc]="this.patientService.getPatientImageAddress(patient)!" priority width="48"
+                            height="48" alt="user image" class="patient-img">
+                        }
+                        @else {
+                        <mat-icon style="font-size: 48px;width: 48px;height: 48px;">account_circle</mat-icon>
+                        }
+                    </div>
+
+                    <div style="float: inline-start;position: relative;">
+                        <mat-card-title>
+                            {{patient.fullName}}
+                        </mat-card-title>
+
+                        <mat-card-subtitle>
+                            <p class="persian-font">
+                                {{patient.nationalId}}
+                            </p>
+                        </mat-card-subtitle>
+                    </div>
+
+                </mat-card-header>
+            </mat-card>
+        </a>
+    </div>
+    }
+
+    <mat-dialog-actions>
+        <button matButton mat-dialog-close>Ok</button>
+    </mat-dialog-actions>
+
+</mat-dialog-content>
