@@ -7,6 +7,7 @@ import { MatButton } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PatientService } from '../../patient/patient-service';
 import { MatCardModule } from "@angular/material/card";
+import { Patient_PatientListModel } from '../../patient/admin/patient-list/patient-list';
 
 @Component({
   selector: 'app-patient-list',
@@ -19,7 +20,7 @@ import { MatCardModule } from "@angular/material/card";
 export class PatientList {
   readonly data = inject<{
     label:string,
-    patients:Patient_ListModel[]
+    patients:Patient_PatientListModel[]
   }>(MAT_DIALOG_DATA);
 
   patientService = inject(PatientService);
@@ -32,18 +33,3 @@ export class PatientList {
 
 }
 
-export class Patient_ListModel
-{
-  constructor(personModel?:Partial<Patient_ListModel>){
-    this.guid = personModel?.guid ?? "";
-    this.nationalId = personModel?.nationalId ?? "";
-    this.fullName = personModel?.fullName;
-    this.hasImage = personModel?.hasImage ?? false;
-    this.integrityVersion = personModel?.integrityVersion ?? 0;
-  }
-  guid: string;
-  nationalId: string;
-  fullName?: string|null;
-  hasImage:boolean;
-  integrityVersion:number;
-}

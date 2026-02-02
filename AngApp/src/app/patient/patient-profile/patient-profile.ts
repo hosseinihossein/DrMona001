@@ -19,6 +19,7 @@ export class Patient_ProfileModel
     this.description = patientModel?.description;
     this.hasImage = patientModel?.hasImage ?? false;
     this.integrityVersion = patientModel?.integrityVersion ?? 0;
+    this.createdAt = patientModel?.createdAt ?? new Date(Date.now());
   }
   guid: string;
   nationalId: string;
@@ -26,4 +27,5 @@ export class Patient_ProfileModel
   description?: string|null;
   hasImage:boolean;
   integrityVersion:number;
+  createdAt:Date = null!;
 }

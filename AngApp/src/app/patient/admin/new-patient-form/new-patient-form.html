@@ -1,0 +1,40 @@
+<h1>Adding New Patient</h1>
+
+<mat-form-field>
+    <mat-label>Full Name</mat-label>
+    <input type="text" matInput [formControl]="fullname_FormControl" required>
+    @if((fullname_FormControl.dirty || fullname_FormControl.touched) &&
+    fullname_FormControl.invalid && fullname_FormControl.hasError("required")){
+    <mat-error>username is required!</mat-error>
+    }
+    @if((fullname_FormControl.dirty || fullname_FormControl.touched) &&
+    fullname_FormControl.invalid && fullname_FormControl.hasError("maxlength")){
+    <mat-error>username must be less than 32 characters long!</mat-error>
+    }
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>National Id</mat-label>
+    <input type="text" matInput [formControl]="nationalId_FormControl" required>
+    @if((nationalId_FormControl.dirty || nationalId_FormControl.touched) &&
+    nationalId_FormControl.invalid && nationalId_FormControl.hasError("required")){
+    <mat-error>username is required!</mat-error>
+    }
+    @if((nationalId_FormControl.dirty || nationalId_FormControl.touched) &&
+    nationalId_FormControl.invalid && nationalId_FormControl.hasError("minlength")){
+    <mat-error>username must be more than 3 characters long!</mat-error>
+    }
+    @if((nationalId_FormControl.dirty || nationalId_FormControl.touched) &&
+    nationalId_FormControl.invalid && nationalId_FormControl.hasError("maxlength")){
+    <mat-error>username must be less than 32 characters long!</mat-error>
+    }
+</mat-form-field>
+
+<button matButton="elevated" id="submit-btn" (click)="submitNewPatient()"
+    [disabled]="fullname_FormControl.invalid || nationalId_FormControl.invalid">
+    Submit
+</button>
+
+@if(displayWaitSpinner()){
+<app-wait-spinner></app-wait-spinner>
+}
