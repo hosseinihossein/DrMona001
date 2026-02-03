@@ -22,12 +22,17 @@ export class PatientService {
     }
     return null;
   }
-  requestPatientList(pageIndex:number=0,pageSize:number=50){
+  requestPatientList(pageIndex:number=0,pageSize:number=10){
     let httpParams = new HttpParams();
     httpParams = httpParams.set("pageIndex",pageIndex);
     httpParams = httpParams.set("pageSize",pageSize);
     return this.httpClient.get<Patient_PatientListModel[]>(
       "/api/Patient/GetPatientList",{params:httpParams}
+    );
+  }
+  requestNumberOfPatients(){
+    return this.httpClient.get<{totalNumberOfPatients:number}>(
+      "/api/Patient/GetTotalNumberOfPatients"
     );
   }
 

@@ -70,6 +70,10 @@
     </tr>
 </table>
 
+<mat-paginator [length]="numberOfAllPatients()" [pageSize]="pageSize()" [pageSizeOptions]="[10, 20, 50, 100]"
+    (page)="handlePageEvent($event)" aria-label="Select page of patients">
+</mat-paginator>
+
 @if(displayWaitSpinner()){
 <app-wait-spinner></app-wait-spinner>
 }

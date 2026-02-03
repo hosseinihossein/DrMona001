@@ -10,11 +10,12 @@ import { WaitSpinner } from '../../../shared/wait-spinner/wait-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
 import { IdentityService } from '../../../identity/identity-service';
 import { PatientService } from '../../patient-service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-patient-list',
   imports: [MatTableModule, MatMiniFabButton, MatIcon, RouterLink, NgOptimizedImage, MatAnchor,
-    WaitSpinner,MatTooltip,
+    WaitSpinner,MatTooltip,MatPaginator
   ],
   templateUrl: './patient-list.html',
   styleUrl: './patient-list.css',
@@ -22,7 +23,11 @@ import { PatientService } from '../../patient-service';
 export class PatientList {
   dataSource = signal<Patient_PatientListModel[]>([]);
   displayedColumns = signal<string[]>(["PatientImage","FullName","NationalId","Guid","CreatedAt",
-    "Actions"]);
+    "Actions"
+  ]);
+  numberOfAllPatients = signal<number>(0);
+  pageSize = signal<number>(10);
+  pageIndex = signal<number>(0);
   
   displayWaitSpinner = signal(true);
   identityService = inject(IdentityService);
@@ -31,11 +36,21 @@ export class PatientList {
   router = inject(Router);
 
   constructor(){
-    this.patientService.requestPatientList().subscribe({
+    effect(()=>{
+      this.patientService.requestPatientList(this.pageIndex(),this.pageSize()).subscribe({
+        next: res => {
+          if(res){
+            this.dataSource.set(res);
+            this.displayWaitSpinner.set(false);
+          }
+        },
+      });
+    });
+
+    this.patientService.requestNumberOfPatients().subscribe({
       next: res => {
         if(res){
-          this.dataSource.set(res);
-          this.displayWaitSpinner.set(false);
+          this.numberOfAllPatients.set(res.totalNumberOfPatients);
         }
       },
     });
@@ -73,6 +88,13 @@ export class PatientList {
       }
     });
   }
+
+  handlePageEvent(e: PageEvent) {
+    //let length = e.length;
+    this.pageSize.set(e.pageSize);
+    this.pageIndex.set(e.pageIndex);
+  }
+
 }
 
 export class Patient_PatientListModel{
