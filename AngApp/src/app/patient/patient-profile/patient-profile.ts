@@ -1,12 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton, MatAnchor } from '@angular/material/button';
+import { NgOptimizedImage } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { IdentityService } from '../../identity/identity-service';
+import { PatientService } from '../patient-service';
+import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
 
 @Component({
   selector: 'app-patient-profile',
-  imports: [],
+  imports: [MatCardModule, MatIcon, MatButton, NgOptimizedImage, WaitSpinner, 
+    MatAnchor, RouterLink
+  ],
   templateUrl: './patient-profile.html',
   styleUrl: './patient-profile.css',
 })
 export class PatientProfile {
+  identityService = inject(IdentityService);
+  patientService = inject(PatientService);
+  router = inject(Router);
+  activatedRoute = inject(ActivatedRoute);
+
+  patientGuid = signal<string|null>(null);
+  patientModel = signal<Patient_ProfileModel|null>(null);
+  patientImgSrc = computed(()=>this.patientService.getPatientImageAddress(this.patientModel()));
+  displayWaitSpinner = signal(true);
+
+  constructor(){
+    this.activatedRoute.paramMap.subscribe(params=>{
+      if(params.has("patientGuid")){
+        this.patientGuid.set(params.get("patientGuid"));
+      }
+    });
+
+    effect(()=>{
+      if(this.patientGuid()){
+        this.patientService.requestPatientModel(this.patientGuid()!).subscribe({
+          next: res => {
+            if(res){
+              this.patientModel.set(res);
+              this.displayWaitSpinner.set(false);
+            }
+          },
+        });
+      }
+    });
+
+    effect(()=>{
+      if(!this.identityService.isAuthenticated()){
+        this.router.navigate(["/"]);
+      }
+    });
+  }
 
 }
 

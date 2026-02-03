@@ -24,7 +24,7 @@ export class PatientList {
   displayedColumns = signal<string[]>(["PatientImage","FullName","NationalId","Guid","CreatedAt",
     "Actions"]);
   
-  displayWaitSpinner = signal(false);
+  displayWaitSpinner = signal(true);
   identityService = inject(IdentityService);
   patientService = inject(PatientService);
   dialog = inject(MatDialog);
@@ -35,6 +35,7 @@ export class PatientList {
       next: res => {
         if(res){
           this.dataSource.set(res);
+          this.displayWaitSpinner.set(false);
         }
       },
     });
@@ -46,22 +47,22 @@ export class PatientList {
     });
   }
 
-  deleteUser(userGuid:string,userName:string){
+  deletePatient(guid:string,fullName:string){
     this.identityService.getCsrf().subscribe({
       next: () => {console.log("csrf received.")},
     });
     
     this.dialog.open(ConfirmDelete,{data:{
-      title:userName,
-      type: "user"
+      title:fullName,
+      type: "patient"
     }}).afterClosed().subscribe(result=>{
       if(result && result === true){
         this.displayWaitSpinner.set(true);
-        this.identityService.requestDeleteUser(userGuid).subscribe({
+        this.patientService.requestDeletePatient(guid).subscribe({
           next: res => {
             if(res && res.success){
               this.dataSource.update(ds=>{
-                let index = ds.findIndex(userModel=>userModel.guid === userGuid);
+                let index = ds.findIndex(pm=>pm.guid === guid);
                 ds.splice(index,1);
                 return ds.map(um=>new Patient_PatientListModel(um));
               });

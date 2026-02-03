@@ -23,7 +23,7 @@ import { EditTextarea } from '../../../dialogs/edit-textarea/edit-textarea';
 })
 export class PatientProfileSettings {
   identityService = inject(IdentityService);
-  patientService = inject(PatientService)
+  patientService = inject(PatientService);
   dialog = inject(MatDialog);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);

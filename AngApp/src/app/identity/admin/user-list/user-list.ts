@@ -22,7 +22,7 @@ export class UserList {
   dataSource = signal<Identity_UserListModel[]>([]);
   displayedColumns = signal<string[]>(["UserImage","FullName","UserName","UserGuid","Actions"]);
   
-  displayWaitSpinner = signal(false);
+  displayWaitSpinner = signal(true);
 
   identityService = inject(IdentityService);
   dialog = inject(MatDialog);
@@ -33,6 +33,7 @@ export class UserList {
       next: res => {
         if(res){
           this.dataSource.set(res);
+          this.displayWaitSpinner.set(false);
         }
       },
     });

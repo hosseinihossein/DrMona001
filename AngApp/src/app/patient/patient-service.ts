@@ -23,7 +23,12 @@ export class PatientService {
     return null;
   }
   requestPatientList(pageIndex:number=0,pageSize:number=50){
-    
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set("pageIndex",pageIndex);
+    httpParams = httpParams.set("pageSize",pageSize);
+    return this.httpClient.get<Patient_PatientListModel[]>(
+      "/api/Patient/GetPatientList",{params:httpParams}
+    );
   }
 
   searchPatients(name:string|null,nationalId:string|null){
@@ -45,6 +50,12 @@ export class PatientService {
     httpParams = httpParams.set("nationalId",nationalId);
     return this.httpClient.post<{success:boolean,guid:string}>(
       "/api/Patient/CreateNewPatient",null,{params:httpParams}
+    );
+  }
+  requestDeletePatient(guid:string){
+    let httpParams = new HttpParams().set("guid",guid);
+    return this.httpClient.delete<{success:boolean}>(
+      "/api/Patient/DeletePatient",{params:httpParams}
     );
   }
 

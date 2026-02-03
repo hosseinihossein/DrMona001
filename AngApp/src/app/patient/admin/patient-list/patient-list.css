@@ -1,0 +1,17 @@
+:host{
+    width: fit-content;
+    display: block;
+    margin: 50px auto 0;
+}
+
+img.patientProfileImage{
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    object-fit: contain;
+}
+
+th,td{
+    text-align: center;
+}

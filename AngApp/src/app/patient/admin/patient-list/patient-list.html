@@ -50,11 +50,11 @@
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let patientModel" style="text-wrap: nowrap;">
             <button matMiniFab style="color:var(--mat-sys-on-error-container);margin: 0 4px;"
-                (click)="deleteUser(patientModel.guid, patientModel.userName)" matTooltip="Delete User">
+                (click)="deletePatient(patientModel.guid, patientModel.fullName)" matTooltip="Delete User">
                 <mat-icon>delete</mat-icon>
             </button>
-            <a matMiniFab [routerLink]="['/edit-user', patientModel.guid]" matTooltip="Edit User"
-                style="margin: 0 4px;">
+            <a matMiniFab [routerLink]="['/patient-profile-settings', patientModel.guid]"
+                matTooltip="Patient Profile Settings" style="margin: 0 4px;">
                 <mat-icon>edit</mat-icon>
             </a>
         </td>
