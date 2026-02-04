@@ -30,10 +30,12 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
+        @if(identityService.userModel()?.roles?.includes("Patient_Admins")){
         <a matButton="" [routerLink]="['/patient-profile-settings']">
             <mat-icon>person_edit</mat-icon>
             Edit Profile
         </a>
+        }
     </mat-card-actions>
 
     @if(displayWaitSpinner()){

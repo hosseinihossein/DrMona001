@@ -1,0 +1,79 @@
+<mat-sidenav-container>
+
+    <!--------------------- content overview -------------------->
+    <mat-sidenav id="endSideNav" mode="side" opened position="end" fixedInViewport fixedTopGap="80" fixedBottomGap="16">
+        <p style="font-weight: 500;color: var(--mat-sys-on-surface);margin: 3px;">Contents:</p>
+        @for(element of documentTabModel().elements; track element.guid){
+        @if(element.type === "h1" || element.type === "h2"){
+        <a (click)="goToElement(element.guid)" id="overview-heading{{element.guid}}"
+            [style.paddingLeft.px]="element.type === 'h2' ? 12 : 4">{{element.value}}</a>
+        }
+        }
+    </mat-sidenav>
+
+    <mat-sidenav-content [class.editMode]="documentPageService.editMode()">
+
+        <!--------------------- top action box -------------------->
+        <div class="actionDiv clearfix">
+
+            @if(documentPageService.editMode()){
+            <button matButton="elevated" [matMenuTriggerFor]="elementMenu" matTooltip="New element"
+                class="noPaddingBtn">
+                <mat-icon>dashboard_customize</mat-icon>
+                <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+            <button matButton="elevated" matTooltip="Exit edit mode" class="noPaddingBtn">
+                <mat-icon>edit_off</mat-icon>
+            </button>
+            }
+            @else {
+            <button matButton="elevated" matTooltip="Enter edit mode" class="noPaddingBtn" (click)="enterEditMode()">
+                <mat-icon>edit</mat-icon>
+            </button>
+            }
+
+        </div>
+
+        <!--------------------- matmenu -------------------->
+
+        <mat-menu #elementMenu>
+            <button mat-menu-item (click)="addNewElement('h1')" matTooltipPosition="left"
+                matTooltip="Add a main heading">
+                <mat-icon>format_h1</mat-icon>
+                Main Heading
+            </button>
+            <button mat-menu-item (click)="addNewElement('p')" matTooltipPosition="left" matTooltip="Add a paragraph">
+                <mat-icon>subject</mat-icon>
+                Paragraph
+            </button>
+            <button mat-menu-item (click)="addNewElement('code')" matTooltipPosition="left"
+                matTooltip="Add a code snippet">
+                <mat-icon>code_blocks</mat-icon>
+                Code
+            </button>
+            <button mat-menu-item (click)="addNewElement('img')" matTooltipPosition="left" matTooltip="Add an image">
+                <mat-icon>image</mat-icon>
+                Image
+            </button>
+            <button mat-menu-item (click)="addNewElement('file')" matTooltipPosition="left"
+                matTooltip="Attach a new file">
+                <mat-icon>file_present</mat-icon>
+                File
+            </button>
+        </mat-menu>
+        <!-------------------------------------------------->
+
+        <!--------------------- elements -------------------->
+        @for(element of sortedElements(); track element.guid){
+        <app-document-element [elementModel]="element" (headingInitialized)="onHeadingInit($event)" [id]="element.guid">
+        </app-document-element>
+        }
+
+        <!--------------------- spinner -------------------->
+        @if(displayWaitSpinner()){
+        <app-wait-spinner></app-wait-spinner>
+        }
+
+    </mat-sidenav-content>
+
+</mat-sidenav-container>
