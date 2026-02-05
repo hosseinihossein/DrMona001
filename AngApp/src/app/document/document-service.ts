@@ -46,4 +46,24 @@ export class DocumentService {
       "/api/Document/EditElement",null,{params:httpParams}
     );
   }
+  requestDeleteElement(guid:string){
+    let httpParams = new HttpParams().set("guid",guid);
+    return this.httpClient.delete<{success:boolean}>(
+      "/api/Document/DeleteElement",{params:httpParams}
+    );
+  }
+  requestDecreaseOrder(guid:string){
+    let httpParams = new HttpParams().set("guid",guid);
+    return this.httpClient.post<{success:boolean}>(
+      "/api/Document/DecreaseOrder",null,{params:httpParams}
+    );
+  }
+  requestIncreaseOrder(guid:string){
+    let httpParams = new HttpParams().set("guid",guid);
+    return this.httpClient.post<{success:boolean}>(
+      "/api/Document/IncreaseOrder",null,{params:httpParams}
+    );
+  }
+
+
 }
