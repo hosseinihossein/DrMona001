@@ -42,3 +42,7 @@
     <app-wait-spinner></app-wait-spinner>
     }
 </mat-card>
+
+@if(patientGuid()){
+<app-document-page [patientGuid]="patientGuid()!"></app-document-page>
+}

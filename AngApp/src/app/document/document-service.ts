@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { DocumentElementModel, NewElementFormModel } from './document-element/document-element';
+import { DocumentPageModel } from './document-page/document-page';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,13 @@ export class DocumentService {
   private httpClient = inject(HttpClient);
   
   constructor(){}
+
+  requestDocumentPageModel(patientGuid:string){
+    let httpParams = new HttpParams().set("patientGuid",patientGuid);
+    return this.httpClient.get<DocumentPageModel>(
+      "/api/Document/GetDocumentPageModel",{params:httpParams}
+    );
+  }
 
   submitNewElement(formModel:NewElementFormModel){
     const formData = new FormData();

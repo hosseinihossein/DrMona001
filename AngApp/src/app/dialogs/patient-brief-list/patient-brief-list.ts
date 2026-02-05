@@ -10,14 +10,14 @@ import { MatCardModule } from "@angular/material/card";
 import { Patient_PatientListModel } from '../../patient/admin/patient-list/patient-list';
 
 @Component({
-  selector: 'app-patient-list',
+  selector: 'app-patient-brief-list',
   imports: [MatDialogModule, NgOptimizedImage, MatIcon, RouterLink, MatButton, ReactiveFormsModule, 
     MatCardModule,
   ],
-  templateUrl: './patient-list.html',
-  styleUrl: './patient-list.css',
+  templateUrl: './patient-brief-list.html',
+  styleUrl: './patient-brief-list.css',
 })
-export class PatientList {
+export class PatientBriefList {
   readonly data = inject<{
     label:string,
     patients:Patient_PatientListModel[]

@@ -2,7 +2,7 @@ import { inject } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
 import { IdentityService } from "../../identity/identity-service";
 
-export const identityAdminGuard: CanActivateFn = (route, state) => {
+export const patientAdminGuard: CanActivateFn = (route, state) => {
   const identityService = inject(IdentityService);
   const router = inject(Router);
   if(identityService.isAuthenticated() && identityService.userModel()?.roles.includes("Patient_Admins")){

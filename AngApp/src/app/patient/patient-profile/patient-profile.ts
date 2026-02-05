@@ -7,12 +7,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IdentityService } from '../../identity/identity-service';
 import { PatientService } from '../patient-service';
 import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
+import { DocumentPage } from "../../document/document-page/document-page";
 
 @Component({
   selector: 'app-patient-profile',
-  imports: [MatCardModule, MatIcon, MatButton, NgOptimizedImage, WaitSpinner, 
-    MatAnchor, RouterLink
-  ],
+  imports: [MatCardModule, MatIcon, MatButton, NgOptimizedImage, WaitSpinner,
+    MatAnchor, RouterLink, DocumentPage],
   templateUrl: './patient-profile.html',
   styleUrl: './patient-profile.css',
 })

@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { DocumentElementModel } from '../document-element';
@@ -10,10 +10,11 @@ import { DocumentPageModel } from '../../document-page/document-page';
 import { EditTextarea } from '../../../dialogs/edit-textarea/edit-textarea';
 import { EditFile } from '../../../dialogs/edit-file/edit-file';
 import { EditImage } from '../../../dialogs/edit-image/edit-image';
+import { WaitSpinner } from '../../../shared/wait-spinner/wait-spinner';
 
 @Component({
   selector: 'app-element-edit-box',
-  imports: [MatIcon,MatButton],
+  imports: [MatIcon,MatButton,WaitSpinner],
   templateUrl: './element-edit-box.html',
   styleUrl: './element-edit-box.css',
 })
@@ -23,6 +24,8 @@ export class ElementEditBox {
   documentService = inject(DocumentService);
   documentPageService = inject(DocumentPageService);
   dialog = inject(MatDialog);
+
+  displayWaitSpinner = signal(false);
 
   openDialog(){
     switch(this.elementModel().type){
@@ -56,13 +59,15 @@ export class ElementEditBox {
           this.deleteElement();
         }
         else{
+          this.displayWaitSpinner.set(true);
           this.documentService.requestEditElement(this.elementModel().guid, result).subscribe({
             next: res => {
               if(res && res.success){
                 console.log("heading value edited: ",result);
                 this.elementModel().value = result;
-                //this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
+                this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
+              this.displayWaitSpinner.set(false);
             }
           });
         }
@@ -81,13 +86,15 @@ export class ElementEditBox {
           this.deleteElement();
         }
         else{
+          this.displayWaitSpinner.set(true);
           this.documentService.requestEditElement(this.elementModel().guid, result).subscribe({
             next: res => {
               if(res && res.success){
                 console.log("paragraph value edited: ",result);
                 this.elementModel().value = result;
-                //this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
+                this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
+              this.displayWaitSpinner.set(false);
             }
           });
         }
@@ -106,13 +113,15 @@ export class ElementEditBox {
           this.deleteElement();
         }
         else{
+          this.displayWaitSpinner.set(true);
           this.documentService.requestEditElement(this.elementModel().guid, result).subscribe({
             next: res => {
               if(res && res.success){
                 console.log("code value edited: ",result);
                 this.elementModel().value = result;
-                //this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
+                this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
+              this.displayWaitSpinner.set(false);
             }
           });
         }
@@ -131,13 +140,15 @@ export class ElementEditBox {
           this.deleteElement();
         }
         else{
+          this.displayWaitSpinner.set(true);
           this.documentService.requestEditElement(this.elementModel().guid, undefined, result).subscribe({
             next: res => {
               if(res && res.success){
                 console.log("file title edited: ",result);
                 this.elementModel().value = result;
-                //this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
+                this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
+              this.displayWaitSpinner.set(false);
             }
           });
         }
@@ -157,13 +168,15 @@ export class ElementEditBox {
           this.deleteElement();
         }
         else{
+          this.displayWaitSpinner.set(true);
           this.documentService.requestEditElement(this.elementModel().guid, undefined, result).subscribe({
             next: res => {
               if(res && res.success){
                 console.log("file title edited: ",result);
                 this.elementModel().value = result;
-                //this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
+                this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
+              this.displayWaitSpinner.set(false);
             }
           });
         }
@@ -172,6 +185,7 @@ export class ElementEditBox {
   }
 
   private deleteElement(){
+    this.displayWaitSpinner.set(true);
     this.documentService.requestDeleteElement(this.elementModel().guid).subscribe({
       next: res => {
         if(res && res.success){
@@ -193,12 +207,14 @@ export class ElementEditBox {
             return new DocumentPageModel(dpm!);
           });
         }
+        this.displayWaitSpinner.set(false);
       },
     });
   }
 
   decreaseOrder(){
     if(this.elementModel().order > 0){
+      this.displayWaitSpinner.set(true);
       this.documentService.requestDecreaseOrder(this.elementModel().guid).subscribe({
         next: res => {
           if(res && res.success){
@@ -215,6 +231,7 @@ export class ElementEditBox {
               return new DocumentPageModel(dpm!);
             });
           }
+          this.displayWaitSpinner.set(false);
         },
       });
     }
@@ -222,6 +239,7 @@ export class ElementEditBox {
   increaseOrder(){
     let tab = this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === this.elementModel().tab);
     if(tab && this.elementModel().order < (tab.elements.length - 1)){
+      this.displayWaitSpinner.set(true);
       this.documentService.requestDecreaseOrder(this.elementModel().guid).subscribe({
         next: res => {
           if(res && res.success){
@@ -237,6 +255,7 @@ export class ElementEditBox {
               return new DocumentPageModel(dpm!);
             });
           }
+          this.displayWaitSpinner.set(false);
         },
       });
     }

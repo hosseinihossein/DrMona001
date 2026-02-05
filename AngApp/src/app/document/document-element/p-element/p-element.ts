@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { DocumentElementModel } from '../document-element';
 
 @Component({
   selector: 'app-p-element',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './p-element.css',
 })
 export class PElement {
-
+  elementModel = input.required<DocumentElementModel>();
 }

@@ -1,37 +1,51 @@
 <mat-tab-group dynamicHeight="">
+    @if(tabCC()){
     <mat-tab label="CC">
         <ng-template matTabContent>
-            <app-document-tab></app-document-tab>
+            <app-document-tab [documentTabModel]="tabCC()!"></app-document-tab>
         </ng-template>
     </mat-tab>
+    }
+    @if(tabPMH()){
     <mat-tab label="PMH">
         <ng-template matTabContent>
-            <app-document-tab></app-document-tab>
+            <app-document-tab [documentTabModel]="tabPMH()!"></app-document-tab>
         </ng-template>
     </mat-tab>
+    }
+    @if(tabDH()){
     <mat-tab label="DH">
         <ng-template matTabContent>
-            <app-document-tab></app-document-tab>
+            <app-document-tab [documentTabModel]="tabDH()!"></app-document-tab>
         </ng-template>
     </mat-tab>
+    }
+    @if(tabPI()){
     <mat-tab label="PI">
         <ng-template matTabContent>
-            <app-document-tab></app-document-tab>
+            <app-document-tab [documentTabModel]="tabPI()!"></app-document-tab>
         </ng-template>
     </mat-tab>
+    }
+    @if(tabPHE()){
     <mat-tab label="PHE">
         <ng-template matTabContent>
-            <app-document-tab></app-document-tab>
+            <app-document-tab [documentTabModel]="tabPHE()!"></app-document-tab>
         </ng-template>
     </mat-tab>
+    }
+    @if(tabPlan()){
     <mat-tab label="Plan">
         <ng-template matTabContent>
-            <app-document-tab></app-document-tab>
+            <app-document-tab [documentTabModel]="tabPlan()!"></app-document-tab>
         </ng-template>
     </mat-tab>
+    }
+    @if(tabResults()){
     <mat-tab label="Results">
         <ng-template matTabContent>
-            <app-document-tab></app-document-tab>
+            <app-document-tab [documentTabModel]="tabResults()!"></app-document-tab>
         </ng-template>
     </mat-tab>
+    }
 </mat-tab-group>

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, input, output, viewChild } from '@angular/core';
+import { DocumentElementModel } from '../document-element';
 
 @Component({
   selector: 'app-h1-element',
@@ -6,6 +7,12 @@ import { Component } from '@angular/core';
   templateUrl: './h1-element.html',
   styleUrl: './h1-element.css',
 })
-export class H1Element {
+export class H1Element implements AfterViewInit {
+  elementModel = input.required<DocumentElementModel>();
+  headingInitialized = output<HTMLHeadingElement>();
+  headingElement = viewChild.required<ElementRef<HTMLHeadingElement>>("headingElement");
 
+  ngAfterViewInit(): void {
+    this.headingInitialized.emit(this.headingElement().nativeElement);
+  }
 }

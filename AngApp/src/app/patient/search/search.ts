@@ -7,7 +7,7 @@ import { MatInput } from '@angular/material/input';
 import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
 import { PatientService } from '../patient-service';
 import { MatDialog } from '@angular/material/dialog';
-import { PatientList } from '../../dialogs/patient-list/patient-list';
+import { PatientBriefList } from '../../dialogs/patient-brief-list/patient-brief-list';
 
 @Component({
   selector: 'app-search',
@@ -42,7 +42,7 @@ export class Search {
       this.patientService.searchPatients(this.name_FormControl.value,this.nid_FormControl.value).subscribe({
         next: res => {
           if(res){
-            this.dialog.open(PatientList,{data:{
+            this.dialog.open(PatientBriefList,{data:{
               label:"Found Patients",
               patients: res,
             }});

@@ -1,9 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { DocumentPageModel } from './document-page';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class DocumentPageService {
   editMode = signal(false);
   documentPageModel = signal<DocumentPageModel|null>(null);

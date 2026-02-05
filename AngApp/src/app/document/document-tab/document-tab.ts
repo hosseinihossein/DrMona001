@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, Renderer2, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DocumentElement, DocumentElementModel, NewElementFormModel } from '../document-element/document-element';
 import { ViewportScroller } from '@angular/common';
@@ -16,6 +16,7 @@ import { Result } from '../../dialogs/result/result';
 import { IdentityService } from '../../identity/identity-service';
 import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
 import { DocumentPageModel } from '../document-page/document-page';
+import { WindowService } from '../../shared/services/window-service';
 
 @Component({
   selector: 'app-document-tab',
@@ -28,13 +29,19 @@ import { DocumentPageModel } from '../document-page/document-page';
 export class DocumentTab {
   documentTabModel = input.required<DocumentTabModel>();
 
+  viewPortObserver: IntersectionObserver;
+
+  windowService = inject(WindowService);
+  renderer = inject(Renderer2);
   identityService = inject(IdentityService);
   documentService = inject(DocumentService);
   documentPageService = inject(DocumentPageService);
   dialog = inject(MatDialog);
   viewportScroller = inject(ViewportScroller);
 
+  headingElements = signal<HTMLHeadingElement[]>([]);
   displayWaitSpinner = signal(false);
+
   editAllowed = computed(()=>this.identityService.isAuthenticated() && 
     this.identityService.userModel()?.roles.includes("Document_Admins")
   );
@@ -45,7 +52,34 @@ export class DocumentTab {
   );
 
 
-  constructor(){}
+  constructor(){
+    this.viewPortObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        let overviewHeader = this.windowService.nativeWindow.document.getElementById("overview-"+entry.target.id);
+        if(overviewHeader){
+          if (entry.isIntersecting) {
+            this.renderer.addClass(overviewHeader!, "active");
+          } else {
+            this.renderer.removeClass(overviewHeader!, "active");
+          }
+        }
+      });
+    });
+    effect(()=>{
+      for(let heading of this.headingElements()){
+        this.viewPortObserver.observe(heading);
+      }
+    });
+    
+  }
+
+  ngAfterViewInit(): void {
+    this.viewportScroller.setOffset([0,64]);//[xOffset, yOffset]
+  }
+
+  onHeadingInit(headingElement: HTMLHeadingElement){
+    this.headingElements.update(elements=>[...elements, headingElement]);
+  }
 
   goToElement(guid:string){
     this.viewportScroller.scrollToAnchor(guid, {behavior:'smooth'});
@@ -163,20 +197,24 @@ export class DocumentTab {
   }
   private requestForNewElement(newElementFormModel: NewElementFormModel){
     if(this.editAllowed()){
+      this.displayWaitSpinner.set(true);
 
       this.documentService.submitNewElement(newElementFormModel).subscribe({
         next: res => {
           if(res){
             console.log("new element added: ",JSON.stringify(res));
             this.documentTabModel().elements.push(res);
-            //this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
+            this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
             
             setTimeout(()=>{
               this.goToElement(res.guid);
             }, 1000);
+
+            this.displayWaitSpinner.set(false);
           }
         },
         error: err => {
+          this.displayWaitSpinner.set(false);
           this.dialog.open(Result,{
             data:{
               status: "warning",
@@ -192,6 +230,8 @@ export class DocumentTab {
 
     }
   }
+
+  
 
 }
 
