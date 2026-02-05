@@ -15,6 +15,7 @@ import { EditFile } from '../../dialogs/edit-file/edit-file';
 import { Result } from '../../dialogs/result/result';
 import { IdentityService } from '../../identity/identity-service';
 import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
+import { DocumentPageModel } from '../document-page/document-page';
 
 @Component({
   selector: 'app-document-tab',
@@ -166,7 +167,9 @@ export class DocumentTab {
       this.documentService.submitNewElement(newElementFormModel).subscribe({
         next: res => {
           if(res){
+            console.log("new element added: ",JSON.stringify(res));
             this.documentTabModel().elements.push(res);
+            //this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
             
             setTimeout(()=>{
               this.goToElement(res.guid);

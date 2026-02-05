@@ -1,1 +1,24 @@
-<p>document-element works!</p>
+<div class="mainDiv" [class.editMode]="documentPageService.editMode()">
+    @if(documentPageService.editMode()){
+    <app-element-edit-box [elementModel]="elementModel()"></app-element-edit-box>
+    }
+
+    @switch (elementModel().type) {
+    @case("h1"){
+    <app-h1-element [elementModel]="elementModel()"
+        (headingInitialized)="headingInitialized.emit($event)"></app-h1-element>
+    }
+    @case("p"){
+    <app-p-element [elementModel]="elementModel()"></app-p-element>
+    }
+    @case("img"){
+    <app-img-element [elementModel]="elementModel()"></app-img-element>
+    }
+    @case("code"){
+    <app-code-element [elementModel]="elementModel()"></app-code-element>
+    }
+    @case("file"){
+    <app-file-element [elementModel]="elementModel()"></app-file-element>
+    }
+    }
+</div>
