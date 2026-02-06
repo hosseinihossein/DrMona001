@@ -29,7 +29,7 @@ public class Program
                 listenOptions.UseHttps(/*"certFileName.pfx"*/);//user default certs
             });
 
-            options.Limits.MaxRequestBodySize = 5 * 1024;// 5 KB
+            options.Limits.MaxRequestBodySize = 16 * 1024;// 16 KB
         });
 
 
@@ -40,6 +40,15 @@ public class Program
         builder.Services.AddDbContext<Identity_DbContext>(opts =>
         {
             opts.UseMySql(builder.Configuration["ConnectionStrings_MySql:IdentityConnection"],
+            new MySqlServerVersion(new Version(8, 0, 42)), options =>
+            {
+                options.EnableRetryOnFailure();
+            });
+        });
+        //******************* Patient_DbContext *******************
+        builder.Services.AddDbContext<Patient_DbContext>(opts =>
+        {
+            opts.UseMySql(builder.Configuration["ConnectionStrings_MySql:PatientConnection"],
             new MySqlServerVersion(new Version(8, 0, 42)), options =>
             {
                 options.EnableRetryOnFailure();
@@ -154,14 +163,14 @@ public class Program
         });
 
         //******************* Controllers *******************
-        builder.Services.AddControllersWithViews(options =>
+        /*builder.Services.AddControllersWithViews(options =>
         {
             options.Filters.Add(new RequireHttpsAttribute());
         })
         .AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.Converters.Add(new GuidJsonConverter());
-        });
+        });*/
         builder.Services.AddControllers(options =>
         {
             options.Filters.Add(new RequireHttpsAttribute());
@@ -250,6 +259,16 @@ public class Program
                 {
                     await roleManager.CreateAsync(new Identity_RoleDbModel("Backup_Admins"));
                     await userManager.AddToRoleAsync(admin, "Backup_Admins");
+                }
+                if (await roleManager.FindByNameAsync("Patient_Admins") == null)
+                {
+                    await roleManager.CreateAsync(new Identity_RoleDbModel("Patient_Admins"));
+                    await userManager.AddToRoleAsync(admin, "Patient_Admins");
+                }
+                if (await roleManager.FindByNameAsync("Document_Admins") == null)
+                {
+                    await roleManager.CreateAsync(new Identity_RoleDbModel("Document_Admins"));
+                    await userManager.AddToRoleAsync(admin, "Document_Admins");
                 }
 
             }

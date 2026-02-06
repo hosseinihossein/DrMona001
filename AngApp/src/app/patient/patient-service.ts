@@ -9,6 +9,13 @@ import { Patient_PatientListModel } from './admin/patient-list/patient-list';
 export class PatientService {
   private httpClient = inject(HttpClient);
 
+  getPatientImageAddress(patientModel:{guid:string, integrityVersion:number, hasImage:boolean}|null):string|null{
+    if(patientModel?.hasImage && patientModel.guid){
+      return `/api/Patient/PatientImage?guid=${patientModel.guid}&v=${patientModel.integrityVersion}`;
+    }
+    return null;
+  }
+
   requestPatientModel(guid:string){
     let httpParams = new HttpParams().set("guid",guid);
     return this.httpClient.get<Patient_ProfileModel>(
@@ -16,12 +23,6 @@ export class PatientService {
     );
   }
 
-  getPatientImageAddress(patientModel:{guid:string, integrityVersion:number, hasImage:boolean}|null):string|null{
-    if(patientModel?.hasImage && patientModel.guid){
-      return `/api/Patient/PatientImage?guid=${patientModel.guid}&v=${patientModel.integrityVersion}`;
-    }
-    return null;
-  }
   requestPatientList(pageIndex:number=0,pageSize:number=10){
     let httpParams = new HttpParams();
     httpParams = httpParams.set("pageIndex",pageIndex);
@@ -45,7 +46,7 @@ export class PatientService {
       httpParams = httpParams.set("nationalId",nationalId);
     }
     return this.httpClient.get<Patient_PatientListModel[]>(
-      "/api/Patient/PatientList",{params:httpParams}
+      "/api/Patient/GetPatientList",{params:httpParams}
     );
   }
 
@@ -87,7 +88,7 @@ export class PatientService {
   }
   requestSubmitPatientImage(guid:string, file: File){
     const formData = new FormData();
-    formData.append('patientImageFile', file);
+    formData.append('image', file);
     formData.append("guid",guid);
     return this.httpClient.post<{success: boolean, hasImage: boolean, integrityVersion:number}>(
       "/api/Patient/SubmitPatientImage", formData

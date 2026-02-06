@@ -61,7 +61,7 @@ export class Patient_ProfileModel
   constructor(patientModel?:Patient_ProfileModel){
     this.guid = patientModel?.guid ?? "";
     this.nationalId = patientModel?.nationalId ?? "";
-    this.fullName = patientModel?.fullName;
+    this.fullName = patientModel?.fullName ?? "";
     this.description = patientModel?.description;
     this.hasImage = patientModel?.hasImage ?? false;
     this.integrityVersion = patientModel?.integrityVersion ?? 0;
@@ -69,7 +69,7 @@ export class Patient_ProfileModel
   }
   guid: string;
   nationalId: string;
-  fullName?: string|null;
+  fullName: string;
   description?: string|null;
   hasImage:boolean;
   integrityVersion:number;

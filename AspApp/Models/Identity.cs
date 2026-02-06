@@ -209,8 +209,8 @@ public class Identity_Process
 {
     public readonly DirectoryInfo Storage_Users;
     //readonly string SeedFileName;
-    public Identity_Process(IWebHostEnvironment _env)
+    public Identity_Process(IWebHostEnvironment env)
     {
-        Storage_Users = Directory.CreateDirectory(Path.Combine(_env.ContentRootPath, "Storage", "Identity", "Users"));
+        Storage_Users = Directory.CreateDirectory(Path.Combine(env.ContentRootPath, "Storage", "Identity", "Users"));
     }
 }

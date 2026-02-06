@@ -121,14 +121,43 @@ public class Patient_DbContext : DbContext
 //************************** Process ***************************
 public class Patient_Process
 {
+    public readonly DirectoryInfo Storage_Patients;
+    public readonly DirectoryInfo Storage_Elements;
 
+    public Patient_Process(IWebHostEnvironment env)
+    {
+        Storage_Patients = Directory.CreateDirectory(Path.Combine(env.ContentRootPath, "Storage", "Patient", "Patients"));
+        Storage_Elements = Directory.CreateDirectory(Path.Combine(env.ContentRootPath, "Storage", "Patient", "Elements"));
+    }
 }
 
 //**************************************************************
 //************************ View Models *************************
-
+public class Patient_Patient_ViewModel
+{
+    public Guid Guid { get; set; }
+    public required string NationalId { get; set; }
+    public required string FullName { get; set; }
+    public string? Description { get; set; }
+    public bool HasImage { get; set; }
+    public int IntegrityVersion { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+public class Patient_PatientList_ViewModel
+{
+    public Guid Guid { get; set; }
+    public required string NationalId { get; set; }
+    public required string FullName { get; set; }
+    public bool HasImage { get; set; }
+    public int IntegrityVersion { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
 //**************************************************************
 //************************ Form Models *************************
-
+public class Patient_PatientImage_FormModel
+{
+    public Guid Guid { get; set; }
+    public required IFormFile Image { get; set; }
+}
 //**************************************************************
 
