@@ -52,10 +52,3 @@ export class NewElementFormModel{
   Title?:string;
   File?:File;
 }
-/*export class EditElementFormModel{
-  Guid:string = null!;
-  Value?:string;
-  Title?:string;
-  Order?:string;
-  Delete?:boolean;
-}*/
