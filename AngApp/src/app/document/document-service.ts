@@ -18,6 +18,18 @@ export class DocumentService {
     );
   }
 
+  requestElementFile(guid:string,fileName:string){
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set("guid",guid);
+    //if(fileName){}
+    httpParams = httpParams.set("fileName",fileName);
+    return this.httpClient.get("/api/Patient/ElementFile",{
+      params:httpParams,
+      responseType: "blob",
+      observe:"body",
+    });
+  }
+
   submitNewElement(formModel:NewElementFormModel){
     const formData = new FormData();
     if(formModel.DocumentGuid){
@@ -38,8 +50,11 @@ export class DocumentService {
     if(formModel.File){
       formData.append("File", formModel.File);
     }
+    if(formModel.Persian){
+      formData.append("Persian", "true");
+    }
     return this.httpClient.post<DocumentElementModel>(
-      "/api/Document/SubmitNewElement", formData
+      "/api/Document/SubmitNewElement", formData, {reportProgress:true, observe:"events"}
     );
   }
   requestEditElement(guid:string,value?:string,title?:string){

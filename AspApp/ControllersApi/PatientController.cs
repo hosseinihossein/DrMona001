@@ -11,7 +11,6 @@ public class PatientController : ControllerBase
 {
     readonly Patient_DbContext patientDb;
     readonly DirectoryInfo Storage_Patients;
-    readonly DirectoryInfo Storage_Elements;
 
 
 
@@ -21,7 +20,6 @@ public class PatientController : ControllerBase
     {
         this.patientDb = patientDb;
         Storage_Patients = patientProcess.Storage_Patients;
-        Storage_Elements = patientProcess.Storage_Elements;
     }
 
 

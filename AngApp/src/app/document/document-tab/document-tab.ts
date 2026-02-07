@@ -17,6 +17,7 @@ import { IdentityService } from '../../identity/identity-service';
 import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
 import { DocumentPageModel } from '../document-page/document-page';
 import { WindowService } from '../../shared/services/window-service';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-document-tab',
@@ -41,6 +42,7 @@ export class DocumentTab {
 
   headingElements = signal<HTMLHeadingElement[]>([]);
   displayWaitSpinner = signal(false);
+  waitSpinnerValue = signal(0);
 
   editAllowed = computed(()=>this.identityService.isAuthenticated() && 
     this.identityService.userModel()?.roles.includes("Document_Admins")
@@ -101,7 +103,7 @@ export class DocumentTab {
     }
   }
 
-  addNewElement(type:"h1" | "p" | "img" | "code" | "file"){
+  addNewElement(type:"h1" | "p" | "img" | "code"/* | "file"*/){
     if(this.editAllowed() && this.documentPageService.documentPageModel()){
 
       let newElementFormModel: NewElementFormModel|null = null;
@@ -161,6 +163,7 @@ export class DocumentTab {
         const dialogRef = this.dialog.open(EditImage, {data:{
           title:"New Image Title", 
           value:"",
+          imageSize:20 * 1024 * 1024,//20 MB
         }});
         dialogRef.afterClosed().subscribe(result=>{
           if(result){
@@ -175,7 +178,7 @@ export class DocumentTab {
           }
         });
       }
-      else if(type === "file"){
+      /*else if(type === "file"){
         const dialogRef = this.dialog.open(EditFile, {data:{
           title:"New File Title", 
           value:"",
@@ -192,7 +195,7 @@ export class DocumentTab {
             this.requestForNewElement(newElementFormModel);
           }
         });
-      }
+      }*/
     }
   }
   private requestForNewElement(newElementFormModel: NewElementFormModel){
@@ -200,21 +203,26 @@ export class DocumentTab {
       this.displayWaitSpinner.set(true);
 
       this.documentService.submitNewElement(newElementFormModel).subscribe({
-        next: res => {
-          if(res){
-            console.log("new element added: ",JSON.stringify(res));
-            this.documentTabModel().elements.push(res);
+        next: event => {
+          if(event.type === HttpEventType.UploadProgress && event.total){
+            this.waitSpinnerValue.set(Math.round((100 * event.loaded) / event.total));
+          }
+          if(event.type === HttpEventType.Response && event.body){
+            //console.log("new element added: ",JSON.stringify(event));
+            this.documentTabModel().elements.push(event.body);
             this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
             
             setTimeout(()=>{
-              this.goToElement(res.guid);
+              this.goToElement(event.body!.guid);
             }, 1000);
 
             this.displayWaitSpinner.set(false);
+            this.waitSpinnerValue.set(0);
           }
         },
         error: err => {
           this.displayWaitSpinner.set(false);
+          this.waitSpinnerValue.set(0);
           this.dialog.open(Result,{
             data:{
               status: "warning",

@@ -55,11 +55,11 @@
                 <mat-icon>image</mat-icon>
                 Image
             </button>
-            <button mat-menu-item (click)="addNewElement('file')" matTooltipPosition="left"
+            <!--button mat-menu-item (click)="addNewElement('file')" matTooltipPosition="left"
                 matTooltip="Attach a new file">
                 <mat-icon>file_present</mat-icon>
                 File
-            </button>
+            </button-->
         </mat-menu>
         <!-------------------------------------------------->
 
@@ -71,7 +71,7 @@
 
         <!--------------------- spinner -------------------->
         @if(displayWaitSpinner()){
-        <app-wait-spinner></app-wait-spinner>
+        <app-wait-spinner [value]="waitSpinnerValue()"></app-wait-spinner>
         }
 
     </mat-sidenav-content>

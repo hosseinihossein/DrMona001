@@ -171,6 +171,7 @@ public class Program
         {
             options.JsonSerializerOptions.Converters.Add(new GuidJsonConverter());
         });*/
+
         builder.Services.AddControllers(options =>
         {
             options.Filters.Add(new RequireHttpsAttribute());

@@ -38,9 +38,10 @@ export class DocumentElementModel{
   guid:string = null!;
   tab:string = null!;
   type:string = null!;
-  value:string = null!;
   order:number = null!;
+  value?:string;
   title?: string;
+  fileName?: string;
   persian:boolean = false;
 }
 
@@ -51,4 +52,5 @@ export class NewElementFormModel{
   Value?:string;
   Title?:string;
   File?:File;
+  Persian?:boolean = false;
 }

@@ -47,9 +47,11 @@ public class Patient_Element_DbModel
     [MaxLength(32)]
     public string Type { get; set; } = string.Empty;
     [MaxLength(4000)]
-    public string Value { get; set; } = string.Empty;
+    public string? Value { get; set; }
     [MaxLength(128)]
-    public string? Title { get; set; } = null;
+    public string? Title { get; set; }
+    [MaxLength(64)]
+    public string? FileName { get; set; }
     public byte _order { get; set; } = 0;
     [NotMapped]
     public int Order
@@ -152,6 +154,30 @@ public class Patient_PatientList_ViewModel
     public int IntegrityVersion { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+
+public class Patient_Element_ViewModel
+{
+    public Guid Guid { get; set; }
+    public string Tab { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
+    public string? Value { get; set; }
+    public string? Title { get; set; }
+    public int Order { get; set; }
+    public bool Persian { get; set; }
+    public string? FileName { get; set; }
+}
+public class Patient_Tab_ViewModel
+{
+    public string Name { get; set; } = string.Empty;
+    public Patient_Element_ViewModel[] Elements { get; set; } = [];
+}
+public class Patient_DocumentPage_ViewModel
+{
+    public Guid Guid { get; set; }
+    public Guid PatientGuid { get; set; }
+    public Patient_Tab_ViewModel[] Tabs { get; set; } = [];
+}
+
 //**************************************************************
 //************************ Form Models *************************
 public class Patient_PatientImage_FormModel
@@ -159,5 +185,21 @@ public class Patient_PatientImage_FormModel
     public Guid Guid { get; set; }
     public required IFormFile Image { get; set; }
 }
+
+public class Patient_NewElement_FormModel
+{
+    public Guid DocumentGuid { get; set; }
+    [StringLength(32)]
+    public required string Tab { get; set; }
+    [StringLength(32)]
+    public required string Type { get; set; }
+    [StringLength(4000)]
+    public string? Value { get; set; }
+    [StringLength(128)]
+    public string? Title { get; set; }
+    public IFormFile? File { get; set; }
+    public bool? Persian { get; set; }
+}
+
 //**************************************************************
 
