@@ -37,7 +37,7 @@ export class AppErrorHandler implements ErrorHandler{
             errTypeMessage = "Application Error";
         }
 
-        this.snackBar.open(errTypeMessage, "Ok", { duration: 5000 });
+        this.snackBar.open(errTypeMessage, "Ok"/*, { duration: 5000 }*/);
         console.error(errTypeMessage, err);
     }
     

@@ -8,7 +8,7 @@ import { WindowService } from '../../shared/services/window-service';
 
 @Component({
   selector: 'app-large-img',
-  imports: [MatDialogContent, NgOptimizedImage, MatIcon, MatIconButton, MatTooltip, MatDialogClose],
+  imports: [MatDialogContent, /*NgOptimizedImage,*/ MatIcon, MatIconButton, MatTooltip, MatDialogClose],
   templateUrl: './large-img.html',
   styleUrl: './large-img.css'
 })
@@ -20,7 +20,7 @@ export class LargeImg implements AfterViewInit {
   windowService = inject(WindowService);
   
   ngAfterViewInit(): void {
-    if(this.theImage()){
+    /*if(this.theImage()){
       let windowWidth90 = Math.floor(this.windowService.nativeWindow.innerWidth * 90 / 100);
       if(this.theImage()!.nativeElement.offsetWidth < windowWidth90){
         this.theImage()!.nativeElement.style.cursor = "zoom-in";
@@ -34,7 +34,7 @@ export class LargeImg implements AfterViewInit {
           }
         });
       }
-    }
+    }*/
   }
 
 }

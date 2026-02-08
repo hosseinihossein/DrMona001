@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, Renderer2, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, Renderer2, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DocumentElement, DocumentElementModel, NewElementFormModel } from '../document-element/document-element';
 import { ViewportScroller } from '@angular/common';
@@ -18,16 +18,17 @@ import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
 import { DocumentPageModel } from '../document-page/document-page';
 import { WindowService } from '../../shared/services/window-service';
 import { HttpEventType } from '@angular/common/http';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-document-tab',
   imports: [MatSidenavModule,MatMenu, MatMenuItem, MatMenuTrigger,MatIcon,MatTooltip,DocumentElement,
-    WaitSpinner,
+    WaitSpinner,MatButton
   ],
   templateUrl: './document-tab.html',
   styleUrl: './document-tab.css',
 })
-export class DocumentTab {
+export class DocumentTab  {
   documentTabModel = input.required<DocumentTabModel>();
 
   viewPortObserver: IntersectionObserver;
@@ -87,18 +88,8 @@ export class DocumentTab {
     this.viewportScroller.scrollToAnchor(guid, {behavior:'smooth'});
   }
 
-  enterEditMode(){
+  toggleEditMode(){
     if(this.editAllowed()){
-      this.identityService.getCsrf().subscribe({
-        next: () => {
-          console.log("csrf token recieved successfully.");
-        },
-        error: err => {
-          console.log("couldn't get csrf token");
-          throw(err);
-        }
-      });
-
       this.documentPageService.toggleEditMode();
     }
   }
@@ -246,6 +237,7 @@ export class DocumentTab {
 export class DocumentTabModel{
   constructor(model:DocumentTabModel){
     this.elements = model.elements.map(el=>new DocumentElementModel(el));
+    this.name = model.name;
   }
 
   elements:DocumentElementModel[] = [];

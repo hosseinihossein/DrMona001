@@ -20,13 +20,13 @@ export class DocumentPage {
 
   //patientGuid = signal<string|null>(null);
 
-  tabCC = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "CC"));
-  tabPMH = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "PMH"));
-  tabDH = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "DH"));
-  tabPI = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "PI"));
-  tabPHE = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "PHE"));
-  tabPlan = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "Plan"));
-  tabResults = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "Results"));
+  tabCC = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "CC") ?? new DocumentTabModel({name:"CC",elements:[]}));
+  tabPMH = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "PMH") ?? new DocumentTabModel({name:"PMH",elements:[]}));
+  tabDH = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "DH") ?? new DocumentTabModel({name:"DH",elements:[]}));
+  tabPI = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "PI") ?? new DocumentTabModel({name:"PI",elements:[]}));
+  tabPHE = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "PHE") ?? new DocumentTabModel({name:"PHE",elements:[]}));
+  tabPlan = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "Plan") ?? new DocumentTabModel({name:"Plan",elements:[]}));
+  tabResults = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "Results") ?? new DocumentTabModel({name:"Result",elements:[]}));
 
   constructor(){
     /*this.activatedRoute.paramMap.subscribe(params=>{
@@ -52,6 +52,7 @@ export class DocumentPage {
 export class DocumentPageModel {
   constructor(model:DocumentPageModel){
     this.guid = model.guid;
+    this.patientGuid = model.patientGuid;
     this.tabs = model.tabs.map(a=>new DocumentTabModel(a));
   }
 

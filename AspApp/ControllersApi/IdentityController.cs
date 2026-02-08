@@ -231,6 +231,12 @@ public class IdentityController : ControllerBase
             return BadRequest(ModelState);
         }
 
+        if (user.UserName == "admin")
+        {
+            ModelState.AddModelError("Admin", "Can Not edit the admin identity!");
+            return BadRequest(ModelState);
+        }
+
         if (!string.IsNullOrWhiteSpace(userName))
         {
             user.UserName = userName;
@@ -242,6 +248,7 @@ public class IdentityController : ControllerBase
                 {
                     ModelState.AddModelError("Editing UserName", error.Description);
                 }
+                return BadRequest(ModelState);
             }
         }
 
@@ -254,6 +261,7 @@ public class IdentityController : ControllerBase
                 {
                     ModelState.AddModelError("Removing Roles", error.Description);
                 }
+                return BadRequest(ModelState);
             }
 
             result = await userManager.AddToRolesAsync(user, roles);
@@ -263,6 +271,7 @@ public class IdentityController : ControllerBase
                 {
                     ModelState.AddModelError("Adding Roles", error.Description);
                 }
+                return BadRequest(ModelState);
             }
         }
 
@@ -275,6 +284,7 @@ public class IdentityController : ControllerBase
                 {
                     ModelState.AddModelError("Remvoing Password", error.Description);
                 }
+                return BadRequest(ModelState);
             }
 
             result = await userManager.AddPasswordAsync(user, password);
@@ -284,13 +294,14 @@ public class IdentityController : ControllerBase
                 {
                     ModelState.AddModelError("Adding Password", error.Description);
                 }
+                return BadRequest(ModelState);
             }
         }
 
-        if (ModelState.ErrorCount > 0)
+        /*if (ModelState.ErrorCount > 0)
         {
             return BadRequest(ModelState);
-        }
+        }*/
 
         return Ok(new { success = true });
     }
@@ -313,6 +324,12 @@ public class IdentityController : ControllerBase
         if (user is null)
         {
             ModelState.AddModelError("user", "the specified user Not found!");
+            return BadRequest(ModelState);
+        }
+
+        if (user.UserName == "admin")
+        {
+            ModelState.AddModelError("Admin", "Can Not delete the admin identity!");
             return BadRequest(ModelState);
         }
 
@@ -349,6 +366,12 @@ public class IdentityController : ControllerBase
     {
         //fetch and create
         Identity_UserDbModel user = (await userManager.FindByNameAsync(User.Identity!.Name!))!;
+
+        if (user.UserName == "admin")
+        {
+            ModelState.AddModelError("Admin", "Can Not edit the admin identity!");
+            return BadRequest(ModelState);
+        }
 
         var result = await userManager.SetUserNameAsync(user, username);
         if (result.Succeeded)

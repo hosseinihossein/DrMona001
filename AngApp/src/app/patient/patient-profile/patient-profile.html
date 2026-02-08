@@ -12,13 +12,13 @@
 
         <div style="float: inline-start;position: relative;">
             <mat-card-title>
-                {{patientModel()?.fullName}}
+                <p class="persian-font" style="margin: 0;">
+                    {{patientModel()?.fullName}}
+                </p>
             </mat-card-title>
 
             <mat-card-subtitle>
-                <p class="persian-font">
-                    {{patientModel()?.nationalId}}
-                </p>
+                {{patientModel()?.nationalId}}
             </mat-card-subtitle>
 
         </div>
@@ -30,8 +30,8 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
-        @if(identityService.userModel()?.roles?.includes("Patient_Admins")){
-        <a matButton="" [routerLink]="['/patient-profile-settings']">
+        @if(identityService.userModel()?.roles?.includes("Patient_Admins") && patientGuid()){
+        <a matButton="" [routerLink]="['/patient-profile-settings',patientGuid()]">
             <mat-icon>person_edit</mat-icon>
             Edit Profile
         </a>

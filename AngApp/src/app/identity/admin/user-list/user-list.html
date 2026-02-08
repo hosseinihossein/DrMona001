@@ -43,10 +43,13 @@
     <ng-container matColumnDef="Actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let userModel" style="text-wrap: nowrap;">
-            <button matMiniFab style="color:var(--mat-sys-on-error-container);margin: 0 4px;"
+            @if(userModel.userName !== "admin"){
+            <button matMiniFab
+                style="color:var(--mat-sys-on-error-container);background-color: var(--mat-sys-error-container);margin: 0 4px;"
                 (click)="deleteUser(userModel.guid, userModel.userName)" matTooltip="Delete User">
                 <mat-icon>delete</mat-icon>
             </button>
+            }
             <a matMiniFab [routerLink]="['/edit-user', userModel.guid]" matTooltip="Edit User" style="margin: 0 4px;">
                 <mat-icon>edit</mat-icon>
             </a>

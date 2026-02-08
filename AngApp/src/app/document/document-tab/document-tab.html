@@ -1,7 +1,7 @@
 <mat-sidenav-container>
 
     <!--------------------- content overview -------------------->
-    <mat-sidenav id="endSideNav" mode="side" opened position="end" fixedInViewport fixedTopGap="80" fixedBottomGap="16">
+    <mat-sidenav id="endSideNav" mode="side" opened position="end">
         <p style="font-weight: 500;color: var(--mat-sys-on-surface);margin: 3px;">Contents:</p>
         @for(element of documentTabModel().elements; track element.guid){
         @if(element.type === "h1" || element.type === "h2"){
@@ -22,12 +22,12 @@
                 <mat-icon>dashboard_customize</mat-icon>
                 <mat-icon>arrow_drop_down</mat-icon>
             </button>
-            <button matButton="elevated" matTooltip="Exit edit mode" class="noPaddingBtn">
+            <button matButton="elevated" matTooltip="Exit edit mode" class="noPaddingBtn" (click)="toggleEditMode()">
                 <mat-icon>edit_off</mat-icon>
             </button>
             }
             @else {
-            <button matButton="elevated" matTooltip="Enter edit mode" class="noPaddingBtn" (click)="enterEditMode()">
+            <button matButton="elevated" matTooltip="Enter edit mode" class="noPaddingBtn" (click)="toggleEditMode()">
                 <mat-icon>edit</mat-icon>
             </button>
             }

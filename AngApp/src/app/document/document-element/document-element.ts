@@ -32,6 +32,7 @@ export class DocumentElementModel{
     this.value = model.value;
     this.order = model.order;
     this.title = model.title;
+    this.fileName = model.fileName;
     this.persian = model.persian;
   }
 

@@ -8,7 +8,7 @@ import { PatientProfileSettings } from "./admin/patient-profile-settings/patient
 
 export const patientRoutes: Routes = [
     {path: "patient-profile/:patientGuid", component:PatientProfile, canActivate: [authGuard]},
-    {path: "patient-profile-settings", component:PatientProfileSettings, canActivate: [patientAdminGuard]},
+    {path: "patient-profile-settings/:patientGuid", component:PatientProfileSettings, canActivate: [patientAdminGuard]},
     {path: "new-patient", component:NewPatientForm, canActivate: [patientAdminGuard]},
     {path: "patient-list", component:PatientList, canActivate: [patientAdminGuard]},
 ];

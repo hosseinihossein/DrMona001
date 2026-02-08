@@ -31,7 +31,7 @@
         @if(identityService.userModel()?.roles?.includes("Identity_Admins")){
         <a mat-menu-item [routerLink]="['/user-list']">
             <mat-icon>user_attributes</mat-icon>
-            User List
+            Medical Staff
         </a>
         }
         <a mat-menu-item (click)="identityService.logout()">

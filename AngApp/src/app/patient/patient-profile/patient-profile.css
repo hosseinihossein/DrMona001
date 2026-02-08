@@ -1,7 +1,7 @@
 mat-card{
     width: 50vw;
     min-width: 400px;
-    margin: 50px auto 0;
+    margin: 0px auto 16px;
     display: block;
 }
 
@@ -14,8 +14,9 @@ img#patient-profile-img{
 }
 
 mat-card-title{
-    margin: 0 16px;
+    margin: 16px;
 }
 mat-card-subtitle{
     margin: 0 16px;
+    letter-spacing: 1px;
 }

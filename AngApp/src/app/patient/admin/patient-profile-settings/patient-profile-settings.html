@@ -16,20 +16,21 @@
 
         <div style="float: inline-start;position: relative;">
             <mat-card-title>
-                {{patientModel()?.fullName}}
-                <button matIconButton class="edit-btn" matTooltip="Edit Full Name" (click)="openEditFullNameDialog()">
-                    <mat-icon>edit</mat-icon>
-                </button>
-            </mat-card-title>
-
-            <mat-card-subtitle>
-                <p class="persian-font">
-                    {{patientModel()?.nationalId}}
+                <p class="persian-font" style="margin: 0;">
+                    {{patientModel()?.fullName}}
                     <button matIconButton class="edit-btn" style="transform: translateY(-4px);float: right;"
-                        matTooltip="Edit National Id" (click)="openEditNationalIdDialog()">
+                        matTooltip="Edit Full Name" (click)="openEditFullNameDialog()">
                         <mat-icon>edit</mat-icon>
                     </button>
                 </p>
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                {{patientModel()?.nationalId}}
+                <button matIconButton class="edit-btn" matTooltip="Edit National Id"
+                    (click)="openEditNationalIdDialog()">
+                    <mat-icon>edit</mat-icon>
+                </button>
             </mat-card-subtitle>
 
         </div>

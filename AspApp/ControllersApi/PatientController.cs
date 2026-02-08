@@ -30,12 +30,12 @@ public class PatientController : ControllerBase
     [Authorize(Roles = "Patient_Admins")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateNewPatient([FromQuery][StringLength(128)] string fullName,
-    [FromQuery][StringLength(10)] string nationlId)
+    [FromQuery][StringLength(10)] string nationalId)
     {
         Patient_Patient_DbModel patientDbModel = new()
         {
             FullName = fullName,
-            NationalId = nationlId,
+            NationalId = nationalId,
             Documents = [new Patient_Document_DbModel()],
         };
 

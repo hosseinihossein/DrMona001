@@ -11,6 +11,7 @@ import { WaitSpinner } from '../../../shared/wait-spinner/wait-spinner';
 import { Router } from '@angular/router';
 import { IdentityService } from '../../../identity/identity-service';
 import { PatientService } from '../../patient-service';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-new-patient-form',
@@ -40,7 +41,7 @@ export class NewPatientForm {
     validators:[
       Validators.required, 
       Validators.minLength(3),
-      Validators.maxLength(32),
+      Validators.maxLength(10),
     ]
   });
 
@@ -71,19 +72,20 @@ export class NewPatientForm {
           next: res => {
             this.displayWaitSpinner.set(false);
             if(res && res.success){
-              this.router.navigate(['/patient-profile-settings',res.guid]);
+              this.router.navigate(['/patient-profile',res.guid]);
             }
           },
           error: err => {
             this.displayWaitSpinner.set(false);
-            this.dialog.open(Result,{data:{
-              status: "warning",
-              title: "Submit New Patient",
-              description: [
-                `Something went wrong when submitting new patient '${this.fullname_FormControl.value}'!`,
-                JSON.stringify(err),
-              ],
-            }});
+            if(err instanceof HttpErrorResponse && err.status == HttpStatusCode.BadRequest){
+              //console.error("BadRequest err: "+err.error);
+              if(err.error.fullName || err.error.errors?.fullName){
+                this.fullname_FormControl.setErrors({submitError: err.error.fullName || err.error.errors?.fullName});
+              }
+              else if(err.error.nationalId || err.error.errors?.nationalId){
+                this.nationalId_FormControl.setErrors({submitError: err.error.nationalId || err.error.errors?.nationalId});
+              }
+            }
             throw(err);
           }
         });

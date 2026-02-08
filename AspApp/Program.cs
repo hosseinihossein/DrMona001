@@ -194,6 +194,7 @@ public class Program
 
         //**************************** Custom Services **************************
         builder.Services.AddSingleton<Identity_Process>();
+        builder.Services.AddSingleton<Patient_Process>();
         builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
         builder.Services.AddSingleton<FileNameValidator>();
 

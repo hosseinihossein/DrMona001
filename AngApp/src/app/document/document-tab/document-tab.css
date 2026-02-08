@@ -1,0 +1,31 @@
+mat-sidenav#endSideNav{
+    width: 250px;
+    border-left: 2px solid var(--mat-sys-outline);
+    border-radius: 0;
+    padding: 16px 8px;
+    height: fit-content;
+}
+
+mat-sidenav#endSideNav a{
+    font-size: 12px;
+    display: block;
+    text-decoration: none;
+    color: var(--mat-sys-secondary);
+    padding: 5px;
+    line-height: 14px;
+    cursor: pointer;
+}
+mat-sidenav#endSideNav a:hover,
+mat-sidenav#endSideNav a.active{
+    /*color: var(--mat-sys-on-primary-container);*/
+    color: var(--mat-sys-primary);
+    font-weight: 600;
+}
+
+mat-sidenav-content{
+    padding: 8px 8px 50px 8px;
+}
+
+div.actionDiv button{
+    float: right;
+}

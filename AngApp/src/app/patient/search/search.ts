@@ -41,12 +41,17 @@ export class Search {
       this.displayWaitSpinner.set(true);
       this.patientService.searchPatients(this.name_FormControl.value,this.nid_FormControl.value).subscribe({
         next: res => {
+          this.displayWaitSpinner.set(false);
           if(res){
             this.dialog.open(PatientBriefList,{data:{
               label:"Found Patients",
               patients: res,
             }});
           }
+        },
+        error: err => {
+          this.displayWaitSpinner.set(false);
+          throw(err);
         },
       });
     }

@@ -22,17 +22,25 @@ export class ImgElement implements OnDestroy {
   //windowService = inject(WindowService);
 
   objectUrl = signal<string|null>(null);
-  imageUrl = signal<SafeUrl|null>(null);
+  imageUrl = signal<string|null>(null);
 
   constructor(){
     effect(()=>{
       if(this.elementModel() && this.elementModel().fileName){
         this.documentService.requestElementFile(this.elementModel().guid,this.elementModel().fileName!).subscribe({
           next: blob => {
-            this.objectUrl.set(URL.createObjectURL(blob));
+            /*this.objectUrl.set(URL.createObjectURL(blob));
             if(this.objectUrl()){
               this.imageUrl.set(this.sanitizer.bypassSecurityTrustUrl(this.objectUrl()!));
-            }
+            }*/
+            const reader = new FileReader(); // Create a FileReader instance
+
+            // Load the image as a Data URL
+            reader.onload = (e)=> {
+              this.imageUrl.set(e.target!.result as string);
+            };
+
+            reader.readAsDataURL(blob); // Read the file as a Data URL
           },
         });
       }

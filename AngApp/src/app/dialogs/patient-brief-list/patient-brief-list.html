@@ -7,16 +7,7 @@
     @for(patient of data.patients; track patient.guid){
     <div style="position: relative;">
         <span style="position: absolute;font-size: 12px;right: 0;">{{$index+1}}</span>
-        <a [routerLink]="['/patient-proile',patient.guid]" mat-dialog-close>
-            <!--div id="user-div">
-                @if(patientService.getUserImageAddress(person)){
-                <img [ngSrc]="patientService.getUserImageAddress(person)!" width="48" height="48" alt="user image">
-                }
-                @else {
-                <mat-icon style="font-size: 48px;width: 48px;height: 48px;">account_circle</mat-icon>
-                }
-                <span> {{person.fullName}}</span>
-            </div-->
+        <a [routerLink]="['/patient-profile',patient.guid]" mat-dialog-close>
             <mat-card appearance="outlined">
                 <mat-card-header>
 
@@ -32,13 +23,13 @@
 
                     <div style="float: inline-start;position: relative;">
                         <mat-card-title>
-                            {{patient.fullName}}
+                            <p class="persian-font" style="margin: 0;">
+                                {{patient.fullName}}
+                            </p>
                         </mat-card-title>
 
                         <mat-card-subtitle>
-                            <p class="persian-font">
-                                {{patient.nationalId}}
-                            </p>
+                            {{patient.nationalId}}
                         </mat-card-subtitle>
                     </div>
 

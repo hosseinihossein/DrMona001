@@ -75,7 +75,7 @@ public class DocumentController : ControllerBase
                     Title = el.Title,
                     Type = el.Type,
                     Value = el.Value,
-                    FileName = el.Value,
+                    FileName = el.FileName,
                 }).ToArray(),
             };
             tabs.Add(tab);

@@ -2,7 +2,8 @@
 
 <mat-form-field>
     <mat-label>Full Name</mat-label>
-    <input type="text" matInput [formControl]="fullname_FormControl" required>
+    <input type="text" matInput [formControl]="fullname_FormControl" required
+        style="font-family: shabnam;direction:rtl;">
     @if((fullname_FormControl.dirty || fullname_FormControl.touched) &&
     fullname_FormControl.invalid && fullname_FormControl.hasError("required")){
     <mat-error>username is required!</mat-error>
@@ -11,11 +12,14 @@
     fullname_FormControl.invalid && fullname_FormControl.hasError("maxlength")){
     <mat-error>username must be less than 32 characters long!</mat-error>
     }
+    @if(fullname_FormControl.invalid && fullname_FormControl.hasError("submitError")){
+    <mat-error>{{fullname_FormControl.getError("submitError")}}</mat-error>
+    }
 </mat-form-field>
 
 <mat-form-field>
     <mat-label>National Id</mat-label>
-    <input type="text" matInput [formControl]="nationalId_FormControl" required>
+    <input type="text" matInput [formControl]="nationalId_FormControl" required style="letter-spacing: 4px;">
     @if((nationalId_FormControl.dirty || nationalId_FormControl.touched) &&
     nationalId_FormControl.invalid && nationalId_FormControl.hasError("required")){
     <mat-error>username is required!</mat-error>
@@ -26,7 +30,10 @@
     }
     @if((nationalId_FormControl.dirty || nationalId_FormControl.touched) &&
     nationalId_FormControl.invalid && nationalId_FormControl.hasError("maxlength")){
-    <mat-error>username must be less than 32 characters long!</mat-error>
+    <mat-error>username must be less than 10 characters long!</mat-error>
+    }
+    @if(nationalId_FormControl.invalid && nationalId_FormControl.hasError("submitError")){
+    <mat-error>{{nationalId_FormControl.getError("submitError")}}</mat-error>
     }
 </mat-form-field>
 
