@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using AspApp.Filters;
 using AspApp.Models;
+using AspApp.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -181,7 +182,8 @@ public class IdentityController : ControllerBase
         string[] roles = await roleManager.Roles.Select(role => role.Name!).ToArrayAsync();
         return Ok(roles);
     }
-    [HttpGet]
+
+    /*[HttpGet]
     [Authorize(Roles = "Identity_Admins")]
     public async Task<IActionResult> GetUserRoles([FromQuery][StringLength(32)] string userGuid)
     {
@@ -204,40 +206,93 @@ public class IdentityController : ControllerBase
         string[] roles = (await userManager.GetRolesAsync(user)).ToArray();
 
         return Ok(roles);
-    }
+    }*/
 
     [HttpPost]
     [Authorize(Roles = "Identity_Admins")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> SubmitEditUser([FromBody] Identity_EditUser_FormModel formModel)
+    public async Task<IActionResult> SubmitEditUser(/*[FromBody] Identity_EditUser_FormModel formModel*/
+    [FromQuery][StringLength(32)] string guid, [FromQuery][StringLength(32)] string? userName,
+    [FromQuery][StringLength(32)] string? password,
+    [FromQuery][MaxStringArrayLength(16, 32)] string[]? roles)
     {
-        if (ModelState.IsValid)
+        if (!Guid.TryParseExact(guid, "N", out Guid userGuid))
         {
-            Identity_UserDbModel? user = await userManager.Users
-            .FirstOrDefaultAsync(u => u.UserGuid == formModel.UserGuid);
+            ModelState.AddModelError("Try Parse Guid", "Couldn't parse the specified string guid!");
+            return BadRequest(ModelState);
+        }
 
-            if (user is null)
-            {
-                ModelState.AddModelError("UserGuid", "Coudn't find the specified user!");
-                return BadRequest(ModelState);
-            }
+        Identity_UserDbModel? user = await userManager.Users
+        .FirstOrDefaultAsync(u => u.UserGuid == userGuid);
 
-            user.UserName = formModel.UserName;
+        if (user is null)
+        {
+            ModelState.AddModelError("UserGuid", "Coudn't find the specified user!");
+            return BadRequest(ModelState);
+        }
 
+        if (!string.IsNullOrWhiteSpace(userName))
+        {
+            user.UserName = userName;
             IdentityResult result = await userManager.UpdateAsync(user);
-            if (result.Succeeded)
+
+            if (!result.Succeeded)
             {
-                await userManager.AddToRolesAsync(user, formModel.Roles);
-                await userManager.RemovePasswordAsync(user);
-                await userManager.AddPasswordAsync(user, formModel.Password);
-                return Ok(new { success = true });
-            }
-            foreach (IdentityError error in result.Errors)
-            {
-                ModelState.AddModelError("Editing User", error.Description);
+                foreach (IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("Editing UserName", error.Description);
+                }
             }
         }
-        return BadRequest(ModelState);
+
+        if (roles is not null)
+        {
+            IdentityResult result = await userManager.RemoveFromRolesAsync(user, await userManager.GetRolesAsync(user));
+            if (!result.Succeeded)
+            {
+                foreach (IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("Removing Roles", error.Description);
+                }
+            }
+
+            result = await userManager.AddToRolesAsync(user, roles);
+            if (!result.Succeeded)
+            {
+                foreach (IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("Adding Roles", error.Description);
+                }
+            }
+        }
+
+        if (password is not null)
+        {
+            IdentityResult result = await userManager.RemovePasswordAsync(user);
+            if (!result.Succeeded)
+            {
+                foreach (IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("Remvoing Password", error.Description);
+                }
+            }
+
+            result = await userManager.AddPasswordAsync(user, password);
+            if (!result.Succeeded)
+            {
+                foreach (IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("Adding Password", error.Description);
+                }
+            }
+        }
+
+        if (ModelState.ErrorCount > 0)
+        {
+            return BadRequest(ModelState);
+        }
+
+        return Ok(new { success = true });
     }
 
     [HttpDelete]

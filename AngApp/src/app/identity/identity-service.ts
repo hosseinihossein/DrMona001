@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 import { Identity_NewUser_FormModel } from './admin/new-user-form/new-user-form';
 import { Identity_EditUser_FormModel } from './admin/edit-user-form/edit-user-form';
 import { Identity_UserListModel } from './admin/user-list/user-list';
@@ -116,8 +116,26 @@ export class IdentityService {
     );
   }
   requestEditUser(formModel:Identity_EditUser_FormModel){
+    if(!formModel.userName && !formModel.password && !formModel.roles){
+      return of({success:false});
+    }
+    
+    let httpParams = new HttpParams().set("guid",formModel.userGuid);
+
+    if(formModel.userName){
+      httpParams = httpParams.set("userName",formModel.userName);
+    }
+    if(formModel.password){
+      httpParams = httpParams.set("password",formModel.password);
+    }
+    if(formModel.roles){
+      formModel.roles.forEach((role,index)=>{
+        httpParams = httpParams.set(`roles[${index}]`,role);
+      });
+    }
+
     return this.httpClient.post<{success:boolean}>(
-      "/api/Identity/SubmitEditUser", formModel
+      "/api/Identity/SubmitEditUser", null, {params:httpParams}
     );
   }
   requestDeleteUser(userGuid:string){
@@ -130,10 +148,10 @@ export class IdentityService {
   requestAllRoles(){
     return this.httpClient.get<string[]>("/api/Identity/GetAllRoles");
   }
-  requestUserRoles(userGuid:string){
+  /*requestUserRoles(userGuid:string){
     let httpParams = new HttpParams().set("userGuid",userGuid);
     return this.httpClient.get<string[]>("/api/Identity/GetUserRoles",{params:httpParams});
-  }
+  }*/
 
   requestChangeUserName(username:string){
     let httpParams = new HttpParams().set("username",username);

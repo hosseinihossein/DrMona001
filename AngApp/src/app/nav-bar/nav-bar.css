@@ -6,6 +6,7 @@ mat-toolbar{
     /*border-bottom: 1px solid var(--mat-sys-secondary-container);*/
     position: fixed;
     width: 100%;
+    height: 56px;
     z-index: 10;
     top: 0;
 }

@@ -163,14 +163,14 @@ public class Program
         });
 
         //******************* Controllers *******************
-        /*builder.Services.AddControllersWithViews(options =>
+        builder.Services.AddControllersWithViews(options =>
         {
             options.Filters.Add(new RequireHttpsAttribute());
         })
         .AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.Converters.Add(new GuidJsonConverter());
-        });*/
+        });
 
         builder.Services.AddControllers(options =>
         {

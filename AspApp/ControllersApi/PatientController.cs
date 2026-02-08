@@ -36,6 +36,7 @@ public class PatientController : ControllerBase
         {
             FullName = fullName,
             NationalId = nationlId,
+            Documents = [new Patient_Document_DbModel()],
         };
 
         patientDb.Patients.Add(patientDbModel);

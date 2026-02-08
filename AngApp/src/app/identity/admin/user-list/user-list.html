@@ -13,7 +13,7 @@
         <td mat-cell *matCellDef="let userModel">
             @if(identityService.getUserImageAddress(userModel)){
             <img [ngSrc]="identityService.getUserImageAddress(userModel)!" alt="user profile image"
-                class="userProfileImage">
+                class="userProfileImage" width="56" height="56">
             }
             @else {
             <mat-icon style="font-size: 56px;width: 56px;height: 56px;">account_circle</mat-icon>

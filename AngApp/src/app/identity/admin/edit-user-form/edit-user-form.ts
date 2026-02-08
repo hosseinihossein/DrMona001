@@ -34,7 +34,6 @@ export class EditUserForm {
   username_FormControl = new FormControl("",{
     nonNullable:true,
     validators:[
-      Validators.required, 
       Validators.minLength(3),
       Validators.maxLength(32),
     ]
@@ -42,7 +41,6 @@ export class EditUserForm {
   password_FormControl = new FormControl("",{
     nonNullable:true,
     validators:[
-      Validators.required,
       Validators.minLength(5),
       Validators.maxLength(32),
     ]
@@ -63,18 +61,10 @@ export class EditUserForm {
             if(res){
               this.userModel.set(res);
               this.username_FormControl.setValue(res.userName);
+              this.selectedRoles_FormControl.setValue(res.roles);
             }
           },
         });
-
-        this.identityService.requestUserRoles(this.userGuid()!).subscribe({
-          next: res => {
-            if(res){
-              this.selectedRoles_FormControl.setValue(res);
-            }
-          }
-        });
-        
       }
     });
 
@@ -105,17 +95,23 @@ export class EditUserForm {
   }
 
   submitEditUser(){
-    if(this.userGuid() &&
-      this.username_FormControl.valid && 
-      this.password_FormControl.valid){
+    if(this.userGuid()){
         
         this.displayWaitSpinner.set(true);
 
         let formModel:Identity_EditUser_FormModel = {
           userGuid: this.userGuid()!,
-          userName: this.username_FormControl.value,
-          password: this.password_FormControl.value,
-          roles: this.selectedRoles_FormControl.value,
+        };
+        if(this.username_FormControl.valid && 
+          this.username_FormControl.value !== this.userModel()?.userName){
+            formModel.userName = this.username_FormControl.value;
+        }
+        if(this.password_FormControl.valid && 
+          this.password_FormControl.value){
+            formModel.password = this.password_FormControl.value;
+        }
+        if(this.selectedRoles_FormControl.valid && this.rolesChanged()){
+            formModel.roles = this.selectedRoles_FormControl.value;
         }
         this.identityService.requestEditUser(formModel).subscribe({
           next: res => {
@@ -148,11 +144,27 @@ export class EditUserForm {
     }
   }
 
+  rolesChanged(){
+    if(this.userModel()){
+      if(this.selectedRoles_FormControl.value.length !== this.userModel()!.roles.length){
+        return true;
+      }
+  
+      for(let role of this.selectedRoles_FormControl.value){
+        if(!this.userModel()!.roles.includes(role)){
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
 }
 
 export class Identity_EditUser_FormModel{
   userGuid:string = null!;
-  userName:string = null!;
-  password:string = null!;
-  roles:string[] = [];
+  userName?:string = null!;
+  password?:string = null!;
+  roles?:string[] = [];
 }
