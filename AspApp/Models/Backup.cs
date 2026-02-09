@@ -30,11 +30,16 @@ public class Backup_Status
 }
 public class Seed_Status
 {
+    public string Extracting_Zip_File { get; set; } = StatusEnum.Not_Started.ToString();
+    public string Clearing_All_Dbs { get; set; } = StatusEnum.Not_Started.ToString();
+
     public string Seeding_Identity_User_Db { get; set; } = StatusEnum.Not_Started.ToString();
 
     public string Seeding_Patient_Patient_Db { get; set; } = StatusEnum.Not_Started.ToString();
     public string Seeding_Patient_Document_Db { get; set; } = StatusEnum.Not_Started.ToString();
     public string Seeding_Patient_Element_Db { get; set; } = StatusEnum.Not_Started.ToString();
+
+    public bool Restore_Completed { get; set; } = false;
 }
 
 public class Backup_Process
@@ -79,15 +84,15 @@ public class Backup_Process
 
     public void Create_Directories()
     {
-        Directory.CreateDirectory(Path.Combine(Storage_Directory.FullName));
-        Directory.CreateDirectory(Path.Combine(Backup_Directory.FullName));
-        Directory.CreateDirectory(Path.Combine(Storage_Db_Directory.FullName));
+        Directory.CreateDirectory(Storage_Directory.FullName);
+        Directory.CreateDirectory(Backup_Directory.FullName);
+        Directory.CreateDirectory(Storage_Db_Directory.FullName);
 
-        Directory.CreateDirectory(Path.Combine(Storage_Db_Identity_User.FullName));
+        Directory.CreateDirectory(Storage_Db_Identity_User.FullName);
 
-        Directory.CreateDirectory(Path.Combine(Storage_Db_Patient_Patient.FullName));
-        Directory.CreateDirectory(Path.Combine(Storage_Db_Patient_Document.FullName));
-        Directory.CreateDirectory(Path.Combine(Storage_Db_Patient_Element.FullName));
+        Directory.CreateDirectory(Storage_Db_Patient_Patient.FullName);
+        Directory.CreateDirectory(Storage_Db_Patient_Document.FullName);
+        Directory.CreateDirectory(Storage_Db_Patient_Element.FullName);
     }
 
     public async Task Generate_Backup_ZipFile()
@@ -139,8 +144,76 @@ public class Backup_Process
         statusInJson = JsonSerializer.Serialize(status);
         await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
     }
+    public async Task Restore_From_Backup_ZipFile()
+    {
+        FileInfo[] backupZipFiles = Backup_Directory.GetFiles($"*_{BackupFileNameWithoutDate}");
+        if (backupZipFiles.Length == 0) throw new Exception("Can not find any backup file!");
+        FileInfo? backupZipFile = null;
+        if (backupZipFiles.Length == 1)
+        {
+            backupZipFile = backupZipFiles[0];
+        }
+        else
+        {
+            backupZipFile = backupZipFiles.MaxBy(f => f.CreationTimeUtc);
+        }
+        if (backupZipFile is null) throw new Exception("'backupZipFile' can Not be null!");
 
-    public async Task Get_All_Dbs_Backup()
+        //delete old storage directory
+        if (Storage_Directory.Exists)
+        {
+            Storage_Directory.Delete(true);
+        }
+
+        //create new Storage directory
+        Directory.CreateDirectory(Storage_Directory.FullName);
+
+        //create new status and save it
+        Seed_Status status = new();
+        status.Extracting_Zip_File = StatusEnum.Started.ToString();
+        string statusInJson = JsonSerializer.Serialize(status);
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+
+        //extract backk zip file to storage directory
+        ZipFile.ExtractToDirectory(backupZipFile.FullName, Storage_Directory.FullName);
+
+        //set extracting zip file to completed
+        status.Extracting_Zip_File = StatusEnum.Completed.ToString();
+        status.Clearing_All_Dbs = StatusEnum.Started.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+
+        //clear all Dbs
+        using (IServiceScope scope = serviceProvider.CreateScope())
+        {
+            //delete all isentity users
+            UserManager<Identity_UserDbModel> userManager = scope.ServiceProvider.GetRequiredService<UserManager<Identity_UserDbModel>>();
+            await userManager.Users.Where(u => u.UserName != "admin").ExecuteDeleteAsync();
+
+            //delete all patient patients
+            Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
+            await patientDb.Patients.ExecuteDeleteAsync();
+            //delete all patient documents
+            await patientDb.Documents.ExecuteDeleteAsync();
+            //delete all patient elements
+            await patientDb.Elements.ExecuteDeleteAsync();
+        }
+
+        //status
+        status.Clearing_All_Dbs = StatusEnum.Completed.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+
+        //seed all databases
+        await Seed_All_Dbs();
+
+        //status
+        status.Restore_Completed = true;
+        statusInJson = JsonSerializer.Serialize(status);
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+    }
+
+    private async Task Get_All_Dbs_Backup()
     {
         await Get_Identity_User_Backup();
 
@@ -148,8 +221,16 @@ public class Backup_Process
         await Get_Patient_Document_Backup();
         await Get_Patient_Element_Backup();
     }
+    private async Task Seed_All_Dbs()
+    {
+        await Seed_Identity_User_Db();
 
-    public async Task Get_Identity_User_Backup()
+        await Seed_Patient_Patient_Db();
+        await Seed_Patient_Document_Db();
+        await Seed_Patient_Element_Db();
+    }
+
+    private async Task Get_Identity_User_Backup()
     {
         //define backup status
         string statusInJson = await File.ReadAllTextAsync(Backup_Status_FilePath);
@@ -164,13 +245,32 @@ public class Backup_Process
         {
             UserManager<Identity_UserDbModel> userManager = scope.ServiceProvider.GetRequiredService<UserManager<Identity_UserDbModel>>();
 
-            await foreach (Identity_UserDbModel user in userManager.Users.AsAsyncEnumerable())
+            int bunchIndex = 0;
+            int bunchSize = 1000;
+            while (true)
             {
-                string[] roles = [.. await userManager.GetRolesAsync(user)];
-                Identity_User_SeedModel seedModel = Identity_User_SeedModel.Factory(user, roles);
-                string json = JsonSerializer.Serialize(seedModel, jsonSerializerOptions);
-                string filePath = Path.Combine(Backup_Identity_User_Directory.FullName, user.UserGuid.ToString("N"));
+                List<Identity_UserDbModel> users = await userManager.Users
+                .OrderBy(u => u.Id)
+                .Skip(bunchIndex * bunchSize)
+                .Take(bunchSize)
+                .ToListAsync();
+
+                if (users.Count == 0) break;
+
+                List<Identity_User_SeedModel> list = [];
+                foreach (Identity_UserDbModel user in users)
+                {
+                    string[] roles = [.. await userManager.GetRolesAsync(user)];
+                    list.Add(Identity_User_SeedModel.Factory(user, roles));
+                }
+
+                string json = JsonSerializer.Serialize(list, jsonSerializerOptions);
+                string filePath = Path.Combine(Storage_Db_Identity_User.FullName, $"list_{bunchIndex}.json");
                 await File.WriteAllTextAsync(filePath, json);
+
+                if (users.Count < bunchSize) break;
+
+                bunchIndex++;
             }
         }
 
@@ -180,7 +280,7 @@ public class Backup_Process
         //write status
         await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
     }
-    public async Task Seed_Identity_User_Db()
+    private async Task Seed_Identity_User_Db()
     {
         //define backup status
         string statusInJson = await File.ReadAllTextAsync(Seed_Status_FilePath);
@@ -195,13 +295,13 @@ public class Backup_Process
         {
             UserManager<Identity_UserDbModel> userManager = scope.ServiceProvider.GetRequiredService<UserManager<Identity_UserDbModel>>();
 
-            foreach (FileInfo fileInfo in Backup_Identity_User_Directory.EnumerateFiles())
+            foreach (FileInfo fileInfo in Storage_Db_Identity_User.EnumerateFiles())
             {
                 string json = await File.ReadAllTextAsync(fileInfo.FullName);
-                Identity_User_SeedModel? seedModel;
+                List<Identity_User_SeedModel>? seedModel_List;
                 try
                 {
-                    seedModel = JsonSerializer.Deserialize<Identity_User_SeedModel>(json, jsonSerializerOptions);
+                    seedModel_List = JsonSerializer.Deserialize<List<Identity_User_SeedModel>>(json, jsonSerializerOptions);
                 }
                 catch (Exception e)
                 {
@@ -209,20 +309,353 @@ public class Backup_Process
                     Console.WriteLine(e.Message);
                     continue;
                 }
-                if (seedModel is null) continue;
+                if (seedModel_List is null) continue;
 
-                Identity_UserDbModel user = seedModel.GetDbModel();
-
-                IdentityResult result = await userManager.CreateAsync(user);
-                if (result.Succeeded)
+                foreach (Identity_User_SeedModel seedModel in seedModel_List)
                 {
-                    await userManager.AddToRolesAsync(user, seedModel.Roles);
+                    Identity_UserDbModel user = seedModel.GetDbModel();
+
+                    if (user.UserName == "admin") continue;
+
+                    IdentityResult result = await userManager.CreateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRolesAsync(user, seedModel.Roles);
+                    }
                 }
             }
         }
 
         //set new status
         status.Seeding_Identity_User_Db = StatusEnum.Completed.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+    }
+
+    private async Task Get_Patient_Patient_Backup()
+    {
+        //define backup status
+        string statusInJson = await File.ReadAllTextAsync(Backup_Status_FilePath);
+        Backup_Status status = JsonSerializer.Deserialize<Backup_Status>(statusInJson) ?? new();
+        //set new status
+        status.Getting_Patient_Patient_Backup = StatusEnum.Started.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
+
+        using (IServiceScope scope = serviceProvider.CreateScope())
+        {
+            Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
+
+            int bunchIndex = 0;
+            int bunchSize = 1000;
+            while (true)
+            {
+                List<Patient_Patient_SeedModel> list = await patientDb.Patients
+                .OrderBy(p => p.Id)
+                .Skip(bunchIndex * bunchSize)
+                .Take(bunchSize)
+                .Select(p => new Patient_Patient_SeedModel()
+                {
+                    CreatedAt = p.CreatedAt,
+                    Description = p.Description,
+                    FullName = p.FullName,
+                    Guid = p.Guid,
+                    HasImage = p.HasImage,
+                    NationalId = p.NationalId,
+                })
+                .ToListAsync();
+
+                if (list.Count == 0) break;
+
+                string json = JsonSerializer.Serialize(list, jsonSerializerOptions);
+                string filePath = Path.Combine(Storage_Db_Patient_Patient.FullName, $"list_{bunchIndex}.json");
+                await File.WriteAllTextAsync(filePath, json);
+
+                if (list.Count < bunchSize) break;
+
+                bunchIndex++;
+            }
+        }
+
+        //set new status
+        status.Getting_Patient_Patient_Backup = StatusEnum.Completed.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
+    }
+    private async Task Seed_Patient_Patient_Db()
+    {
+        //define backup status
+        string statusInJson = await File.ReadAllTextAsync(Seed_Status_FilePath);
+        Seed_Status status = JsonSerializer.Deserialize<Seed_Status>(statusInJson) ?? new();
+        //set new status
+        status.Seeding_Patient_Patient_Db = StatusEnum.Started.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+
+        using (IServiceScope scope = serviceProvider.CreateScope())
+        {
+            Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
+
+            foreach (FileInfo fileInfo in Storage_Db_Patient_Patient.EnumerateFiles())
+            {
+                string json = await File.ReadAllTextAsync(fileInfo.FullName);
+                List<Patient_Patient_SeedModel>? seedModel_List;
+                try
+                {
+                    seedModel_List = JsonSerializer.Deserialize<List<Patient_Patient_SeedModel>>(json, jsonSerializerOptions);
+                }
+                catch (Exception e)
+                {
+                    //log
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                if (seedModel_List is null) continue;
+
+                List<Patient_Patient_DbModel> patients = [];
+                foreach (Patient_Patient_SeedModel seedModel in seedModel_List)
+                {
+                    patients.Add(seedModel.GetDbModel());
+                }
+
+                patientDb.Patients.AddRange(patients);
+                await patientDb.SaveChangesAsync();
+            }
+        }
+
+        //set new status
+        status.Seeding_Patient_Patient_Db = StatusEnum.Completed.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+    }
+
+    private async Task Get_Patient_Document_Backup()
+    {
+        //define backup status
+        string statusInJson = await File.ReadAllTextAsync(Backup_Status_FilePath);
+        Backup_Status status = JsonSerializer.Deserialize<Backup_Status>(statusInJson) ?? new();
+        //set new status
+        status.Getting_Patient_Document_Backup = StatusEnum.Started.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
+
+        using (IServiceScope scope = serviceProvider.CreateScope())
+        {
+            Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
+
+            int bunchIndex = 0;
+            int bunchSize = 1000;
+            while (true)
+            {
+                List<Patient_Document_SeedModel> list = await patientDb.Documents
+                .OrderBy(d => d.Id)
+                .Skip(bunchIndex * bunchSize)
+                .Take(bunchSize)
+                .Select(d => new Patient_Document_SeedModel()
+                {
+                    CreatedAt = d.CreatedAt,
+                    Guid = d.Guid,
+                    Patient_Guid = d.Patient.Guid,
+                })
+                .AsSplitQuery()
+                .ToListAsync();
+
+                if (list.Count == 0) break;
+
+                string json = JsonSerializer.Serialize(list, jsonSerializerOptions);
+                string filePath = Path.Combine(Storage_Db_Patient_Document.FullName, $"list_{bunchIndex}.json");
+                await File.WriteAllTextAsync(filePath, json);
+
+                if (list.Count < bunchSize) break;
+
+                bunchIndex++;
+            }
+        }
+
+        //set new status
+        status.Getting_Patient_Document_Backup = StatusEnum.Completed.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
+    }
+    private async Task Seed_Patient_Document_Db()
+    {
+        //define backup status
+        string statusInJson = await File.ReadAllTextAsync(Seed_Status_FilePath);
+        Seed_Status status = JsonSerializer.Deserialize<Seed_Status>(statusInJson) ?? new();
+        //set new status
+        status.Seeding_Patient_Document_Db = StatusEnum.Started.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+
+        using (IServiceScope scope = serviceProvider.CreateScope())
+        {
+            Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
+
+            foreach (FileInfo fileInfo in Storage_Db_Patient_Document.EnumerateFiles())
+            {
+                string json = await File.ReadAllTextAsync(fileInfo.FullName);
+                List<Patient_Document_SeedModel>? seedModel_List;
+                try
+                {
+                    seedModel_List = JsonSerializer.Deserialize<List<Patient_Document_SeedModel>>(json, jsonSerializerOptions);
+                }
+                catch (Exception e)
+                {
+                    //log
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                if (seedModel_List is null) continue;
+
+                List<Patient_Document_DbModel> documents = [];
+                foreach (Patient_Document_SeedModel seedModel in seedModel_List)
+                {
+                    Patient_Document_DbModel document = seedModel.GetDbModel();
+
+                    Patient_Patient_DbModel? parentPatient = await patientDb.Patients
+                    .FirstOrDefaultAsync(p => p.Guid == seedModel.Patient_Guid);
+                    if (parentPatient is null)
+                    {
+                        //log
+                        Console.WriteLine($"couldn't the specified find parent patient! parent patient guid = {seedModel.Patient_Guid}");
+                        continue;
+                    }
+
+                    documents.Add(document);
+                }
+
+                patientDb.Documents.AddRange(documents);
+                await patientDb.SaveChangesAsync();
+            }
+        }
+
+        //set new status
+        status.Seeding_Patient_Document_Db = StatusEnum.Completed.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+    }
+
+    private async Task Get_Patient_Element_Backup()
+    {
+        //define backup status
+        string statusInJson = await File.ReadAllTextAsync(Backup_Status_FilePath);
+        Backup_Status status = JsonSerializer.Deserialize<Backup_Status>(statusInJson) ?? new();
+        //set new status
+        status.Getting_Patient_Element_Backup = StatusEnum.Started.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
+
+        using (IServiceScope scope = serviceProvider.CreateScope())
+        {
+            Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
+
+            int bunchIndex = 0;
+            int bunchSize = 1000;
+            while (true)
+            {
+                List<Patient_Element_SeedModel> list = await patientDb.Elements
+                .OrderBy(el => el.Id)
+                .Skip(bunchIndex * bunchSize)
+                .Take(bunchSize)
+                .Select(el => new Patient_Element_SeedModel()
+                {
+                    CreatedAt = el.CreatedAt,
+                    Guid = el.Guid,
+                    Document_Guid = el.Document.Guid,
+                    FileName = el.FileName,
+                    Order = el.Order,
+                    Persian = el.Persian,
+                    Tab = el.Tab,
+                    Title = el.Title,
+                    Type = el.Type,
+                    Value = el.Value,
+                })
+                .AsSplitQuery()
+                .ToListAsync();
+
+                if (list.Count == 0) break;
+
+                string json = JsonSerializer.Serialize(list, jsonSerializerOptions);
+                string filePath = Path.Combine(Storage_Db_Patient_Element.FullName, $"list_{bunchIndex}.json");
+                await File.WriteAllTextAsync(filePath, json);
+
+                if (list.Count < bunchSize) break;
+
+                bunchIndex++;
+            }
+        }
+
+        //set new status
+        status.Getting_Patient_Element_Backup = StatusEnum.Completed.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
+    }
+    private async Task Seed_Patient_Element_Db()
+    {
+        //define backup status
+        string statusInJson = await File.ReadAllTextAsync(Seed_Status_FilePath);
+        Seed_Status status = JsonSerializer.Deserialize<Seed_Status>(statusInJson) ?? new();
+        //set new status
+        status.Seeding_Patient_Element_Db = StatusEnum.Started.ToString();
+        statusInJson = JsonSerializer.Serialize(status);
+        //write status
+        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+
+        using (IServiceScope scope = serviceProvider.CreateScope())
+        {
+            Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
+
+            foreach (FileInfo fileInfo in Storage_Db_Patient_Element.EnumerateFiles())
+            {
+                string json = await File.ReadAllTextAsync(fileInfo.FullName);
+                List<Patient_Element_SeedModel>? seedModel_List;
+                try
+                {
+                    seedModel_List = JsonSerializer.Deserialize<List<Patient_Element_SeedModel>>(json, jsonSerializerOptions);
+                }
+                catch (Exception e)
+                {
+                    //log
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                if (seedModel_List is null) continue;
+
+                List<Patient_Element_DbModel> elements = [];
+                foreach (Patient_Element_SeedModel seedModel in seedModel_List)
+                {
+                    Patient_Element_DbModel element = seedModel.GetDbModel();
+
+                    Patient_Document_DbModel? parentDocument = await patientDb.Documents
+                    .FirstOrDefaultAsync(d => d.Guid == seedModel.Document_Guid);
+                    if (parentDocument is null)
+                    {
+                        //log
+                        Console.WriteLine($"couldn't the specified find parent document! parent document guid = {seedModel.Document_Guid}");
+                        continue;
+                    }
+
+                    elements.Add(element);
+                }
+
+                patientDb.Elements.AddRange(elements);
+                await patientDb.SaveChangesAsync();
+            }
+        }
+
+        //set new status
+        status.Seeding_Patient_Element_Db = StatusEnum.Completed.ToString();
         statusInJson = JsonSerializer.Serialize(status);
         //write status
         await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
