@@ -529,6 +529,7 @@ public class Backup_Process
                         continue;
                     }
 
+                    document.Patient = parentPatient;
                     documents.Add(document);
                 }
 
@@ -646,6 +647,7 @@ public class Backup_Process
                         continue;
                     }
 
+                    element.Document = parentDocument;
                     elements.Add(element);
                 }
 
