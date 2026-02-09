@@ -44,6 +44,7 @@ export class DocumentTab  {
   headingElements = signal<HTMLHeadingElement[]>([]);
   displayWaitSpinner = signal(false);
   waitSpinnerValue = signal(0);
+  sideNavTopGap = signal(320);
 
   editAllowed = computed(()=>this.identityService.isAuthenticated() && 
     this.identityService.userModel()?.roles.includes("Document_Admins")
@@ -78,6 +79,16 @@ export class DocumentTab  {
 
   ngAfterViewInit(): void {
     this.viewportScroller.setOffset([0,64]);//[xOffset, yOffset]
+
+    this.windowService.nativeWindow.addEventListener("scroll",()=>{
+      let verticalScrollPosition = this.windowService.nativeWindow.scrollY;
+      this.sideNavTopGap.update(()=>{
+        let x = 320-verticalScrollPosition;
+        //console.log("x= "+x);
+        if(x < 64) x=64;
+        return x;
+      });
+    });
   }
 
   onHeadingInit(headingElement: HTMLHeadingElement){
@@ -110,7 +121,8 @@ export class DocumentTab  {
               DocumentGuid: this.documentPageService.documentPageModel()!.guid,
               Tab:this.documentTabModel().name,
               Type: type,
-              Value: result,
+              Value: result.value,
+              Persian: result.persian,
             };
             this.requestForNewElement(newElementFormModel);
           }
@@ -127,7 +139,8 @@ export class DocumentTab  {
               DocumentGuid: this.documentPageService.documentPageModel()!.guid,
               Tab:this.documentTabModel().name,
               Type: type,
-              Value: result,
+              Value: result.value,
+              Persian: result.persian,
             };
             this.requestForNewElement(newElementFormModel);
           }
@@ -144,7 +157,8 @@ export class DocumentTab  {
               DocumentGuid: this.documentPageService.documentPageModel()!.guid,
               Tab:this.documentTabModel().name,
               Type: type,
-              Value: result,
+              Value: result.value,
+              Persian: result.persian,
             };
             this.requestForNewElement(newElementFormModel);
           }
@@ -201,7 +215,7 @@ export class DocumentTab  {
           if(event.type === HttpEventType.Response && event.body){
             //console.log("new element added: ",JSON.stringify(event));
             this.documentTabModel().elements.push(event.body);
-            this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
+            //this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
             
             setTimeout(()=>{
               this.goToElement(event.body!.guid);

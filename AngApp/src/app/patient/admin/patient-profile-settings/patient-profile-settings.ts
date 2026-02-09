@@ -140,14 +140,14 @@ export class PatientProfileSettings {
       this.dialog.open(EditInput,{data:{
         label:"Edit National Id",
         value:this.patientModel()!.nationalId,
-      }}).afterClosed().subscribe((result:string)=>{
+      }}).afterClosed().subscribe(result=>{
         if(result){
           this.displayWaitSpinner.set(true);
-          this.patientService.requestChangeNationalId(this.patientGuid()!,result).subscribe({
+          this.patientService.requestChangeNationalId(this.patientGuid()!,result.value).subscribe({
             next: res => {
               if(res && res.success){
                 this.patientModel.update(pm=>{
-                  pm!.nationalId = result;
+                  pm!.nationalId = result.value;
                   return new Patient_ProfileModel(pm!);
                 });
               }
@@ -176,14 +176,14 @@ export class PatientProfileSettings {
         label:"Edit Full Name",
         value:this.patientModel()?.fullName,
         persian:true,
-      }}).afterClosed().subscribe((result:string)=>{
+      }}).afterClosed().subscribe((result)=>{
         if(result){
           this.displayWaitSpinner.set(true);
-          this.patientService.requestChangeFullName(this.patientGuid()!,result).subscribe({
+          this.patientService.requestChangeFullName(this.patientGuid()!,result.value).subscribe({
             next: res => {
               if(res && res.success){
                 this.patientModel.update(pm=>{
-                  pm!.fullName = result;
+                  pm!.fullName = result.value;
                   return new Patient_ProfileModel(pm!);
                 });
               }
@@ -212,14 +212,14 @@ export class PatientProfileSettings {
         label:"Edit Description",
         value:this.patientModel()!.description,
         persian:true,
-      }}).afterClosed().subscribe((result:string)=>{
+      }}).afterClosed().subscribe((result)=>{
         if(result){
           this.displayWaitSpinner.set(true);
-          this.patientService.requestChangeDescription(this.patientGuid()!,result).subscribe({
+          this.patientService.requestChangeDescription(this.patientGuid()!,result.value).subscribe({
             next: res => {
               if(res && res.success){
                 this.patientModel.update(pm=>{
-                  pm!.description = result;
+                  pm!.description = result.value;
                   return new Patient_ProfileModel(pm!);
                 });
               }

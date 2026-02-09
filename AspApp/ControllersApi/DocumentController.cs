@@ -186,7 +186,8 @@ public class DocumentController : ControllerBase
     [Authorize(Roles = "Document_Admins")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditElement([FromQuery][StringLength(32)] string guid,
-    [FromQuery][StringLength(4000)] string? value, [FromQuery][StringLength(128)] string? title)
+    [FromQuery][StringLength(4000)] string? value, [FromQuery][StringLength(128)] string? title,
+    [FromQuery] bool? persian)
     {
         if (!Guid.TryParseExact(guid, "N", out Guid element_Guid))
         {
@@ -206,6 +207,10 @@ public class DocumentController : ControllerBase
         if (value is not null)
         {
             elementDbModel.Value = value;
+        }
+        if (persian is not null)
+        {
+            elementDbModel.Persian = persian.Value;
         }
         if (title is not null)
         {
@@ -255,6 +260,16 @@ public class DocumentController : ControllerBase
             remainedElementsInTab[i].Order = i;
         }
         await patientDb.SaveChangesAsync();
+
+        if (elementDbModel.Type == "img" || elementDbModel.Type == "file")
+        {
+            string elementDirPath =
+            Path.Combine(Storage_Elements.FullName, guid);
+            if (Directory.Exists(elementDirPath))
+            {
+                Directory.Delete(elementDirPath, true);
+            }
+        }
 
         return Ok(new { success = true });
     }

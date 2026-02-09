@@ -18,23 +18,25 @@ export class LargeImg implements AfterViewInit {
   
   theImage = viewChild<ElementRef<HTMLImageElement>>("theImage");
   windowService = inject(WindowService);
+
+  fitTo90 = signal(false);
+  cursorZoomIn = signal(false);
   
   ngAfterViewInit(): void {
-    /*if(this.theImage()){
+    if(this.theImage()){
+      this.theImage()!.nativeElement.addEventListener("click", ()=>{
+        this.fitTo90.update(f=>!f);
+        this.cursorZoomIn.update(z=>!z);
+      });
+      
       let windowWidth90 = Math.floor(this.windowService.nativeWindow.innerWidth * 90 / 100);
       if(this.theImage()!.nativeElement.offsetWidth < windowWidth90){
-        this.theImage()!.nativeElement.style.cursor = "zoom-in";
-        this.theImage()!.nativeElement.addEventListener("click", ()=>{
-          this.theImage()!.nativeElement.classList.toggle("zoomedIn");
-          if(this.theImage()!.nativeElement.classList.contains("zoomedIn")){
-            this.theImage()!.nativeElement.style.cursor = "zoom-out";
-          }
-          else{
-            this.theImage()!.nativeElement.style.cursor = "zoom-in";
-          }
-        });
+        this.cursorZoomIn.set(true);
       }
-    }*/
+      else if(this.theImage()!.nativeElement.offsetWidth > windowWidth90){
+        this.cursorZoomIn.set(false);
+      }
+    }
   }
 
 }

@@ -13,9 +13,13 @@ img{
     height: fit-content;
     margin: auto;
     object-fit: contain;
+    cursor: zoom-out;
 }
-img.zoomedIn{
+/*img.zoomedIn{
     min-width: calc(90vw - 48px);
+}*/
+img.fitTo90{
+    width: calc(90vw - 48px);
 }
 
 div.buttons-box{

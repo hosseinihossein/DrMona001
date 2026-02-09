@@ -1,7 +1,15 @@
 <mat-dialog-content>
+    @if(data.label !== "Edit Username"){
+    <p style="text-align: right;">
+        <mat-slide-toggle [checked]="isPersian()" (change)="togglePersian()">
+            <span class="persian-font">فونت فارسی</span>
+        </mat-slide-toggle>
+    </p>
+    }
     <mat-form-field>
         <mat-label>{{data.label}}</mat-label>
-        <input matInput [formControl]="myInput" [class]="data.persian?'persian-font':''">
+        <input matInput [formControl]="myInput" [class]="isPersian()?'persian-font':''"
+            [style]="isPersian()?'font-family:shabnam;':''">
 
         @if(myInput.invalid && (myInput.dirty || myInput.touched) && myInput.hasError("required")){
         <mat-error>
@@ -21,7 +29,7 @@
     </mat-form-field>
     <mat-dialog-actions align="end" style="float:inline-end;">
         <button matButton mat-dialog-close>Cancel</button>
-        <button matButton="filled" [mat-dialog-close]="myInput.value"
+        <button matButton="filled" [mat-dialog-close]="{value:myInput.value,persian:isPersian()}"
             [disabled]="myInput.value === data.value || myInput.invalid">
             Save
         </button>

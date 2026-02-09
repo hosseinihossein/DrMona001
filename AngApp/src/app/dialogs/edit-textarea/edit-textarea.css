@@ -2,6 +2,11 @@ mat-form-field{
     width: 100%;
 }
 mat-dialog-content{
-    width: 50vw;
+    width: 60vw;
     min-width: 400px;
+}
+@media screen and (max-width:800px) {
+    mat-dialog-content{
+        width: 80vw;
+    }
 }

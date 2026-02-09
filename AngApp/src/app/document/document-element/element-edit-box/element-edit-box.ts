@@ -60,11 +60,12 @@ export class ElementEditBox {
         }
         else{
           this.displayWaitSpinner.set(true);
-          this.documentService.requestEditElement(this.elementModel().guid, result).subscribe({
+          this.documentService.requestEditElement(this.elementModel().guid, result.value, result.persian).subscribe({
             next: res => {
               if(res && res.success){
-                console.log("heading value edited: ",result);
-                this.elementModel().value = result;
+                //console.log("heading value edited: ",result);
+                this.elementModel().value = result.value;
+                this.elementModel().persian = result.persian;
                 this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
               this.displayWaitSpinner.set(false);
@@ -87,11 +88,12 @@ export class ElementEditBox {
         }
         else{
           this.displayWaitSpinner.set(true);
-          this.documentService.requestEditElement(this.elementModel().guid, result).subscribe({
+          this.documentService.requestEditElement(this.elementModel().guid, result.value, result.persian).subscribe({
             next: res => {
               if(res && res.success){
-                console.log("paragraph value edited: ",result);
-                this.elementModel().value = result;
+                //console.log("paragraph value edited: ",result);
+                this.elementModel().value = result.value;
+                this.elementModel().persian = result.persian;
                 this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
               this.displayWaitSpinner.set(false);
@@ -114,11 +116,12 @@ export class ElementEditBox {
         }
         else{
           this.displayWaitSpinner.set(true);
-          this.documentService.requestEditElement(this.elementModel().guid, result).subscribe({
+          this.documentService.requestEditElement(this.elementModel().guid, result.value, result.persian).subscribe({
             next: res => {
               if(res && res.success){
-                console.log("code value edited: ",result);
-                this.elementModel().value = result;
+                //console.log("code value edited: ",result);
+                this.elementModel().value = result.value;
+                this.elementModel().persian = result.persian;
                 this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
               this.displayWaitSpinner.set(false);
@@ -141,10 +144,10 @@ export class ElementEditBox {
         }
         else{
           this.displayWaitSpinner.set(true);
-          this.documentService.requestEditElement(this.elementModel().guid, undefined, result).subscribe({
+          this.documentService.requestEditElement(this.elementModel().guid, undefined,undefined, result).subscribe({
             next: res => {
               if(res && res.success){
-                console.log("file title edited: ",result);
+                //console.log("file title edited: ",result);
                 this.elementModel().value = result;
                 this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
@@ -169,10 +172,10 @@ export class ElementEditBox {
         }
         else{
           this.displayWaitSpinner.set(true);
-          this.documentService.requestEditElement(this.elementModel().guid, undefined, result).subscribe({
+          this.documentService.requestEditElement(this.elementModel().guid, undefined,undefined, result).subscribe({
             next: res => {
               if(res && res.success){
-                console.log("file title edited: ",result);
+                //console.log("file title edited: ",result);
                 this.elementModel().value = result;
                 this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
               }
@@ -189,7 +192,7 @@ export class ElementEditBox {
     this.documentService.requestDeleteElement(this.elementModel().guid).subscribe({
       next: res => {
         if(res && res.success){
-          console.log("element deleted!");
+          //console.log("element deleted!");
           this.documentPageService.documentPageModel.update(dpm=>{
             let tab = dpm!.tabs.find(t=>t.name === this.elementModel().tab);
             if(tab){
@@ -240,7 +243,7 @@ export class ElementEditBox {
     let tab = this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === this.elementModel().tab);
     if(tab && this.elementModel().order < (tab.elements.length - 1)){
       this.displayWaitSpinner.set(true);
-      this.documentService.requestDecreaseOrder(this.elementModel().guid).subscribe({
+      this.documentService.requestIncreaseOrder(this.elementModel().guid).subscribe({
         next: res => {
           if(res && res.success){
             this.documentPageService.documentPageModel.update(dpm=>{

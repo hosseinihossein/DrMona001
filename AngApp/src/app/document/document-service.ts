@@ -23,7 +23,7 @@ export class DocumentService {
     httpParams = httpParams.set("guid",guid);
     //if(fileName){}
     httpParams = httpParams.set("fileName",fileName);
-    return this.httpClient.get("/api/Patient/ElementFile",{
+    return this.httpClient.get("/api/Document/ElementFile",{
       params:httpParams,
       responseType: "blob",
       observe:"body",
@@ -57,10 +57,13 @@ export class DocumentService {
       "/api/Document/SubmitNewElement", formData, {reportProgress:true, observe:"events"}
     );
   }
-  requestEditElement(guid:string,value?:string,title?:string){
+  requestEditElement(guid:string,value?:string,persian?:boolean,title?:string){
     let httpParams= new HttpParams().set("guid",guid);
     if(value){
       httpParams = httpParams.set("value",value);
+    }
+    if(persian){
+      httpParams = httpParams.set("persian",persian);
     }
     if(title){
       httpParams = httpParams.set("title",title);

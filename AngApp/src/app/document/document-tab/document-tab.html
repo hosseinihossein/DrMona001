@@ -1,12 +1,14 @@
 <mat-sidenav-container>
 
     <!--------------------- content overview -------------------->
-    <mat-sidenav id="endSideNav" mode="side" opened position="end">
+    <mat-sidenav id="endSideNav" mode="side" opened position="end" fixedInViewport="" [fixedTopGap]="sideNavTopGap()">
         <p style="font-weight: 500;color: var(--mat-sys-on-surface);margin: 3px;">Contents:</p>
         @for(element of documentTabModel().elements; track element.guid){
         @if(element.type === "h1" || element.type === "h2"){
         <a (click)="goToElement(element.guid)" id="overview-heading{{element.guid}}"
-            [style.paddingLeft.px]="element.type === 'h2' ? 12 : 4">{{element.value}}</a>
+            [style.paddingLeft.px]="element.type === 'h2' ? 12 : 4" [style]="element.persian?'font-family:shabnam;':''">
+            {{element.value}}
+        </a>
         }
         }
     </mat-sidenav>

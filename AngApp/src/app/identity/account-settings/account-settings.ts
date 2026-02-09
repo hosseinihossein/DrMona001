@@ -113,14 +113,14 @@ export class AccountSettings {
       this.dialog.open(EditInput,{data:{
         label:"Edit Username",
         value:this.identityService.userModel()?.userName,
-      }}).afterClosed().subscribe((result:string)=>{
+      }}).afterClosed().subscribe((result)=>{
         if(result){
           this.displayWaitSpinner.set(true);
-          this.identityService.requestChangeUserName(result).subscribe({
+          this.identityService.requestChangeUserName(result.value).subscribe({
             next: res => {
               if(res && res.success){
                 this.identityService.userModel.update(um=>{
-                  um!.userName = result;
+                  um!.userName = result.value;
                   return new Identity_UserModel(um!);
                 });
               }
@@ -149,14 +149,14 @@ export class AccountSettings {
         label:"Edit Full Name",
         value:this.identityService.userModel()?.fullName,
         persian:true,
-      }}).afterClosed().subscribe((result:string)=>{
+      }}).afterClosed().subscribe((result)=>{
         if(result){
           this.displayWaitSpinner.set(true);
-          this.identityService.requestChangeFullName(result).subscribe({
+          this.identityService.requestChangeFullName(result.value).subscribe({
             next: res => {
               if(res && res.success){
                 this.identityService.userModel.update(um=>{
-                  um!.fullName = result;
+                  um!.fullName = result.value;
                   return new Identity_UserModel(um!);
                 });
               }
@@ -185,14 +185,14 @@ export class AccountSettings {
         label:"Edit Description",
         value:this.identityService.userModel()?.description,
         persian:true,
-      }}).afterClosed().subscribe((result:string)=>{
+      }}).afterClosed().subscribe((result)=>{
         if(result){
           this.displayWaitSpinner.set(true);
-          this.identityService.requestChangeDescription(result).subscribe({
+          this.identityService.requestChangeDescription(result.value).subscribe({
             next: res => {
               if(res && res.success){
                 this.identityService.userModel.update(um=>{
-                  um!.description = result;
+                  um!.description = result.value;
                   return new Identity_UserModel(um!);
                 });
               }

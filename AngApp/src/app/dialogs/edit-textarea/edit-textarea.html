@@ -1,8 +1,13 @@
 <mat-dialog-content>
+    <p style="text-align: right;">
+        <mat-slide-toggle [checked]="isPersian()" (change)="togglePersian()">
+            <span class="persian-font">فونت فارسی</span>
+        </mat-slide-toggle>
+    </p>
     <mat-form-field>
         <mat-label>{{data.label}}</mat-label>
         <textarea matInput [value]="data.value" [formControl]="myText" placeholder="Write here.." rows="5"
-            [class]="data.persian?'persian-font':''">
+            [class]="isPersian()?'persian-font':''" [style]="isPersian()?'font-family:shabnam;':''">
         </textarea>
         @if(myText.invalid && (myText.dirty || myText.touched) && myText.hasError("required")){
         <mat-error>
@@ -17,7 +22,7 @@
     </mat-form-field>
     <mat-dialog-actions align="end" style="float:inline-end;">
         <button matButton mat-dialog-close>Cancel</button>
-        <button matButton="filled" [mat-dialog-close]="myText.value"
+        <button matButton="filled" [mat-dialog-close]="{value:myText.value,persian:isPersian()}"
             [disabled]="data.value === myText.value || myText.invalid">
             Submit
         </button>

@@ -1,1 +1,3 @@
-<img [src]="imageUrl()" [alt]="elementModel().title" (click)="openLargeImage()">
+@if(imageUrl()){
+<img [src]="imageUrl()!" [alt]="elementModel().title" (click)="openLargeImage()">
+}

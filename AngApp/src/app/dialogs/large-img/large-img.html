@@ -9,5 +9,6 @@
         </a>
     </div>
 
-    <img [src]="data.imgSrc" width="100" height="100" [alt]="data.imgTitle" #theImage>
+    <img [src]="data.imgSrc" [alt]="data.imgTitle" #theImage [class.fitTo90]="fitTo90()"
+        [style]="cursorZoomIn() ? 'cursor:zoom-in;' : ''">
 </mat-dialog-content>
