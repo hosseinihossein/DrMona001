@@ -1,0 +1,32 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{backupStatus()?.file_Name}}</mat-card-title>
+        <mat-card-subtitle>{{backupStatus()?.created_At | date}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <p>Ready to download: {{backupStatus()?.ready_To_Download}}</p>
+        <p>File Size: {{backupStatus()?.file_Size}}</p>
+        <h2>Status:</h2>
+        <p>Generating_Zip_File: {{backupStatus()?.generating_Zip_File}}</p>
+        <p>getting_Identity_User_Backup: {{backupStatus()?.getting_Identity_User_Backup}}</p>
+        <p>getting_Patient_Patient_Backup: {{backupStatus()?.getting_Patient_Patient_Backup}}</p>
+        <p>getting_Patient_Document_Backup: {{backupStatus()?.getting_Patient_Document_Backup}}</p>
+        <p>getting_Patient_Element_Backup: {{backupStatus()?.getting_Patient_Element_Backup}}</p>
+    </mat-card-content>
+    <mat-card-actions align="start">
+        @if(timer()){
+        <span style="font-size: 0.75rem;">Refresh in {{timer()}} seconds.</span>
+        }
+    </mat-card-actions>
+    <mat-card-actions align="end">
+        @if(backupStatus()?.ready_To_Download){
+        <button matButton (click)="downloadFile()">Download</button>
+        }
+        @if(backupStatus()?.process === "Completed"){
+        <button matButton (click)="deleteFile()">Delete</button>
+        }
+        @if(backupStatus()?.process === "Not_Started") {
+        <button matButton (click)="generateFile()">Generate</button>
+        }
+    </mat-card-actions>
+</mat-card>

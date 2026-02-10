@@ -15,6 +15,8 @@ public enum StatusEnum
 
 public class Backup_Status
 {
+    public string Process { get; set; } = StatusEnum.Not_Started.ToString();
+
     public string Generating_Zip_File { get; set; } = StatusEnum.Not_Started.ToString();
 
     public string Getting_Identity_User_Backup { get; set; } = StatusEnum.Not_Started.ToString();
@@ -28,7 +30,7 @@ public class Backup_Status
     public string? File_Name { get; set; }
     public bool Ready_To_Download { get; set; } = false;
 }
-public class Seed_Status
+public class Restore_Status
 {
     public string Extracting_Zip_File { get; set; } = StatusEnum.Not_Started.ToString();
     public string Clearing_All_Dbs { get; set; } = StatusEnum.Not_Started.ToString();
@@ -55,7 +57,7 @@ public class Backup_Process
     readonly DirectoryInfo Storage_Db_Patient_Element;
 
     public readonly string Backup_Status_FilePath;
-    public readonly string Seed_Status_FilePath;
+    public readonly string Restore_Status_FilePath;
     public readonly string BackupFileNameWithoutDate = "backup.zip";
 
     readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.General);
@@ -75,7 +77,7 @@ public class Backup_Process
         Storage_Db_Patient_Element = Directory.CreateDirectory(Path.Combine(Storage_Db_Directory.FullName, "Patient", "Element"));
 
         Backup_Status_FilePath = Path.Combine(Backup_Directory.FullName, "Backup_Status.json");
-        Seed_Status_FilePath = Path.Combine(Backup_Directory.FullName, "Seed_Status.json");
+        Restore_Status_FilePath = Path.Combine(Backup_Directory.FullName, "Seed_Status.json");
 
         jsonSerializerOptions.Converters.Add(new GuidJsonConverter());
 
@@ -97,52 +99,69 @@ public class Backup_Process
 
     public async Task Generate_Backup_ZipFile()
     {
-        //delete old directories
-        if (Storage_Db_Directory.Exists)
+        try
         {
-            Storage_Db_Directory.Delete(true);
+            //create new status and save it
+            Backup_Status status = new();
+            status.Process = StatusEnum.Started.ToString();
+            string statusInJson = JsonSerializer.Serialize(status);
+            await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
+
+            //delete old directories
+            if (Storage_Db_Directory.Exists)
+            {
+                Storage_Db_Directory.Delete(true);
+            }
+            if (Backup_Directory.Exists)
+            {
+                Backup_Directory.Delete(true);
+            }
+
+            //create new directories
+            Create_Directories();
+
+            //get all dbs backup
+            await Get_All_Dbs_Backup();
+
+            //define backup status
+            statusInJson = await File.ReadAllTextAsync(Backup_Status_FilePath);
+            status = JsonSerializer.Deserialize<Backup_Status>(statusInJson) ?? new();
+            DateTime createdAt = status.Created_At;
+            string backupFileName = createdAt.ToString("yyyy_MM_dd_HH_mm_ss") + "_" + BackupFileNameWithoutDate;
+            status.File_Name = backupFileName;
+
+            //write status
+            status.Generating_Zip_File = StatusEnum.Started.ToString();
+            statusInJson = JsonSerializer.Serialize(status);
+            await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
+
+            //zip the Storage directory
+            string backupFilePath = Path.Combine(Backup_Directory.FullName, backupFileName);
+            ZipFile.CreateFromDirectory(Storage_Directory.FullName, backupFilePath);
+
+            status.Generating_Zip_File = StatusEnum.Completed.ToString();
+            FileInfo backupFileInfo = new FileInfo(backupFilePath);//fileInfo needed for fie length
+            if (backupFileInfo.Exists)
+            {
+                status.File_Size = (double)backupFileInfo.Length / 1024;//size in KB
+                status.Ready_To_Download = true;
+            }
+            statusInJson = JsonSerializer.Serialize(status);
+            await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
         }
-        if (Backup_Directory.Exists)
+        catch (Exception e)
         {
-            Backup_Directory.Delete(true);
+            //log
+            Console.WriteLine(e.Message);
+
+            string json = await System.IO.File.ReadAllTextAsync(Backup_Status_FilePath);
+            Backup_Status? status = JsonSerializer.Deserialize<Backup_Status>(json);
+            status ??= new();
+            status.Process = StatusEnum.Completed.ToString();
+
+            string statusInJson = JsonSerializer.Serialize(status);
+            await System.IO.File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
         }
-
-        //create new directories
-        Create_Directories();
-
-        //create new status and save it
-        Backup_Status status = new();
-        string statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
-
-        //get all dbs backup
-        await Get_All_Dbs_Backup();
-
-        //define backup status
-        statusInJson = await File.ReadAllTextAsync(Backup_Status_FilePath);
-        status = JsonSerializer.Deserialize<Backup_Status>(statusInJson) ?? new();
-        DateTime createdAt = status.Created_At;
-        string backupFileName = createdAt.ToString("yyyy_MM_dd_HH_mm_ss") + "_" + BackupFileNameWithoutDate;
-        status.File_Name = backupFileName;
-
-        //write status
-        status.Generating_Zip_File = StatusEnum.Started.ToString();
-        statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
-
-        //zip the Storage directory
-        string backupFilePath = Path.Combine(Backup_Directory.FullName, backupFileName);
-        ZipFile.CreateFromDirectory(Storage_Directory.FullName, backupFilePath);
-
-        status.Generating_Zip_File = StatusEnum.Completed.ToString();
-        FileInfo backupFileInfo = new FileInfo(backupFilePath);//fileInfo needed for fie length
-        if (backupFileInfo.Exists)
-        {
-            status.File_Size = (double)backupFileInfo.Length / 1024;//size in KB
-            status.Ready_To_Download = true;
-        }
-        statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
     }
     public async Task Restore_From_Backup_ZipFile()
     {
@@ -169,10 +188,10 @@ public class Backup_Process
         Directory.CreateDirectory(Storage_Directory.FullName);
 
         //create new status and save it
-        Seed_Status status = new();
+        Restore_Status status = new();
         status.Extracting_Zip_File = StatusEnum.Started.ToString();
         string statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
 
         //extract backk zip file to storage directory
         ZipFile.ExtractToDirectory(backupZipFile.FullName, Storage_Directory.FullName);
@@ -181,7 +200,7 @@ public class Backup_Process
         status.Extracting_Zip_File = StatusEnum.Completed.ToString();
         status.Clearing_All_Dbs = StatusEnum.Started.ToString();
         statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
 
         //clear all Dbs
         using (IServiceScope scope = serviceProvider.CreateScope())
@@ -202,7 +221,7 @@ public class Backup_Process
         //status
         status.Clearing_All_Dbs = StatusEnum.Completed.ToString();
         statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
 
         //seed all databases
         await Seed_All_Dbs();
@@ -210,7 +229,7 @@ public class Backup_Process
         //status
         status.Restore_Completed = true;
         statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
     }
 
     private async Task Get_All_Dbs_Backup()
@@ -283,13 +302,13 @@ public class Backup_Process
     private async Task Seed_Identity_User_Db()
     {
         //define backup status
-        string statusInJson = await File.ReadAllTextAsync(Seed_Status_FilePath);
-        Seed_Status status = JsonSerializer.Deserialize<Seed_Status>(statusInJson) ?? new();
+        string statusInJson = await File.ReadAllTextAsync(Restore_Status_FilePath);
+        Restore_Status status = JsonSerializer.Deserialize<Restore_Status>(statusInJson) ?? new();
         //set new status
         status.Seeding_Identity_User_Db = StatusEnum.Started.ToString();
         statusInJson = JsonSerializer.Serialize(status);
         //write status
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
 
         using (IServiceScope scope = serviceProvider.CreateScope())
         {
@@ -330,7 +349,7 @@ public class Backup_Process
         status.Seeding_Identity_User_Db = StatusEnum.Completed.ToString();
         statusInJson = JsonSerializer.Serialize(status);
         //write status
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
     }
 
     private async Task Get_Patient_Patient_Backup()
@@ -388,13 +407,13 @@ public class Backup_Process
     private async Task Seed_Patient_Patient_Db()
     {
         //define backup status
-        string statusInJson = await File.ReadAllTextAsync(Seed_Status_FilePath);
-        Seed_Status status = JsonSerializer.Deserialize<Seed_Status>(statusInJson) ?? new();
+        string statusInJson = await File.ReadAllTextAsync(Restore_Status_FilePath);
+        Restore_Status status = JsonSerializer.Deserialize<Restore_Status>(statusInJson) ?? new();
         //set new status
         status.Seeding_Patient_Patient_Db = StatusEnum.Started.ToString();
         statusInJson = JsonSerializer.Serialize(status);
         //write status
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
 
         using (IServiceScope scope = serviceProvider.CreateScope())
         {
@@ -431,7 +450,7 @@ public class Backup_Process
         status.Seeding_Patient_Patient_Db = StatusEnum.Completed.ToString();
         statusInJson = JsonSerializer.Serialize(status);
         //write status
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
     }
 
     private async Task Get_Patient_Document_Backup()
@@ -487,13 +506,13 @@ public class Backup_Process
     private async Task Seed_Patient_Document_Db()
     {
         //define backup status
-        string statusInJson = await File.ReadAllTextAsync(Seed_Status_FilePath);
-        Seed_Status status = JsonSerializer.Deserialize<Seed_Status>(statusInJson) ?? new();
+        string statusInJson = await File.ReadAllTextAsync(Restore_Status_FilePath);
+        Restore_Status status = JsonSerializer.Deserialize<Restore_Status>(statusInJson) ?? new();
         //set new status
         status.Seeding_Patient_Document_Db = StatusEnum.Started.ToString();
         statusInJson = JsonSerializer.Serialize(status);
         //write status
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
 
         using (IServiceScope scope = serviceProvider.CreateScope())
         {
@@ -542,7 +561,7 @@ public class Backup_Process
         status.Seeding_Patient_Document_Db = StatusEnum.Completed.ToString();
         statusInJson = JsonSerializer.Serialize(status);
         //write status
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
     }
 
     private async Task Get_Patient_Element_Backup()
@@ -605,13 +624,13 @@ public class Backup_Process
     private async Task Seed_Patient_Element_Db()
     {
         //define backup status
-        string statusInJson = await File.ReadAllTextAsync(Seed_Status_FilePath);
-        Seed_Status status = JsonSerializer.Deserialize<Seed_Status>(statusInJson) ?? new();
+        string statusInJson = await File.ReadAllTextAsync(Restore_Status_FilePath);
+        Restore_Status status = JsonSerializer.Deserialize<Restore_Status>(statusInJson) ?? new();
         //set new status
         status.Seeding_Patient_Element_Db = StatusEnum.Started.ToString();
         statusInJson = JsonSerializer.Serialize(status);
         //write status
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
 
         using (IServiceScope scope = serviceProvider.CreateScope())
         {
@@ -660,7 +679,7 @@ public class Backup_Process
         status.Seeding_Patient_Element_Db = StatusEnum.Completed.ToString();
         statusInJson = JsonSerializer.Serialize(status);
         //write status
-        await File.WriteAllTextAsync(Seed_Status_FilePath, statusInJson);
+        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
     }
 
 
@@ -775,5 +794,10 @@ public class Backup_Process
 
 
 
+}
+
+public class Backup_Restore_FormModel
+{
+    public IFormFile File { get; set; } = null!;
 }
 

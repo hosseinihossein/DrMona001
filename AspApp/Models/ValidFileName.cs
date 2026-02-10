@@ -1,14 +1,18 @@
+using System.Net;
+
 namespace AspApp.Models;
 
 public class FileNameValidator
 {
-    readonly string SeedFileName;
+    /*readonly string SeedFileName;
     public FileNameValidator(IConfiguration config)
     {
         SeedFileName = config["SeedFileName"] ?? "holibzSeedData.json";
-    }
+    }*/
     public string GetValidFileName(string suggestedFileName)
     {
+        suggestedFileName = WebUtility.HtmlEncode(suggestedFileName) ?? "file";
+
         if (string.IsNullOrWhiteSpace(suggestedFileName))
         {
             return "file";
@@ -47,10 +51,10 @@ public class FileNameValidator
         }
 
         //SeedFileName
-        if (validFileName == SeedFileName)
+        /*if (validFileName == SeedFileName)
         {
             validFileName = "User_" + validFileName;
-        }
+        }*/
 
         return validFileName;
     }
