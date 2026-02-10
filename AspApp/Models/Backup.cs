@@ -46,7 +46,7 @@ public class Restore_Status
 
 public class Backup_Process
 {
-    readonly DirectoryInfo Storage_Directory;
+    public readonly DirectoryInfo Storage_Directory;
     public readonly DirectoryInfo Backup_Directory;
     public readonly DirectoryInfo Storage_Db_Directory;
 
@@ -796,8 +796,5 @@ public class Backup_Process
 
 }
 
-public class Backup_Restore_FormModel
-{
-    public IFormFile File { get; set; } = null!;
-}
+
 

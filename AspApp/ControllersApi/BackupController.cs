@@ -186,47 +186,86 @@ public class BackupController : ControllerBase
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UploadBackupFile()
     {
-        Backup_Restore_FormModel formModel = new();
+        /*Backup_Restore_FormModel*/
+        object? formModel = null;//new();
         List<string> uploadingFormFileNames = ["File"];
         var uploadLargeFile_Model = await uploadLargeFile.GetFormModelAndLargeFiles(HttpContext, formModel,
         uploadingFormFileNames, this);
 
+        //string fileGuid = uploadLargeFile_Model.UploadedFileGuid;
+        FileInfo fileTempPathFileInfo =
+        new FileInfo(uploadLargeFile_Model.FormFileNameFullName["File"]);
+        string fileName = fileTempPathFileInfo.Name;
+
+        if (!uploadLargeFile_Model.IsSuccessful)
+        {
+            if (fileTempPathFileInfo.Exists)
+            {
+                fileTempPathFileInfo.Directory?.Delete(true);
+            }
+
+            foreach (var kv in uploadLargeFile_Model.ErrorDescription)
+            {
+                ModelState.AddModelError(kv.Key, kv.Value);
+            }
+            return BadRequest(ModelState);
+        }
+
+        if (!uploadLargeFile_Model.FormFileNameFullName.ContainsKey("File") ||
+        string.IsNullOrWhiteSpace(uploadLargeFile_Model.FormFileNameFullName["File"]))
+        {
+            ModelState.AddModelError("File", "File is required!");
+            return BadRequest(ModelState);
+        }
+
+        var fileDirInfo = Directory.CreateDirectory(
+            Path.Combine(backupProcess.Backup_Directory.FullName)
+        );
+
+        string fileMainPath = Path.Combine(fileDirInfo.FullName, fileName);
+        if (fileTempPathFileInfo.Exists)
+        {
+            System.IO.File.Move(fileTempPathFileInfo.FullName, fileMainPath);
+        }
+        else
+        {
+            ModelState.AddModelError("temp file", "Can not find temp file!");
+            return BadRequest(ModelState);
+        }
+
+        fileTempPathFileInfo.Directory?.Delete(true);
+
+        //create new status and save it
+        Backup_Status status = new();
+        status.Process = StatusEnum.Completed.ToString();
+        status.Ready_To_Download = true;
+        status.File_Name = fileName;
+        status.File_Size = (double)new FileInfo(fileMainPath).Length / 1024;//KB
+        string statusInJson = JsonSerializer.Serialize(status);
+        await System.IO.File.WriteAllTextAsync(backupProcess.Backup_Status_FilePath, statusInJson);
+
+        return Ok(new { success = true });
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Backup_Admins")]
+    public async Task<IActionResult> RestoreFromBackup()
+    {
         Backup_Status? status = null;
         if (System.IO.File.Exists(backupProcess.Backup_Status_FilePath))
         {
             string json = await System.IO.File.ReadAllTextAsync(backupProcess.Backup_Status_FilePath);
             status = JsonSerializer.Deserialize<Backup_Status>(json);
         }
-        if (status is null)
+        if (status is not null && status.Process == "Started")
         {
-            return BadRequest("status file not found!");
-        }
-        if (status.File_Name is null)
-        {
-            return BadRequest("file name can not be null!");
-        }
-        if (status.Process != "Completed")
-        {
-            return BadRequest("backup process is not completed yet!");
-        }
-        if (!status.Ready_To_Download)
-        {
-            return BadRequest("Not ready to download!");
+            return BadRequest("last backup process is not completed yet!");
         }
 
-        string backupFilePath = Path.Combine(backupProcess.Backup_Directory.FullName, status.File_Name);
-        if (System.IO.File.Exists(backupFilePath))
-        {
-            /*In ASP.NET Core, when you return a file using PhysicalFile, File, or FileContentResult, 
-            the framework automatically sets the Content-Disposition header to attachment if 
-            you pass a fileDownloadName.*/
-            /*
-            Content-Disposition: inline; Display the content in the browser.
-            Content-Disposition: attachment; Prompt the user to download the file.
-            */
-            return PhysicalFile(backupFilePath, "application/octet-stream", status.File_Name, true);
-        }
-        return NotFound();
+        _ = backupProcess.Restore_From_Backup_ZipFile();
+
+        return Ok();
     }
+
 
 }

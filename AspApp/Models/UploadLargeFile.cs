@@ -28,7 +28,7 @@ public class UploadLargeFile
     }
 
     public async Task<UploadLargeFile_Model> GetFormModelAndLargeFiles<T>(HttpContext HttpContext,
-    T formModel, List<string> uploadingFormFileNames, ControllerBase controllerBase) where T : class
+    T? formModel, List<string> uploadingFormFileNames, ControllerBase controllerBase) where T : class
     {
         UploadLargeFile_Model uploadLargeFile_Model = new();
 
@@ -99,7 +99,8 @@ public class UploadLargeFile
                         && (!string.IsNullOrEmpty(contentDisposition.FileName.Value)
                             || !string.IsNullOrEmpty(contentDisposition.FileNameStar.Value)))
                     {
-                        var tempFilesDirInfo = Directory.CreateDirectory(Path.Combine(env.ContentRootPath, "TempFiles", fileGuid));
+                        var tempFilesDirInfo =
+                        Directory.CreateDirectory(Path.Combine(env.ContentRootPath, "TempFiles", fileGuid));
                         //var fileName = WebUtility.HtmlEncode(contentDisposition.FileName.Value) ?? "fileName";
                         var fileName = fileNameValidator.GetValidFileName(contentDisposition.FileName.Value ?? "file");
                         var key = HeaderUtilities.RemoveQuotes(contentDisposition.Name).Value;
@@ -118,9 +119,10 @@ public class UploadLargeFile
                         }
                     }
                     else if (contentDisposition != null
-                            && contentDisposition.DispositionType.Equals("form-data")
-                            && string.IsNullOrEmpty(contentDisposition.FileName.Value)
-                            && string.IsNullOrEmpty(contentDisposition.FileNameStar.Value))
+                        && contentDisposition.DispositionType.Equals("form-data")
+                        && string.IsNullOrEmpty(contentDisposition.FileName.Value)
+                        && string.IsNullOrEmpty(contentDisposition.FileNameStar.Value)
+                    )
                     {
                         // Don't limit the key name length because the 
                         // multipart headers length limit is already in effect.
@@ -181,20 +183,25 @@ public class UploadLargeFile
         // Bind form data to the model
         //var formData = new FormData();
         //T formModel2 = new(); // needs to define for method where : new()
-        var formValueProvider = new FormValueProvider(
-            BindingSource.Form,
-            new FormCollection(formAccumulator.GetResults()),
-            CultureInfo.CurrentCulture);
 
-        var bindingSuccessful = await controllerBase.TryUpdateModelAsync(formModel, prefix: "",
-            valueProvider: formValueProvider);
-
-        if (!bindingSuccessful)
+        if (formModel is not null)
         {
-            uploadLargeFile_Model.ErrorDescription
-            .Add("ControllerBase.TryUpdateModelAsync", "Binding was Not successful");
-            return uploadLargeFile_Model;
+            var formValueProvider = new FormValueProvider(
+                BindingSource.Form,
+                new FormCollection(formAccumulator.GetResults()),
+                CultureInfo.CurrentCulture);
+
+            var bindingSuccessful = await controllerBase.TryUpdateModelAsync(formModel, prefix: "",
+                valueProvider: formValueProvider);
+
+            if (!bindingSuccessful)
+            {
+                uploadLargeFile_Model.ErrorDescription
+                .Add("ControllerBase.TryUpdateModelAsync", "Binding was Not successful");
+                return uploadLargeFile_Model;
+            }
         }
+
 
         uploadLargeFile_Model.IsSuccessful = true;
         return uploadLargeFile_Model;
