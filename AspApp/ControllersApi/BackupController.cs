@@ -91,15 +91,26 @@ public class BackupController : ControllerBase
     [Authorize(Roles = "Backup_Admins")]
     public async Task<IActionResult> GenerateBackupFile()
     {
-        Backup_Status? status = null;
+        Backup_Status? backupStatus = null;
         if (System.IO.File.Exists(backupProcess.Backup_Status_FilePath))
         {
             string json = await System.IO.File.ReadAllTextAsync(backupProcess.Backup_Status_FilePath);
-            status = JsonSerializer.Deserialize<Backup_Status>(json);
+            backupStatus = JsonSerializer.Deserialize<Backup_Status>(json);
         }
-        if (status is not null && status.Process == "Started")
+        if (backupStatus is not null && backupStatus.Process == "Started")
         {
             return BadRequest("last backup process is not completed yet!");
+        }
+
+        Restore_Status? restoreStatus = null;
+        if (System.IO.File.Exists(backupProcess.Restore_Status_FilePath))
+        {
+            string json = await System.IO.File.ReadAllTextAsync(backupProcess.Restore_Status_FilePath);
+            restoreStatus = JsonSerializer.Deserialize<Restore_Status>(json);
+        }
+        if (restoreStatus is not null && restoreStatus.Process == "Started")
+        {
+            return BadRequest("last restore process is not completed yet!");
         }
 
         _ = backupProcess.Generate_Backup_ZipFile();
@@ -251,15 +262,26 @@ public class BackupController : ControllerBase
     [Authorize(Roles = "Backup_Admins")]
     public async Task<IActionResult> RestoreFromBackup()
     {
-        Backup_Status? status = null;
+        Backup_Status? backupStatus = null;
         if (System.IO.File.Exists(backupProcess.Backup_Status_FilePath))
         {
             string json = await System.IO.File.ReadAllTextAsync(backupProcess.Backup_Status_FilePath);
-            status = JsonSerializer.Deserialize<Backup_Status>(json);
+            backupStatus = JsonSerializer.Deserialize<Backup_Status>(json);
         }
-        if (status is not null && status.Process == "Started")
+        if (backupStatus is not null && backupStatus.Process == "Started")
         {
             return BadRequest("last backup process is not completed yet!");
+        }
+
+        Restore_Status? restoreStatus = null;
+        if (System.IO.File.Exists(backupProcess.Restore_Status_FilePath))
+        {
+            string json = await System.IO.File.ReadAllTextAsync(backupProcess.Restore_Status_FilePath);
+            restoreStatus = JsonSerializer.Deserialize<Restore_Status>(json);
+        }
+        if (restoreStatus is not null && restoreStatus.Process == "Started")
+        {
+            return BadRequest("last restore process is not completed yet!");
         }
 
         _ = backupProcess.Restore_From_Backup_ZipFile();

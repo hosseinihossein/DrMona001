@@ -32,7 +32,10 @@ public class Backup_Status
 }
 public class Restore_Status
 {
+    public string Process { get; set; } = StatusEnum.Not_Started.ToString();
+
     public string Extracting_Zip_File { get; set; } = StatusEnum.Not_Started.ToString();
+
     public string Clearing_All_Dbs { get; set; } = StatusEnum.Not_Started.ToString();
 
     public string Seeding_Identity_User_Db { get; set; } = StatusEnum.Not_Started.ToString();
@@ -41,7 +44,7 @@ public class Restore_Status
     public string Seeding_Patient_Document_Db { get; set; } = StatusEnum.Not_Started.ToString();
     public string Seeding_Patient_Element_Db { get; set; } = StatusEnum.Not_Started.ToString();
 
-    public bool Restore_Completed { get; set; } = false;
+    //public bool Restore_Completed { get; set; } = false;
 }
 
 public class Backup_Process
@@ -165,71 +168,93 @@ public class Backup_Process
     }
     public async Task Restore_From_Backup_ZipFile()
     {
-        FileInfo[] backupZipFiles = Backup_Directory.GetFiles($"*_{BackupFileNameWithoutDate}");
-        if (backupZipFiles.Length == 0) throw new Exception("Can not find any backup file!");
-        FileInfo? backupZipFile = null;
-        if (backupZipFiles.Length == 1)
+        try
         {
-            backupZipFile = backupZipFiles[0];
+            //create new status and save it
+            Restore_Status status = new();
+            status.Process = StatusEnum.Started.ToString();
+            string statusInJson = JsonSerializer.Serialize(status);
+            await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
+
+            FileInfo[] backupZipFiles = Backup_Directory.GetFiles($"*_{BackupFileNameWithoutDate}");
+            if (backupZipFiles.Length == 0) throw new Exception("Can not find any backup file trailing with '_backup.zip'!");
+            FileInfo? backupZipFile = null;
+            if (backupZipFiles.Length == 1)
+            {
+                backupZipFile = backupZipFiles[0];
+            }
+            else
+            {
+                backupZipFile = backupZipFiles.MaxBy(f => f.CreationTimeUtc);
+            }
+            if (backupZipFile is null) throw new Exception("'backupZipFile' can Not be null!");
+
+            //delete old storage directory
+            if (Storage_Directory.Exists)
+            {
+                Storage_Directory.Delete(true);
+            }
+
+            //create new Storage directory
+            Directory.CreateDirectory(Storage_Directory.FullName);
+
+            //extracting started
+            status.Extracting_Zip_File = StatusEnum.Started.ToString();
+            statusInJson = JsonSerializer.Serialize(status);
+            await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
+
+            //extract backk zip file to storage directory
+            ZipFile.ExtractToDirectory(backupZipFile.FullName, Storage_Directory.FullName);
+
+            //set extracting zip file to completed
+            status.Extracting_Zip_File = StatusEnum.Completed.ToString();
+            status.Clearing_All_Dbs = StatusEnum.Started.ToString();
+            statusInJson = JsonSerializer.Serialize(status);
+            await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
+
+            //clear all Dbs
+            using (IServiceScope scope = serviceProvider.CreateScope())
+            {
+                //delete all isentity users
+                UserManager<Identity_UserDbModel> userManager = scope.ServiceProvider.GetRequiredService<UserManager<Identity_UserDbModel>>();
+                await userManager.Users.Where(u => u.UserName != "admin").ExecuteDeleteAsync();
+
+                //delete all patient patients
+                Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
+                await patientDb.Patients.ExecuteDeleteAsync();
+                //delete all patient documents
+                await patientDb.Documents.ExecuteDeleteAsync();
+                //delete all patient elements
+                await patientDb.Elements.ExecuteDeleteAsync();
+            }
+
+            //status
+            status.Clearing_All_Dbs = StatusEnum.Completed.ToString();
+            statusInJson = JsonSerializer.Serialize(status);
+            await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
+
+            //seed all databases
+            await Seed_All_Dbs();
+
+            //status
+            //status.Restore_Completed = true;
+            status.Process = StatusEnum.Completed.ToString();
+            statusInJson = JsonSerializer.Serialize(status);
+            await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
         }
-        else
+        catch (Exception e)
         {
-            backupZipFile = backupZipFiles.MaxBy(f => f.CreationTimeUtc);
+            //log
+            Console.WriteLine(e.Message);
+
+            string json = await System.IO.File.ReadAllTextAsync(Restore_Status_FilePath);
+            Restore_Status? status = JsonSerializer.Deserialize<Restore_Status>(json);
+            status ??= new();
+            status.Process = StatusEnum.Completed.ToString();
+
+            string statusInJson = JsonSerializer.Serialize(status);
+            await System.IO.File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
         }
-        if (backupZipFile is null) throw new Exception("'backupZipFile' can Not be null!");
-
-        //delete old storage directory
-        if (Storage_Directory.Exists)
-        {
-            Storage_Directory.Delete(true);
-        }
-
-        //create new Storage directory
-        Directory.CreateDirectory(Storage_Directory.FullName);
-
-        //create new status and save it
-        Restore_Status status = new();
-        status.Extracting_Zip_File = StatusEnum.Started.ToString();
-        string statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
-
-        //extract backk zip file to storage directory
-        ZipFile.ExtractToDirectory(backupZipFile.FullName, Storage_Directory.FullName);
-
-        //set extracting zip file to completed
-        status.Extracting_Zip_File = StatusEnum.Completed.ToString();
-        status.Clearing_All_Dbs = StatusEnum.Started.ToString();
-        statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
-
-        //clear all Dbs
-        using (IServiceScope scope = serviceProvider.CreateScope())
-        {
-            //delete all isentity users
-            UserManager<Identity_UserDbModel> userManager = scope.ServiceProvider.GetRequiredService<UserManager<Identity_UserDbModel>>();
-            await userManager.Users.Where(u => u.UserName != "admin").ExecuteDeleteAsync();
-
-            //delete all patient patients
-            Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
-            await patientDb.Patients.ExecuteDeleteAsync();
-            //delete all patient documents
-            await patientDb.Documents.ExecuteDeleteAsync();
-            //delete all patient elements
-            await patientDb.Elements.ExecuteDeleteAsync();
-        }
-
-        //status
-        status.Clearing_All_Dbs = StatusEnum.Completed.ToString();
-        statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
-
-        //seed all databases
-        await Seed_All_Dbs();
-
-        //status
-        status.Restore_Completed = true;
-        statusInJson = JsonSerializer.Serialize(status);
-        await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
     }
 
     private async Task Get_All_Dbs_Backup()

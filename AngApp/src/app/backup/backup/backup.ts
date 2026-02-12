@@ -52,7 +52,7 @@ export class Backup {
           const url = window.URL.createObjectURL(blob);
           const a = this.windowService.nativeWindow.document.createElement('a');
           a.href = url;
-          a.download = this.backupStatus()!.fileName; // Suggested filename
+          a.download = this.backupStatus()!.file_Name; // Suggested filename
           this.matCardActions().nativeElement.appendChild(a);
           a.click();
           this.matCardActions().nativeElement.removeChild(a);
@@ -105,7 +105,7 @@ export class Backup {
             next: res => {
               if(res){
                 this.backupStatus.set(res);
-                if(res.readyToDownload){
+                if(res.ready_To_Download){
                   clearInterval(this.refreshInterval());
                   clearInterval(this.timerInterval());
                   this.timer.set(null);

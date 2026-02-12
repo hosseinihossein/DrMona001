@@ -198,6 +198,7 @@ public class Program
         builder.Services.AddSingleton<Backup_Process>();
         builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
         builder.Services.AddSingleton<FileNameValidator>();
+        builder.Services.AddSingleton<UploadLargeFile>();
 
 
 
