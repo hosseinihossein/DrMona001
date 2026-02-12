@@ -32,7 +32,7 @@ export class BackupService {
   requestUploadBackupFile(file:File){
     let formData = new FormData();
     formData.append("File",file);
-    return this.httpClient.post<{success:boolean}>(
+    return this.httpClient.post<RestoreStatus>(
       "/api/Backup/UploadBackupFile", formData, {reportProgress:true, observe:"events"}
     );
   }

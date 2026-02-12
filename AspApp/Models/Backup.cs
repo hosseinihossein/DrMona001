@@ -32,6 +32,8 @@ public class Backup_Status
 }
 public class Restore_Status
 {
+    public string? Backup_File_Name { get; set; }
+
     public string Process { get; set; } = StatusEnum.Not_Started.ToString();
 
     public string Extracting_Zip_File { get; set; } = StatusEnum.Not_Started.ToString();

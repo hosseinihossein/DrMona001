@@ -187,6 +187,17 @@ public class BackupController : ControllerBase
             }
         }
         status ??= new();
+
+        FileInfo[] backupZipFiles = backupProcess.Backup_Directory.GetFiles($"*_{backupProcess.BackupFileNameWithoutDate}");
+        if (backupZipFiles.Length == 1)
+        {
+            status.Backup_File_Name = backupZipFiles[0].Name;
+        }
+        else if (backupZipFiles.Length > 1)
+        {
+            status.Backup_File_Name = backupZipFiles.MaxBy(f => f.CreationTimeUtc)?.Name;
+        }
+
         return Ok(status);
     }
 
@@ -246,16 +257,22 @@ public class BackupController : ControllerBase
 
         fileTempPathFileInfo.Directory?.Delete(true);
 
-        //create new status and save it
-        Backup_Status status = new();
-        status.Process = StatusEnum.Completed.ToString();
-        status.Ready_To_Download = true;
-        status.File_Name = fileName;
-        status.File_Size = (double)new FileInfo(fileMainPath).Length / 1024;//KB
-        string statusInJson = JsonSerializer.Serialize(status);
+        //create new backup status and save it
+        Backup_Status backupStatus = new();
+        backupStatus.Process = StatusEnum.Completed.ToString();
+        backupStatus.Ready_To_Download = true;
+        backupStatus.File_Name = fileName;
+        backupStatus.File_Size = (double)new FileInfo(fileMainPath).Length / 1024;//KB
+        string statusInJson = JsonSerializer.Serialize(backupStatus);
         await System.IO.File.WriteAllTextAsync(backupProcess.Backup_Status_FilePath, statusInJson);
 
-        return Ok(new { success = true });
+        //create new restore status and save it
+        Restore_Status restoreStatus = new();
+        restoreStatus.Backup_File_Name = fileName;
+        statusInJson = JsonSerializer.Serialize(restoreStatus);
+        await System.IO.File.WriteAllTextAsync(backupProcess.Restore_Status_FilePath, statusInJson);
+
+        return Ok(restoreStatus);
     }
 
     [HttpGet]

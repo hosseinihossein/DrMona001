@@ -85,52 +85,54 @@ export class Backup {
     }
   }
   generateFile(){
-    this.backupService.requestGeneratingBackupFile().subscribe({
-      next: () => {
-        //define timer interval
-        this.timerInterval.set(setInterval(() => {
-          this.timer.update(t=>{
-            if(t === null || t <= 0){
-              t = 10;
-            }
-            else{
-              t -= 1;
-            }
-            return t;
-          });
-        }, 1000));
-        //define refresh interval
-        this.refreshInterval.set(setInterval(() => {
-          this.backupService.requestBackupStatus().subscribe({
-            next: res => {
-              if(res){
-                this.backupStatus.set(res);
-                if(res.ready_To_Download){
-                  clearInterval(this.refreshInterval());
-                  clearInterval(this.timerInterval());
-                  this.timer.set(null);
-                }
+    if(this.backupStatus()?.process !== "Started"){
+      this.backupService.requestGeneratingBackupFile().subscribe({
+        next: () => {
+          //define timer interval
+          this.timerInterval.set(setInterval(() => {
+            this.timer.update(t=>{
+              if(t === null || t <= 0){
+                t = 10;
               }
-            },
-            error: err => {
-              console.log(JSON.stringify(err));
-              this.backupStatus.set(null);
-            },
-          });
-        }, 10000));//every 10 seconds
-
-        //display result
-        this.dialog.open(Result, {data:{
-          status: "success",
-          title: "Generating Backup File",
-          description: [
-            "Your request for generating the backup file sent successfully.",
-            "Please wait untill the backup file gets ready.",
-            "You can check whether it's ready to download or not from the status information that gets refreshed every 10 seconds."
-          ],
-        }});
-      },
-    });
+              else{
+                t -= 1;
+              }
+              return t;
+            });
+          }, 1000));
+          //define refresh interval
+          this.refreshInterval.set(setInterval(() => {
+            this.backupService.requestBackupStatus().subscribe({
+              next: res => {
+                if(res){
+                  this.backupStatus.set(res);
+                  if(res.ready_To_Download){
+                    clearInterval(this.refreshInterval());
+                    clearInterval(this.timerInterval());
+                    this.timer.set(null);
+                  }
+                }
+              },
+              error: err => {
+                console.log(JSON.stringify(err));
+                this.backupStatus.set(null);
+              },
+            });
+          }, 10000));//every 10 seconds
+  
+          //display result
+          this.dialog.open(Result, {data:{
+            status: "success",
+            title: "Generating Backup File",
+            description: [
+              "Your request for generating the backup file sent successfully.",
+              "Please wait untill the backup file gets ready.",
+              "You can check whether it's ready to download or not from the status information that gets refreshed every 10 seconds."
+            ],
+          }});
+        },
+      });
+    }
   }
   
 }

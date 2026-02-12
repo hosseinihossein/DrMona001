@@ -9,14 +9,20 @@ import { MatInput } from '@angular/material/input';
 @Component({
   selector: 'app-edit-file',
   imports: [MatDialogContent, MatFormField, MatButton,MatDialogActions,MatDialogClose,MatLabel,MatInput,
-    MatError,ReactiveFormsModule,JsonPipe
+    MatError,ReactiveFormsModule
   ],
   templateUrl: './edit-file.html',
   styleUrl: './edit-file.css'
 })
 export class EditFile {
   readonly dialogRef = inject(MatDialogRef<EditFile>);
-  readonly data = inject<{value:string, title:string, enableEdit?:boolean, fileSize?:number}>(MAT_DIALOG_DATA);
+  readonly data = inject<{
+    value:string, 
+    title:string, 
+    enableEdit?:boolean, 
+    fileSize?:number,
+    displayTitle?:boolean,
+  }>(MAT_DIALOG_DATA);
 
   selectedFile = signal<File | null>(null);
   fileNameSrc = signal(this.data.value);
@@ -24,7 +30,8 @@ export class EditFile {
 
   fileName = viewChild<ElementRef<HTMLImageElement>>("fileName");
 
-  titleControl = new FormControl(this.data.title,{nonNullable:true, validators:[Validators.required, 
+  titleControl = new FormControl(this.data.title,{nonNullable:true, validators:[
+    //Validators.required, 
     Validators.maxLength(128), 
     Validators.minLength(3)
   ]})

@@ -4,6 +4,7 @@ import { identityRoutes } from './identity/identity-routes';
 import { authGuard } from './identity/auth-guard';
 import { documentRoutes } from './document/document-routes';
 import { patientRoutes } from './patient/patient-routes';
+import { backupRoutes } from './backup/backup-routes';
 
 export const routes: Routes = [
     {path: "", component: Home, canActivate:[authGuard]},
@@ -11,4 +12,5 @@ export const routes: Routes = [
     ...identityRoutes,
     ...patientRoutes,
     ...documentRoutes,
+    ...backupRoutes,
 ];
