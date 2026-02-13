@@ -1,9 +1,12 @@
+@if(identityService.userModel() &&
+identityService.userModel()!.roles.includes("Identity_Admins")){
 <div>
     <a matButton="outlined" [routerLink]="['/new-user']">
         <mat-icon>person_add</mat-icon>
         Add New User
     </a>
 </div>
+}
 
 <table mat-table [dataSource]="dataSource()" matSort matSortDisableClear matSortDirection="desc">
 
@@ -24,7 +27,7 @@
     <!-- Fullname Column -->
     <ng-container matColumnDef="FullName">
         <th mat-header-cell *matHeaderCellDef> FullName </th>
-        <td mat-cell *matCellDef="let userModel"> {{userModel.fullName}} </td>
+        <td mat-cell *matCellDef="let userModel" class="persian-font"> {{userModel.fullName}} </td>
     </ng-container>
 
     <!-- UserName Column -->
@@ -43,15 +46,20 @@
     <ng-container matColumnDef="Actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let userModel" style="text-wrap: nowrap;">
-            @if(userModel.userName !== "admin"){
+            @if(identityService.userModel() &&
+            identityService.userModel()!.roles.includes("Identity_Admins")){
             <button matMiniFab
                 style="color:var(--mat-sys-on-error-container);background-color: var(--mat-sys-error-container);margin: 0 4px;"
                 (click)="deleteUser(userModel.guid, userModel.userName)" matTooltip="Delete User">
                 <mat-icon>delete</mat-icon>
             </button>
-            }
             <a matMiniFab [routerLink]="['/edit-user', userModel.guid]" matTooltip="Edit User" style="margin: 0 4px;">
                 <mat-icon>edit</mat-icon>
+            </a>
+            }
+            <a matMiniFab [routerLink]="['/user-profile', userModel.guid]" matTooltip="User Profile"
+                style="margin: 0 4px;">
+                <mat-icon>account_box</mat-icon>
             </a>
         </td>
     </ng-container>

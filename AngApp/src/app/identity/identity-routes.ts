@@ -15,5 +15,5 @@ export const identityRoutes: Routes = [
     {path: "user-account-settings", component:AccountSettings, canActivate: [authGuard]},
     {path: "new-user", component:NewUserForm, canActivate: [identityAdminGuard]},
     {path: "edit-user/:userGuid", component:EditUserForm, canActivate: [identityAdminGuard]},
-    {path: "user-list", component:UserList, canActivate: [identityAdminGuard]},
+    {path: "user-list", component:UserList, canActivate: [authGuard]},
 ];

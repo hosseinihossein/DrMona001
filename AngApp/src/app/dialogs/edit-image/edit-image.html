@@ -8,6 +8,7 @@
         <button matButton="elevated" id="selectButton" (click)="fileInput.click()">Select New Image</button>
         <input type="file" hidden #fileInput (change)="onSelectImage($event)">
         }
+        <canvas #canvas style="display:none;"></canvas>
     </div>
 
     <mat-form-field [style]="data.displayTitle?'':'display:none;'">

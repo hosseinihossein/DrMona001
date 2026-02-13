@@ -20,7 +20,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 })
 export class UserList {
   dataSource = signal<Identity_UserListModel[]>([]);
-  displayedColumns = signal<string[]>(["UserImage","FullName","UserName","UserGuid","Actions"]);
+  displayedColumns = signal<string[]>(["UserImage","FullName","UserName",/*"UserGuid",*/"Actions"]);
   
   displayWaitSpinner = signal(true);
 
@@ -37,6 +37,15 @@ export class UserList {
         }
       },
     });
+
+    /*effect(()=>{
+      if(this.identityService.userModel()?.roles.includes("Identity_Admins")){
+        this.displayedColumns.set(["UserImage","FullName","UserName","UserGuid","Actions"]);
+      }
+      else{
+        this.displayedColumns.set(["UserImage","FullName","UserName","Actions"]);
+      }
+    });*/
 
     effect(()=>{
       if(!this.identityService.isAuthenticated()){

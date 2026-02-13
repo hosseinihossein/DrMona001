@@ -28,7 +28,7 @@
             <mat-icon>account_box</mat-icon>
             Profile
         </a>
-        @if(identityService.userModel()?.roles?.includes("Identity_Admins")){
+        @if(identityService.isAuthenticated()){
         <a mat-menu-item [routerLink]="['/user-list']">
             <mat-icon>user_attributes</mat-icon>
             Medical Staff

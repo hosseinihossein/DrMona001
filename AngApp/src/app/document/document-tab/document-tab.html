@@ -17,7 +17,7 @@
 
         <!--------------------- top action box -------------------->
         <div class="actionDiv clearfix">
-
+            @if(identityService.userModel()?.roles?.includes("Document_Admins")){
             @if(documentPageService.editMode()){
             <button matButton="elevated" [matMenuTriggerFor]="elementMenu" matTooltip="New element"
                 class="noPaddingBtn">
@@ -32,6 +32,7 @@
             <button matButton="elevated" matTooltip="Enter edit mode" class="noPaddingBtn" (click)="toggleEditMode()">
                 <mat-icon>edit</mat-icon>
             </button>
+            }
             }
 
         </div>

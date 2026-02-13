@@ -99,6 +99,7 @@ public class IdentityController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetUserModel([FromQuery][StringLength(32)] string userGuid)
     {
         if (!Guid.TryParseExact(userGuid, "N", out Guid userGuid_Guid))
@@ -132,10 +133,11 @@ public class IdentityController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Identity_Admins")]
+    [Authorize]
     public async Task<IActionResult> GetUserList()
     {
         var userList = await userManager.Users
+        .Where(u => u.UserName != "admin")
         .Select(user => new
         {
             Guid = user.UserGuid,

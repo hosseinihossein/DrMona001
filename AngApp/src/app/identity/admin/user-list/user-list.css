@@ -15,3 +15,8 @@ img.userProfileImage{
 th,td{
     text-align: center;
 }
+tr:hover{
+    /*border: 1px solid var(--mat-sys-outline);*/
+    background-color: var(--mat-sys-secondary);
+    color: var(--mat-sys-on-secondary);
+}

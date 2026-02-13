@@ -1,6 +1,8 @@
 <mat-card>
     <mat-card-header>
-        <mat-card-title>{{restoreStatus()?.backup_File_Name}}</mat-card-title>
+        @if(restoreStatus()?.backup_File_Name){
+        <mat-card-title>Newest Backup: {{restoreStatus()?.backup_File_Name}}</mat-card-title>
+        }
         <!--mat-card-subtitle>{{restoreStatus()?.created_At | date}}</mat-card-subtitle-->
     </mat-card-header>
     <mat-card-content>
@@ -54,10 +56,10 @@
         }
     </mat-card-actions>
     <mat-card-actions align="end">
-        @if(restoreStatus()?.process !== "Started"){
+        @if(!restoreStatus()?.backup_File_Name){
         <button matButton (click)="uploadFile()">Upload</button>
         }
-        @if(restoreStatus()?.backup_File_Name && restoreStatus()?.process === "Not_Started") {
+        @if(restoreStatus()?.backup_File_Name && restoreStatus()?.process !== "Started") {
         <button matButton (click)="restore()">Restore</button>
         }
         <a matButton [routerLink]="['/Backup']">Backup</a>

@@ -1,6 +1,8 @@
 <mat-card>
     <mat-card-header>
-        <mat-card-title>{{backupStatus()?.file_Name}}</mat-card-title>
+        @if(backupStatus()?.file_Name){
+        <mat-card-title>Newest Backup: {{backupStatus()?.file_Name}}</mat-card-title>
+        }
         <mat-card-subtitle>{{backupStatus()?.created_At | date}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>

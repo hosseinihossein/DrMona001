@@ -2,7 +2,8 @@
 
 <mat-form-field>
     <mat-label>Full Name</mat-label>
-    <input type="text" matInput [formControl]="fullname_FormControl" required>
+    <input type="text" matInput [formControl]="fullname_FormControl" required class="persian-font"
+        style="font-family:shabnam;">
     @if((fullname_FormControl.dirty || fullname_FormControl.touched) &&
     fullname_FormControl.invalid && fullname_FormControl.hasError("required")){
     <mat-error>username is required!</mat-error>
