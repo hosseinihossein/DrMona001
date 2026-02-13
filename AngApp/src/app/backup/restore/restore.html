@@ -4,14 +4,49 @@
         <!--mat-card-subtitle>{{restoreStatus()?.created_At | date}}</mat-card-subtitle-->
     </mat-card-header>
     <mat-card-content>
-        <h2>Status:</h2>
-        <p>Restoring Process: {{restoreStatus()?.process}}</p>
-        <p>Extracting_Zip_File: {{restoreStatus()?.extracting_Zip_File}}</p>
-        <p>Clearing_All_Dbs: {{restoreStatus()?.clearing_All_Dbs}}</p>
-        <p>Seeding_Identity_User_Db: {{restoreStatus()?.seeding_Identity_User_Db}}</p>
-        <p>Seeding_Patient_Patient_Db: {{restoreStatus()?.seeding_Patient_Patient_Db}}</p>
-        <p>Seeding_Patient_Document_Db: {{restoreStatus()?.seeding_Patient_Document_Db}}</p>
-        <p>Seeding_Patient_Element_Db: {{restoreStatus()?.seeding_Patient_Element_Db}}</p>
+        <h2>Details:</h2>
+        <p>
+            Process: {{restoreStatus()?.process}}
+            @if(restoreStatus()?.process === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Extracting_Zip_File: {{restoreStatus()?.extracting_Zip_File}}
+            @if(restoreStatus()?.extracting_Zip_File === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Clearing_All_Dbs: {{restoreStatus()?.clearing_All_Dbs}}
+            @if(restoreStatus()?.clearing_All_Dbs === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Seeding_Identity_User_Db: {{restoreStatus()?.seeding_Identity_User_Db}}
+            @if(restoreStatus()?.seeding_Identity_User_Db === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Seeding_Patient_Patient_Db: {{restoreStatus()?.seeding_Patient_Patient_Db}}
+            @if(restoreStatus()?.seeding_Patient_Patient_Db === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Seeding_Patient_Document_Db: {{restoreStatus()?.seeding_Patient_Document_Db}}
+            @if(restoreStatus()?.seeding_Patient_Document_Db === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Seeding_Patient_Element_Db: {{restoreStatus()?.seeding_Patient_Element_Db}}
+            @if(restoreStatus()?.seeding_Patient_Element_Db === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
     </mat-card-content>
     <mat-card-actions align="start">
         @if(timer()){
@@ -22,11 +57,9 @@
         @if(restoreStatus()?.process !== "Started"){
         <button matButton (click)="uploadFile()">Upload</button>
         }
-        @if(restoreStatus()?.process === "Completed"){
-        <a matButton [routerLink]="['/Restore']">Backup</a>
-        }
         @if(restoreStatus()?.backup_File_Name && restoreStatus()?.process === "Not_Started") {
-        <button matButton (click)="generateFile()">Restore</button>
+        <button matButton (click)="restore()">Restore</button>
         }
+        <a matButton [routerLink]="['/Backup']">Backup</a>
     </mat-card-actions>
 </mat-card>

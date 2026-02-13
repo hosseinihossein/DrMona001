@@ -1,15 +1,18 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardActions, MatCardModule, } from '@angular/material/card';
 import { BackupService } from '../backup-service';
 import { WindowService } from '../../shared/services/window-service';
 import { MatDialog } from '@angular/material/dialog';
 import { Result } from '../../dialogs/result/result';
+import { Router, RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { IdentityService } from '../../identity/identity-service';
 
 @Component({
   selector: 'app-backup',
-  imports: [MatCardModule, MatButton, DatePipe,
+  imports: [MatCardModule, MatButton, DatePipe, RouterLink, MatIcon,
   ],
   templateUrl: './backup.html',
   styleUrl: './backup.css',
@@ -22,6 +25,8 @@ export class Backup {
   backupService = inject(BackupService);
   windowService = inject(WindowService);
   dialog = inject(MatDialog);
+  identityService = inject(IdentityService);
+  router = inject(Router);
 
   matCardActions = viewChild.required(MatCardActions, {read:ElementRef});
   timer = signal<number|null>(null);
@@ -37,6 +42,12 @@ export class Backup {
         console.log(JSON.stringify(err));
         this.backupStatus.set(null);
       },
+    });
+
+    effect(()=>{
+      if(!this.identityService.isAuthenticated()){
+        this.router.navigate(["/"]);
+      }
     });
   }
   ngOnDestroy(): void {

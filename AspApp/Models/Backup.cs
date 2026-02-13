@@ -11,6 +11,7 @@ public enum StatusEnum
     Not_Started,
     Started,
     Completed,
+    Exception,
 }
 
 public class Backup_Status
@@ -82,7 +83,7 @@ public class Backup_Process
         Storage_Db_Patient_Element = Directory.CreateDirectory(Path.Combine(Storage_Db_Directory.FullName, "Patient", "Element"));
 
         Backup_Status_FilePath = Path.Combine(Backup_Directory.FullName, "Backup_Status.json");
-        Restore_Status_FilePath = Path.Combine(Backup_Directory.FullName, "Seed_Status.json");
+        Restore_Status_FilePath = Path.Combine(Backup_Directory.FullName, "Restore_Status.json");
 
         jsonSerializerOptions.Converters.Add(new GuidJsonConverter());
 
@@ -106,11 +107,27 @@ public class Backup_Process
     {
         try
         {
-            //create new status and save it
-            Backup_Status status = new();
-            status.Process = StatusEnum.Started.ToString();
-            string statusInJson = JsonSerializer.Serialize(status);
-            await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
+            Backup_Status? backupStatus = null;
+            if (System.IO.File.Exists(Backup_Status_FilePath))
+            {
+                string json = await System.IO.File.ReadAllTextAsync(Backup_Status_FilePath);
+                backupStatus = JsonSerializer.Deserialize<Backup_Status>(json);
+            }
+            if (backupStatus is not null && backupStatus.Process == "Started")
+            {
+                return;// BadRequest("last backup process is not completed yet!");
+            }
+
+            Restore_Status? restoreStatus = null;
+            if (System.IO.File.Exists(Restore_Status_FilePath))
+            {
+                string json = await System.IO.File.ReadAllTextAsync(Restore_Status_FilePath);
+                restoreStatus = JsonSerializer.Deserialize<Restore_Status>(json);
+            }
+            if (restoreStatus is not null && restoreStatus.Process == "Started")
+            {
+                return;// BadRequest("last restore process is not completed yet!");
+            }
 
             //delete old directories
             if (Storage_Db_Directory.Exists)
@@ -124,6 +141,12 @@ public class Backup_Process
 
             //create new directories
             Create_Directories();
+
+            //create new status and save it
+            Backup_Status status = new();
+            status.Process = StatusEnum.Started.ToString();
+            string statusInJson = JsonSerializer.Serialize(status);
+            await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
 
             //get all dbs backup
             await Get_All_Dbs_Backup();
@@ -151,18 +174,23 @@ public class Backup_Process
                 status.File_Size = (double)backupFileInfo.Length / 1024;//size in KB
                 status.Ready_To_Download = true;
             }
+            status.Process = StatusEnum.Completed.ToString();
             statusInJson = JsonSerializer.Serialize(status);
             await File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
         }
         catch (Exception e)
         {
             //log
-            Console.WriteLine(e.Message);
+            Console.WriteLine(e);
 
-            string json = await System.IO.File.ReadAllTextAsync(Backup_Status_FilePath);
-            Backup_Status? status = JsonSerializer.Deserialize<Backup_Status>(json);
+            Backup_Status? status = null;
+            if (File.Exists(Backup_Status_FilePath))
+            {
+                string json = await System.IO.File.ReadAllTextAsync(Backup_Status_FilePath);
+                status = JsonSerializer.Deserialize<Backup_Status>(json);
+            }
             status ??= new();
-            status.Process = StatusEnum.Completed.ToString();
+            status.Process = StatusEnum.Exception.ToString();
 
             string statusInJson = JsonSerializer.Serialize(status);
             await System.IO.File.WriteAllTextAsync(Backup_Status_FilePath, statusInJson);
@@ -239,7 +267,8 @@ public class Backup_Process
             await Seed_All_Dbs();
 
             //status
-            //status.Restore_Completed = true;
+            string json = await System.IO.File.ReadAllTextAsync(Restore_Status_FilePath);
+            status = JsonSerializer.Deserialize<Restore_Status>(json) ?? new();
             status.Process = StatusEnum.Completed.ToString();
             statusInJson = JsonSerializer.Serialize(status);
             await File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);
@@ -252,7 +281,7 @@ public class Backup_Process
             string json = await System.IO.File.ReadAllTextAsync(Restore_Status_FilePath);
             Restore_Status? status = JsonSerializer.Deserialize<Restore_Status>(json);
             status ??= new();
-            status.Process = StatusEnum.Completed.ToString();
+            status.Process = StatusEnum.Exception.ToString();
 
             string statusInJson = JsonSerializer.Serialize(status);
             await System.IO.File.WriteAllTextAsync(Restore_Status_FilePath, statusInJson);

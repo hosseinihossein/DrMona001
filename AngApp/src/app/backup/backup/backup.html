@@ -4,14 +4,50 @@
         <mat-card-subtitle>{{backupStatus()?.created_At | date}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <p>Ready to download: {{backupStatus()?.ready_To_Download}}</p>
-        <p>File Size: {{backupStatus()?.file_Size}}</p>
-        <h2>Status:</h2>
-        <p>Generating_Zip_File: {{backupStatus()?.generating_Zip_File}}</p>
-        <p>getting_Identity_User_Backup: {{backupStatus()?.getting_Identity_User_Backup}}</p>
-        <p>getting_Patient_Patient_Backup: {{backupStatus()?.getting_Patient_Patient_Backup}}</p>
-        <p>getting_Patient_Document_Backup: {{backupStatus()?.getting_Patient_Document_Backup}}</p>
-        <p>getting_Patient_Element_Backup: {{backupStatus()?.getting_Patient_Element_Backup}}</p>
+        <p>
+            Ready to download: {{backupStatus()?.ready_To_Download}}
+            @if(backupStatus()?.ready_To_Download){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>File Size: {{backupStatus()?.file_Size?.toFixed(2)}} KB</p>
+        <h2>Details:</h2>
+        <p>
+            Process: {{backupStatus()?.process}}
+            @if(backupStatus()?.process === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Getting_Identity_User_Backup: {{backupStatus()?.getting_Identity_User_Backup}}
+            @if(backupStatus()?.getting_Identity_User_Backup === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Getting_Patient_Patient_Backup: {{backupStatus()?.getting_Patient_Patient_Backup}}
+            @if(backupStatus()?.getting_Patient_Patient_Backup === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Getting_Patient_Document_Backup: {{backupStatus()?.getting_Patient_Document_Backup}}
+            @if(backupStatus()?.getting_Patient_Document_Backup === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Getting_Patient_Element_Backup: {{backupStatus()?.getting_Patient_Element_Backup}}
+            @if(backupStatus()?.getting_Patient_Element_Backup === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
+        <p>
+            Generating_Zip_File: {{backupStatus()?.generating_Zip_File}}
+            @if(backupStatus()?.generating_Zip_File === "Completed"){
+            <mat-icon style="color: lawngreen;position: relative;top: 4px;">check_circle</mat-icon>
+            }
+        </p>
     </mat-card-content>
     <mat-card-actions align="start">
         @if(timer()){
@@ -28,5 +64,6 @@
         @if(backupStatus()?.process === "Not_Started") {
         <button matButton (click)="generateFile()">Generate</button>
         }
+        <a matButton [routerLink]="['/Restore']">Restore</a>
     </mat-card-actions>
 </mat-card>

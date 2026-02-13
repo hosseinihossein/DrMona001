@@ -57,24 +57,32 @@ public class BackupController : ControllerBase
         }
         if (status is null)
         {
+            //log
+            Console.WriteLine("backup status file not found!");
             return BadRequest("status file not found!");
         }
         if (status.File_Name is null)
         {
+            Console.WriteLine("backup file name can not be null!");
             return BadRequest("file name can not be null!");
         }
         if (status.Process != "Completed")
         {
+            Console.WriteLine("backup process is not completed yet!");
             return BadRequest("backup process is not completed yet!");
         }
         if (!status.Ready_To_Download)
         {
+            Console.WriteLine("backup Not ready to download!");
             return BadRequest("Not ready to download!");
         }
 
         string backupFilePath = Path.Combine(backupProcess.Backup_Directory.FullName, status.File_Name);
         if (System.IO.File.Exists(backupFilePath))
         {
+            //log
+            Console.WriteLine($"***** Downloading Backup '{status.File_Name}'");
+
             /*In ASP.NET Core, when you return a file using PhysicalFile, File, or FileContentResult, 
             the framework automatically sets the Content-Disposition header to attachment if 
             you pass a fileDownloadName.*/
@@ -84,6 +92,9 @@ public class BackupController : ControllerBase
             */
             return PhysicalFile(backupFilePath, "application/octet-stream", status.File_Name, true);
         }
+
+        //log
+        Console.WriteLine("backup file Not Found!");
         return NotFound();
     }
 
@@ -188,6 +199,7 @@ public class BackupController : ControllerBase
         }
         status ??= new();
 
+        Directory.CreateDirectory(backupProcess.Backup_Directory.FullName);
         FileInfo[] backupZipFiles = backupProcess.Backup_Directory.GetFiles($"*_{backupProcess.BackupFileNameWithoutDate}");
         if (backupZipFiles.Length == 1)
         {

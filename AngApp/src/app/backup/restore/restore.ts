@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardActions, MatCardModule } from '@angular/material/card';
 import { BackupService } from '../backup-service';
@@ -8,12 +8,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditFile } from '../../dialogs/edit-file/edit-file';
 import { HttpEventType } from '@angular/common/http';
 import { Result } from '../../dialogs/result/result';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { IdentityService } from '../../identity/identity-service';
 
 @Component({
   selector: 'app-restore',
   imports: [
-    MatCardModule, MatButton, RouterLink
+    MatCardModule, MatButton, RouterLink,MatIcon,
   ],
   templateUrl: './restore.html',
   styleUrl: './restore.css',
@@ -26,6 +28,8 @@ export class Restore {
   backupService = inject(BackupService);
   windowService = inject(WindowService);
   dialog = inject(MatDialog);
+  identityService = inject(IdentityService);
+  router = inject(Router);
 
   matCardActions = viewChild.required(MatCardActions, {read:ElementRef});
   timer = signal<number|null>(null);
@@ -45,6 +49,18 @@ export class Restore {
         console.log(JSON.stringify(err));
         this.restoreStatus.set(null);
       },
+    });
+
+    this.identityService.getCsrf().subscribe({
+      next: res => {
+        console.log("csrf received.");
+      },
+    });
+
+    effect(()=>{
+      if(!this.identityService.isAuthenticated()){
+        this.router.navigate(["/"]);
+      }
     });
   }
   ngOnDestroy(): void {
@@ -85,13 +101,14 @@ export class Restore {
                   ],
                 }
               });
+              throw(err);
             }
           });
         }
       });
     }
   }
-  generateFile(){
+  restore(){
     if(this.restoreStatus()?.process !== "Started"){
       this.backupService.requestRestore().subscribe({
         next: () => {
