@@ -23,7 +23,7 @@ mat-toolbar.shadow{
     display: none;
 }
 
-@media screen and (max-width:500px) {
+/*@media screen and (max-width:500px) {
     #mainMenu{
         display: none;
     }
@@ -31,14 +31,22 @@ mat-toolbar.shadow{
     #littleMenu{
     display: block;
     }
-}
+}*/
 
 .lightDarkBtn{
     margin: 0px 20px 0px 0;
 }
 
 @media screen and (max-width:600px) {
- .lightDarkBtn{
-    margin: 0px 0px 0px 0;
-}   
+    .lightDarkBtn{
+        margin: 0px 0px 0px 0;
+    }
 }
+
+/*img#drmona-logo{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    object-fit: cover;
+}*/

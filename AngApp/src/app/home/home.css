@@ -1,0 +1,7 @@
+img#drmona-logo{
+    width: 150px;
+    height: 150px;
+    display: block;
+    margin: auto;
+    object-fit: cover;
+}

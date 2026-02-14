@@ -1,9 +1,12 @@
 @if(identitySerice.userModel()?.roles?.includes("Patient_Admins")){
-<div>
+<div style="position: absolute;">
     <a matButton="outlined" [routerLink]="['/new-patient']">
         <mat-icon>person_add</mat-icon>
         Add New Patient
     </a>
 </div>
 }
+
+<img ngSrc="DrMona200.png" width="150" height="150" priority="" alt="DrMona Logo" id="drmona-logo">
+
 <app-search></app-search>

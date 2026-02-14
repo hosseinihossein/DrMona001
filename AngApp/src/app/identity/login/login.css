@@ -1,7 +1,7 @@
 :host{
     display: block;
     margin: 100px auto 0;
-    width: 400px;
+    width: fit-content;
 }
 form{
     width: 100%;
@@ -13,4 +13,11 @@ mat-form-field{
 #login-btn{
     display: flex;
     margin: auto;
+}
+
+img{
+    width: 200px;
+    height: 300px;
+    float: left;
+    object-fit: cover;
 }

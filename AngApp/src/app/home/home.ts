@@ -6,10 +6,11 @@ import { Search } from "../patient/search/search";
 import { MatAnchor } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { IdentityService } from '../identity/identity-service';
+import { NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: 'app-home',
-  imports: [Search, MatAnchor, MatIcon, RouterLink],
+  imports: [Search, MatAnchor, MatIcon, RouterLink, NgOptimizedImage],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

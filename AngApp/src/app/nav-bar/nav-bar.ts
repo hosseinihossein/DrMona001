@@ -14,9 +14,8 @@ import { UserList } from '../identity/admin/user-list/user-list';
 
 @Component({
   selector: 'app-nav-bar',
-  imports: [MatIcon, MatToolbar, MatIconButton, MatMenu, MatMenuItem, AccountDropdown, MatTooltip, 
-    RouterLink,
-  ],
+  imports: [MatIcon, MatToolbar, MatIconButton, MatMenu, MatMenuItem, AccountDropdown, MatTooltip,
+    RouterLink/*, NgOptimizedImage*/],
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.css'
 })

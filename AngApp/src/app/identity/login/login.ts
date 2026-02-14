@@ -8,11 +8,12 @@ import { IdentityService } from '../identity-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { WaitSpinner } from '../../shared/wait-spinner/wait-spinner';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule,MatFormField,MatLabel,MatInput,MatError,MatIcon,MatButton,MatIconButton,
-    MatSuffix,WaitSpinner
+    MatSuffix,WaitSpinner,NgOptimizedImage
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
