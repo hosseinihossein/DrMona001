@@ -24,7 +24,7 @@ public class Program
         //******************* Kestrel *******************
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.Listen(IPAddress.Loopback, 5443, listenOptions =>
+            options.Listen(IPAddress.Any, 5443, listenOptions =>
             {
                 listenOptions.UseHttps(/*"certFileName.pfx"*/);//user default certs
             });
@@ -325,7 +325,7 @@ public class Program
 
 
         //******************* app.Run ******************
-        Console.WriteLine("app is running on 'https://localhost:5443'");
+        Console.WriteLine("app is running on all network interfaces.");
         app.Run();
     }
 }
