@@ -224,6 +224,9 @@ public class Program
                 Identity_DbContext identityDb = scope.ServiceProvider.GetRequiredService<Identity_DbContext>();
                 identityDb.Database.Migrate();
 
+                Patient_DbContext patientDb = scope.ServiceProvider.GetRequiredService<Patient_DbContext>();
+                patientDb.Database.Migrate();
+
 
                 Console.WriteLine("** All DB Migration Completed! **");
 
