@@ -142,6 +142,9 @@ export class PatientProfileSettings {
         value:this.patientModel()!.nationalId,
       }}).afterClosed().subscribe(result=>{
         if(result){
+          if(result.value.trim() === ""){
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.patientService.requestChangeNationalId(this.patientGuid()!,result.value).subscribe({
             next: res => {
@@ -178,6 +181,9 @@ export class PatientProfileSettings {
         persian:true,
       }}).afterClosed().subscribe((result)=>{
         if(result){
+          if(result.value.trim() === ""){
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.patientService.requestChangeFullName(this.patientGuid()!,result.value).subscribe({
             next: res => {
@@ -214,6 +220,9 @@ export class PatientProfileSettings {
         persian:true,
       }}).afterClosed().subscribe((result)=>{
         if(result){
+          if(result.value.trim() === ""){
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.patientService.requestChangeDescription(this.patientGuid()!,result.value).subscribe({
             next: res => {

@@ -115,7 +115,7 @@ public class PatientController : ControllerBase
     [Authorize(Roles = "Patient_Admins")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SubmitDescription([FromQuery][StringLength(32)] string guid,
-    [FromQuery][StringLength(128)] string description)
+    [FromQuery][StringLength(4000)] string description)
     {
         if (!Guid.TryParseExact(guid, "N", out Guid patientGuid))
         {
@@ -280,6 +280,18 @@ public class PatientController : ControllerBase
         return Ok(new { totalNumberOfPatients });
     }
 
+    [HttpGet]
+    public IActionResult PatientImage([FromQuery][StringLength(32)] string guid)
+    {
+        string userImagePath =
+        Path.Combine(Storage_Patients.FullName, guid, "image");
+        if (System.IO.File.Exists(userImagePath))
+        {
+            return PhysicalFile(userImagePath, "application/octet-stream", "patientImage", true);
+        }
+
+        return NotFound("Patient Image Not Found!");
+    }
 
 
 

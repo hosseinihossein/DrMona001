@@ -1,5 +1,5 @@
-import { Component, computed, effect, inject, input, OnInit, Renderer2, signal } from '@angular/core';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { AfterViewChecked, AfterViewInit, Component, computed, effect, ElementRef, inject, input, OnInit, Renderer2, signal, viewChild } from '@angular/core';
+import { MatSidenavContainer, MatSidenavModule } from '@angular/material/sidenav';
 import { DocumentElement, DocumentElementModel, NewElementFormModel } from '../document-element/document-element';
 import { ViewportScroller } from '@angular/common';
 import { DocumentService } from '../document-service';
@@ -28,7 +28,7 @@ import { MatButton } from '@angular/material/button';
   templateUrl: './document-tab.html',
   styleUrl: './document-tab.css',
 })
-export class DocumentTab  {
+export class DocumentTab implements AfterViewInit {
   documentTabModel = input.required<DocumentTabModel>();
 
   viewPortObserver: IntersectionObserver;
@@ -44,7 +44,9 @@ export class DocumentTab  {
   headingElements = signal<HTMLHeadingElement[]>([]);
   displayWaitSpinner = signal(false);
   waitSpinnerValue = signal(0);
-  sideNavTopGap = signal(320);
+  sideNavTopGap = signal(0);
+  sideNavOpen = signal(false);
+  sideNavTopDistance = signal(0);
 
   editAllowed = computed(()=>this.identityService.isAuthenticated() && 
     this.identityService.userModel()?.roles.includes("Document_Admins")
@@ -54,6 +56,8 @@ export class DocumentTab  {
       if(a.order > b.order)return 1;else return -1;
     })
   );
+
+  sideNavContainer = viewChild.required("matSideNavContainer",{read:ElementRef});
 
 
   constructor(){
@@ -80,15 +84,49 @@ export class DocumentTab  {
   ngAfterViewInit(): void {
     this.viewportScroller.setOffset([0,64]);//[xOffset, yOffset]
 
+    //this.sideNavTopDistance.set(this.sideNavContainer().nativeElement.getBoundingClientRect().top);
+    //this.sideNavTopGap.set(this.sideNavTopDistance());
+    //define event
     this.windowService.nativeWindow.addEventListener("scroll",()=>{
+      //console.log("sideNavTopDistance: "+this.sideNavTopDistance());
       let verticalScrollPosition = this.windowService.nativeWindow.scrollY;
       this.sideNavTopGap.update(()=>{
-        let x = 320-verticalScrollPosition;
+        let x = this.sideNavTopDistance()-verticalScrollPosition;
         //console.log("x= "+x);
         if(x < 64) x=64;
         return x;
       });
     });
+
+    /*
+    //viewport change
+    if(this.windowService.nativeWindow.innerWidth > 800){
+      this.sideNavOpen.set(true);
+    }
+    else{
+      this.sideNavOpen.set(false);
+    }
+    //create mediaQuery and listen to the change event
+    const mediaQuery = window.matchMedia('(max-width: 800px)');
+    mediaQuery.addEventListener("change",(e)=>this.handleViewportChange(e));
+    //mediaQuery.dispatchEvent(new Event("change"));
+    */
+  }
+
+  /*handleViewportChange(e:MediaQueryListEvent) {
+    if (e.matches) {
+      this.sideNavOpen.set(false);
+    } else {
+      this.sideNavOpen.set(true);
+    }
+  }*/
+
+  toggleSideNav(){
+    this.sideNavOpen.update(o=>!o);
+    if(this.sideNavOpen()){
+      this.sideNavTopDistance.set(this.sideNavContainer().nativeElement.getBoundingClientRect().top + this.windowService.nativeWindow.scrollY);
+      this.sideNavTopGap.set(this.sideNavContainer().nativeElement.getBoundingClientRect().top);
+    }
   }
 
   onHeadingInit(headingElement: HTMLHeadingElement){

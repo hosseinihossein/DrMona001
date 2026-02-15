@@ -18,4 +18,5 @@ mat-card-title{
 }
 mat-card-subtitle{
     margin: 0 16px;
+    letter-spacing: 1px;
 }

@@ -7,7 +7,7 @@
     <mat-form-field>
         <mat-label>{{data.label}}</mat-label>
         <textarea matInput [value]="data.value" [formControl]="myText" placeholder="Write here.." rows="5"
-            [class]="isPersian()?'persian-font':''" [style]="isPersian()?'font-family:shabnam;':''">
+            [class]="isPersian()?'persian-font':''" [style]="isPersian()?'font-family:shabnam;':''" required="">
         </textarea>
         @if(myText.invalid && (myText.dirty || myText.touched) && myText.hasError("required")){
         <mat-error>
@@ -16,7 +16,7 @@
         }
         @if(myText.invalid && (myText.dirty || myText.touched) && myText.hasError("maxlength")){
         <mat-error>
-            {{data.label}} cannot be more than 128 characters long!
+            {{data.label}} cannot be more than 4000 characters long!
         </mat-error>
         }
     </mat-form-field>

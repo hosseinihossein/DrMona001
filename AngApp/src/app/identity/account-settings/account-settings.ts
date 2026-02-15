@@ -151,6 +151,9 @@ export class AccountSettings {
         persian:true,
       }}).afterClosed().subscribe((result)=>{
         if(result){
+          if(result.value.trim() === ""){
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.identityService.requestChangeFullName(result.value).subscribe({
             next: res => {
@@ -187,6 +190,9 @@ export class AccountSettings {
         persian:true,
       }}).afterClosed().subscribe((result)=>{
         if(result){
+          if(result.value.trim() === ""){
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.identityService.requestChangeDescription(result.value).subscribe({
             next: res => {

@@ -56315,14 +56315,14 @@ var PatientBriefList = class _PatientBriefList {
 })();
 
 // src/app/patient/search/search.ts
-function Search_Conditional_6_Template(rf, ctx) {
+function Search_Conditional_7_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "mat-error");
     \u0275\u0275text(1, "Name must be less than 32 characters long!");
     \u0275\u0275elementEnd();
   }
 }
-function Search_Conditional_7_Template(rf, ctx) {
+function Search_Conditional_8_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "mat-error");
     \u0275\u0275text(1);
@@ -56334,14 +56334,14 @@ function Search_Conditional_7_Template(rf, ctx) {
     \u0275\u0275textInterpolate(ctx_r0.name_FormControl.getError("searchError"));
   }
 }
-function Search_Conditional_12_Template(rf, ctx) {
+function Search_Conditional_13_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "mat-error");
     \u0275\u0275text(1, "National id can not be more than 10 characters long!");
     \u0275\u0275elementEnd();
   }
 }
-function Search_Conditional_13_Template(rf, ctx) {
+function Search_Conditional_14_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "mat-error");
     \u0275\u0275text(1);
@@ -56353,7 +56353,7 @@ function Search_Conditional_13_Template(rf, ctx) {
     \u0275\u0275textInterpolate(ctx_r0.nid_FormControl.getError("searchError"));
   }
 }
-function Search_Conditional_18_Template(rf, ctx) {
+function Search_Conditional_19_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275element(0, "app-wait-spinner");
   }
@@ -56397,53 +56397,57 @@ var Search = class _Search {
   static \u0275fac = function Search_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _Search)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _Search, selectors: [["app-search"]], decls: 19, vars: 8, consts: [["type", "text", "matInput", "", 2, "font-family", "shabnam", "direction", "rtl", 3, "formControl"], ["type", "text", "matInput", "", 2, "letter-spacing", "4px", 3, "formControl"], ["matButton", "elevated", "id", "login-btn", 3, "click", "disabled"]], template: function Search_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _Search, selectors: [["app-search"]], decls: 20, vars: 8, consts: [[3, "keydown.enter"], ["type", "text", "matInput", "", 2, "font-family", "shabnam", "direction", "rtl", 3, "formControl"], ["type", "text", "matInput", "", 2, "letter-spacing", "4px", 3, "formControl"], ["matButton", "elevated", "id", "login-btn", 3, "click", "disabled"]], template: function Search_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "h1");
       \u0275\u0275text(1, "Search Patient");
       \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(2, "mat-form-field")(3, "mat-label");
-      \u0275\u0275text(4, "Name");
-      \u0275\u0275elementEnd();
-      \u0275\u0275element(5, "input", 0);
-      \u0275\u0275conditionalCreate(6, Search_Conditional_6_Template, 2, 0, "mat-error");
-      \u0275\u0275conditionalCreate(7, Search_Conditional_7_Template, 2, 1, "mat-error");
-      \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(8, "mat-form-field")(9, "mat-label");
-      \u0275\u0275text(10, "National Id");
-      \u0275\u0275elementEnd();
-      \u0275\u0275element(11, "input", 1);
-      \u0275\u0275conditionalCreate(12, Search_Conditional_12_Template, 2, 0, "mat-error");
-      \u0275\u0275conditionalCreate(13, Search_Conditional_13_Template, 2, 1, "mat-error");
-      \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(14, "button", 2);
-      \u0275\u0275listener("click", function Search_Template_button_click_14_listener() {
+      \u0275\u0275elementStart(2, "div", 0);
+      \u0275\u0275listener("keydown.enter", function Search_Template_div_keydown_enter_2_listener() {
         return ctx.search();
       });
-      \u0275\u0275elementStart(15, "mat-icon");
-      \u0275\u0275text(16, "search");
+      \u0275\u0275elementStart(3, "mat-form-field")(4, "mat-label");
+      \u0275\u0275text(5, "Name");
       \u0275\u0275elementEnd();
-      \u0275\u0275text(17, " Search\n");
+      \u0275\u0275element(6, "input", 1);
+      \u0275\u0275conditionalCreate(7, Search_Conditional_7_Template, 2, 0, "mat-error");
+      \u0275\u0275conditionalCreate(8, Search_Conditional_8_Template, 2, 1, "mat-error");
       \u0275\u0275elementEnd();
-      \u0275\u0275conditionalCreate(18, Search_Conditional_18_Template, 1, 0, "app-wait-spinner");
+      \u0275\u0275elementStart(9, "mat-form-field")(10, "mat-label");
+      \u0275\u0275text(11, "National Id");
+      \u0275\u0275elementEnd();
+      \u0275\u0275element(12, "input", 2);
+      \u0275\u0275conditionalCreate(13, Search_Conditional_13_Template, 2, 0, "mat-error");
+      \u0275\u0275conditionalCreate(14, Search_Conditional_14_Template, 2, 1, "mat-error");
+      \u0275\u0275elementEnd();
+      \u0275\u0275elementStart(15, "button", 3);
+      \u0275\u0275listener("click", function Search_Template_button_click_15_listener() {
+        return ctx.search();
+      });
+      \u0275\u0275elementStart(16, "mat-icon");
+      \u0275\u0275text(17, "search");
+      \u0275\u0275elementEnd();
+      \u0275\u0275text(18, " Search ");
+      \u0275\u0275elementEnd()();
+      \u0275\u0275conditionalCreate(19, Search_Conditional_19_Template, 1, 0, "app-wait-spinner");
     }
     if (rf & 2) {
-      \u0275\u0275advance(5);
+      \u0275\u0275advance(6);
       \u0275\u0275property("formControl", ctx.name_FormControl);
       \u0275\u0275advance();
-      \u0275\u0275conditional((ctx.name_FormControl.dirty || ctx.name_FormControl.touched) && ctx.name_FormControl.invalid && ctx.name_FormControl.hasError("maxlength") ? 6 : -1);
+      \u0275\u0275conditional((ctx.name_FormControl.dirty || ctx.name_FormControl.touched) && ctx.name_FormControl.invalid && ctx.name_FormControl.hasError("maxlength") ? 7 : -1);
       \u0275\u0275advance();
-      \u0275\u0275conditional(ctx.name_FormControl.invalid && ctx.name_FormControl.hasError("searchError") ? 7 : -1);
+      \u0275\u0275conditional(ctx.name_FormControl.invalid && ctx.name_FormControl.hasError("searchError") ? 8 : -1);
       \u0275\u0275advance(4);
       \u0275\u0275property("formControl", ctx.nid_FormControl);
       \u0275\u0275advance();
-      \u0275\u0275conditional((ctx.nid_FormControl.dirty || ctx.nid_FormControl.touched) && ctx.nid_FormControl.invalid && ctx.nid_FormControl.hasError("maxlength") ? 12 : -1);
+      \u0275\u0275conditional((ctx.nid_FormControl.dirty || ctx.nid_FormControl.touched) && ctx.nid_FormControl.invalid && ctx.nid_FormControl.hasError("maxlength") ? 13 : -1);
       \u0275\u0275advance();
-      \u0275\u0275conditional(ctx.nid_FormControl.invalid && ctx.nid_FormControl.hasError("searchError") ? 13 : -1);
+      \u0275\u0275conditional(ctx.nid_FormControl.invalid && ctx.nid_FormControl.hasError("searchError") ? 14 : -1);
       \u0275\u0275advance();
       \u0275\u0275property("disabled", ctx.name_FormControl.invalid || ctx.nid_FormControl.invalid);
       \u0275\u0275advance(4);
-      \u0275\u0275conditional(ctx.displayWaitSpinner() ? 18 : -1);
+      \u0275\u0275conditional(ctx.displayWaitSpinner() ? 19 : -1);
     }
   }, dependencies: [
     ReactiveFormsModule,
@@ -56471,7 +56475,7 @@ var Search = class _Search {
       MatIcon,
       MatButton,
       WaitSpinner
-    ], template: '<h1>Search Patient</h1>\r\n\r\n<!--form (submit)="search()"-->\r\n<mat-form-field>\r\n    <mat-label>Name</mat-label>\r\n    <input type="text" matInput [formControl]="name_FormControl" style="font-family: shabnam;direction:rtl;">\r\n    @if((name_FormControl.dirty || name_FormControl.touched) &&\r\n    name_FormControl.invalid && name_FormControl.hasError("maxlength")){\r\n    <mat-error>Name must be less than 32 characters long!</mat-error>\r\n    }\r\n    @if(name_FormControl.invalid && name_FormControl.hasError("searchError")){\r\n    <mat-error>{{name_FormControl.getError("searchError")}}</mat-error>\r\n    }\r\n</mat-form-field>\r\n\r\n<mat-form-field>\r\n    <mat-label>National Id</mat-label>\r\n    <input type="text" matInput [formControl]="nid_FormControl" style="letter-spacing: 4px;">\r\n    @if((nid_FormControl.dirty || nid_FormControl.touched) &&\r\n    nid_FormControl.invalid && nid_FormControl.hasError("maxlength")){\r\n    <mat-error>National id can not be more than 10 characters long!</mat-error>\r\n    }\r\n    @if(nid_FormControl.invalid && nid_FormControl.hasError("searchError")){\r\n    <mat-error>{{nid_FormControl.getError("searchError")}}</mat-error>\r\n    }\r\n</mat-form-field>\r\n\r\n<button matButton="elevated" id="login-btn" (click)="search()"\r\n    [disabled]="name_FormControl.invalid || nid_FormControl.invalid">\r\n    <mat-icon>search</mat-icon>\r\n    Search\r\n</button>\r\n<!--/form-->\r\n\r\n@if(displayWaitSpinner()){\r\n<app-wait-spinner></app-wait-spinner>\r\n}', styles: ["/* src/app/patient/search/search.css */\n:host {\n  display: block;\n  margin: auto;\n  width: 400px;\n}\nform {\n  width: 100%;\n}\nmat-form-field {\n  display: flex;\n  width: 100%;\n}\n#login-btn {\n  display: flex;\n  margin: auto;\n}\n/*# sourceMappingURL=search.css.map */\n"] }]
+    ], template: '<h1>Search Patient</h1>\r\n\r\n<div (keydown.enter)="search()">\r\n    <mat-form-field>\r\n        <mat-label>Name</mat-label>\r\n        <input type="text" matInput [formControl]="name_FormControl" style="font-family: shabnam;direction:rtl;">\r\n        @if((name_FormControl.dirty || name_FormControl.touched) &&\r\n        name_FormControl.invalid && name_FormControl.hasError("maxlength")){\r\n        <mat-error>Name must be less than 32 characters long!</mat-error>\r\n        }\r\n        @if(name_FormControl.invalid && name_FormControl.hasError("searchError")){\r\n        <mat-error>{{name_FormControl.getError("searchError")}}</mat-error>\r\n        }\r\n    </mat-form-field>\r\n\r\n    <mat-form-field>\r\n        <mat-label>National Id</mat-label>\r\n        <input type="text" matInput [formControl]="nid_FormControl" style="letter-spacing: 4px;">\r\n        @if((nid_FormControl.dirty || nid_FormControl.touched) &&\r\n        nid_FormControl.invalid && nid_FormControl.hasError("maxlength")){\r\n        <mat-error>National id can not be more than 10 characters long!</mat-error>\r\n        }\r\n        @if(nid_FormControl.invalid && nid_FormControl.hasError("searchError")){\r\n        <mat-error>{{nid_FormControl.getError("searchError")}}</mat-error>\r\n        }\r\n    </mat-form-field>\r\n\r\n    <button matButton="elevated" id="login-btn" (click)="search()"\r\n        [disabled]="name_FormControl.invalid || nid_FormControl.invalid">\r\n        <mat-icon>search</mat-icon>\r\n        Search\r\n    </button>\r\n</div>\r\n\r\n@if(displayWaitSpinner()){\r\n<app-wait-spinner></app-wait-spinner>\r\n}', styles: ["/* src/app/patient/search/search.css */\n:host {\n  display: block;\n  margin: auto;\n  width: 400px;\n}\nform {\n  width: 100%;\n}\nmat-form-field {\n  display: flex;\n  width: 100%;\n}\n#login-btn {\n  display: flex;\n  margin: auto;\n}\n/*# sourceMappingURL=search.css.map */\n"] }]
   }], () => [], null);
 })();
 (() => {
@@ -58993,7 +58997,7 @@ function EditTextarea_Conditional_11_Template(rf, ctx) {
   if (rf & 2) {
     const ctx_r0 = \u0275\u0275nextContext();
     \u0275\u0275advance();
-    \u0275\u0275textInterpolate1(" ", ctx_r0.data.label, " cannot be more than 128 characters long! ");
+    \u0275\u0275textInterpolate1(" ", ctx_r0.data.label, " cannot be more than 4000 characters long! ");
   }
 }
 function EditTextarea_Conditional_17_Template(rf, ctx) {
@@ -59017,7 +59021,7 @@ var EditTextarea = class _EditTextarea {
   static \u0275fac = function EditTextarea_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _EditTextarea)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _EditTextarea, selectors: [["app-edit-textarea"]], decls: 18, vars: 16, consts: [[2, "text-align", "right"], [3, "change", "checked"], [1, "persian-font"], ["matInput", "", "placeholder", "Write here..", "rows", "5", 3, "value", "formControl"], ["align", "end", 2, "float", "inline-end"], ["matButton", "", "mat-dialog-close", ""], ["matButton", "filled", 3, "mat-dialog-close", "disabled"], ["align", "start"], ["matButton", "filled", "mat-dialog-close", "Delete", 1, "warning"]], template: function EditTextarea_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _EditTextarea, selectors: [["app-edit-textarea"]], decls: 18, vars: 16, consts: [[2, "text-align", "right"], [3, "change", "checked"], [1, "persian-font"], ["matInput", "", "placeholder", "Write here..", "rows", "5", "required", "", 3, "value", "formControl"], ["align", "end", 2, "float", "inline-end"], ["matButton", "", "mat-dialog-close", ""], ["matButton", "filled", 3, "mat-dialog-close", "disabled"], ["align", "start"], ["matButton", "filled", "mat-dialog-close", "Delete", 1, "warning"]], template: function EditTextarea_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "mat-dialog-content")(1, "p", 0)(2, "mat-slide-toggle", 1);
       \u0275\u0275listener("change", function EditTextarea_Template_mat_slide_toggle_change_2_listener() {
@@ -59073,6 +59077,7 @@ var EditTextarea = class _EditTextarea {
     ReactiveFormsModule,
     DefaultValueAccessor,
     NgControlStatus,
+    RequiredValidator,
     FormControlDirective,
     MatError,
     MatSlideToggle
@@ -59101,7 +59106,7 @@ var EditTextarea = class _EditTextarea {
     <mat-form-field>\r
         <mat-label>{{data.label}}</mat-label>\r
         <textarea matInput [value]="data.value" [formControl]="myText" placeholder="Write here.." rows="5"\r
-            [class]="isPersian()?'persian-font':''" [style]="isPersian()?'font-family:shabnam;':''">\r
+            [class]="isPersian()?'persian-font':''" [style]="isPersian()?'font-family:shabnam;':''" required="">\r
         </textarea>\r
         @if(myText.invalid && (myText.dirty || myText.touched) && myText.hasError("required")){\r
         <mat-error>\r
@@ -59110,7 +59115,7 @@ var EditTextarea = class _EditTextarea {
         }\r
         @if(myText.invalid && (myText.dirty || myText.touched) && myText.hasError("maxlength")){\r
         <mat-error>\r
-            {{data.label}} cannot be more than 128 characters long!\r
+            {{data.label}} cannot be more than 4000 characters long!\r
         </mat-error>\r
         }\r
     </mat-form-field>\r
@@ -59576,6 +59581,9 @@ var AccountSettings = class _AccountSettings {
         persian: true
       } }).afterClosed().subscribe((result) => {
         if (result) {
+          if (result.value.trim() === "") {
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.identityService.requestChangeFullName(result.value).subscribe({
             next: (res) => {
@@ -59612,6 +59620,9 @@ var AccountSettings = class _AccountSettings {
         persian: true
       } }).afterClosed().subscribe((result) => {
         if (result) {
+          if (result.value.trim() === "") {
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.identityService.requestChangeDescription(result.value).subscribe({
             next: (res) => {
@@ -65482,7 +65493,7 @@ function UserList_Conditional_0_Template(rf, ctx) {
     \u0275\u0275elementStart(0, "div")(1, "a", 13)(2, "mat-icon");
     \u0275\u0275text(3, "person_add");
     \u0275\u0275elementEnd();
-    \u0275\u0275text(4, " Add New User ");
+    \u0275\u0275text(4, " Add New Member ");
     \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
@@ -65784,7 +65795,7 @@ identityService.userModel()!.roles.includes("Identity_Admins")){\r
 <div>\r
     <a matButton="outlined" [routerLink]="['/new-user']">\r
         <mat-icon>person_add</mat-icon>\r
-        Add New User\r
+        Add New Member\r
     </a>\r
 </div>\r
 }\r
@@ -72156,12 +72167,13 @@ var MatMenuModule = class _MatMenuModule {
 })();
 
 // src/app/document/document-tab/document-tab.ts
+var _c030 = ["matSideNavContainer"];
 var _forTrack02 = ($index, $item) => $item.guid;
-function DocumentTab_For_5_Conditional_0_Template(rf, ctx) {
+function DocumentTab_For_6_Conditional_0_Template(rf, ctx) {
   if (rf & 1) {
     const _r2 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "a", 11);
-    \u0275\u0275listener("click", function DocumentTab_For_5_Conditional_0_Template_a_click_0_listener() {
+    \u0275\u0275elementStart(0, "a", 13);
+    \u0275\u0275listener("click", function DocumentTab_For_6_Conditional_0_Template_a_click_0_listener() {
       \u0275\u0275restoreView(_r2);
       const element_r3 = \u0275\u0275nextContext().$implicit;
       const ctx_r3 = \u0275\u0275nextContext();
@@ -72179,45 +72191,46 @@ function DocumentTab_For_5_Conditional_0_Template(rf, ctx) {
     \u0275\u0275textInterpolate1(" ", element_r3.value, " ");
   }
 }
-function DocumentTab_For_5_Template(rf, ctx) {
+function DocumentTab_For_6_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275conditionalCreate(0, DocumentTab_For_5_Conditional_0_Template, 2, 7, "a", 10);
+    \u0275\u0275conditionalCreate(0, DocumentTab_For_6_Conditional_0_Template, 2, 7, "a", 12);
   }
   if (rf & 2) {
     const element_r3 = ctx.$implicit;
     \u0275\u0275conditional(element_r3.type === "h1" || element_r3.type === "h2" ? 0 : -1);
   }
 }
-function DocumentTab_Conditional_8_Conditional_0_Template(rf, ctx) {
+function DocumentTab_Conditional_12_Conditional_0_Template(rf, ctx) {
   if (rf & 1) {
     const _r5 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "button", 13)(1, "mat-icon");
-    \u0275\u0275text(2, "dashboard_customize");
-    \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(3, "mat-icon");
-    \u0275\u0275text(4, "arrow_drop_down");
-    \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(5, "button", 14);
-    \u0275\u0275listener("click", function DocumentTab_Conditional_8_Conditional_0_Template_button_click_5_listener() {
+    \u0275\u0275elementStart(0, "button", 15);
+    \u0275\u0275listener("click", function DocumentTab_Conditional_12_Conditional_0_Template_button_click_0_listener() {
       \u0275\u0275restoreView(_r5);
       const ctx_r3 = \u0275\u0275nextContext(2);
       return \u0275\u0275resetView(ctx_r3.toggleEditMode());
     });
+    \u0275\u0275elementStart(1, "mat-icon");
+    \u0275\u0275text(2, "edit_off");
+    \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(3, "button", 16)(4, "mat-icon");
+    \u0275\u0275text(5, "dashboard_customize");
+    \u0275\u0275elementEnd();
     \u0275\u0275elementStart(6, "mat-icon");
-    \u0275\u0275text(7, "edit_off");
+    \u0275\u0275text(7, "arrow_drop_down");
     \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
     \u0275\u0275nextContext(2);
-    const elementMenu_r6 = \u0275\u0275reference(10);
+    const elementMenu_r6 = \u0275\u0275reference(14);
+    \u0275\u0275advance(3);
     \u0275\u0275property("matMenuTriggerFor", elementMenu_r6);
   }
 }
-function DocumentTab_Conditional_8_Conditional_1_Template(rf, ctx) {
+function DocumentTab_Conditional_12_Conditional_1_Template(rf, ctx) {
   if (rf & 1) {
     const _r7 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "button", 15);
-    \u0275\u0275listener("click", function DocumentTab_Conditional_8_Conditional_1_Template_button_click_0_listener() {
+    \u0275\u0275elementStart(0, "button", 17);
+    \u0275\u0275listener("click", function DocumentTab_Conditional_12_Conditional_1_Template_button_click_0_listener() {
       \u0275\u0275restoreView(_r7);
       const ctx_r3 = \u0275\u0275nextContext(2);
       return \u0275\u0275resetView(ctx_r3.toggleEditMode());
@@ -72227,20 +72240,20 @@ function DocumentTab_Conditional_8_Conditional_1_Template(rf, ctx) {
     \u0275\u0275elementEnd()();
   }
 }
-function DocumentTab_Conditional_8_Template(rf, ctx) {
+function DocumentTab_Conditional_12_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275conditionalCreate(0, DocumentTab_Conditional_8_Conditional_0_Template, 8, 1)(1, DocumentTab_Conditional_8_Conditional_1_Template, 3, 0, "button", 12);
+    \u0275\u0275conditionalCreate(0, DocumentTab_Conditional_12_Conditional_0_Template, 8, 1)(1, DocumentTab_Conditional_12_Conditional_1_Template, 3, 0, "button", 14);
   }
   if (rf & 2) {
     const ctx_r3 = \u0275\u0275nextContext();
     \u0275\u0275conditional(ctx_r3.documentPageService.editMode() ? 0 : 1);
   }
 }
-function DocumentTab_For_28_Template(rf, ctx) {
+function DocumentTab_For_32_Template(rf, ctx) {
   if (rf & 1) {
     const _r8 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "app-document-element", 16);
-    \u0275\u0275listener("headingInitialized", function DocumentTab_For_28_Template_app_document_element_headingInitialized_0_listener($event) {
+    \u0275\u0275elementStart(0, "app-document-element", 18);
+    \u0275\u0275listener("headingInitialized", function DocumentTab_For_32_Template_app_document_element_headingInitialized_0_listener($event) {
       \u0275\u0275restoreView(_r8);
       const ctx_r3 = \u0275\u0275nextContext();
       return \u0275\u0275resetView(ctx_r3.onHeadingInit($event));
@@ -72252,9 +72265,9 @@ function DocumentTab_For_28_Template(rf, ctx) {
     \u0275\u0275property("elementModel", element_r9)("id", element_r9.guid);
   }
 }
-function DocumentTab_Conditional_29_Template(rf, ctx) {
+function DocumentTab_Conditional_33_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275element(0, "app-wait-spinner", 9);
+    \u0275\u0275element(0, "app-wait-spinner", 11);
   }
   if (rf & 2) {
     const ctx_r3 = \u0275\u0275nextContext();
@@ -72274,7 +72287,9 @@ var DocumentTab = class _DocumentTab {
   headingElements = signal([], ...ngDevMode ? [{ debugName: "headingElements" }] : []);
   displayWaitSpinner = signal(false, ...ngDevMode ? [{ debugName: "displayWaitSpinner" }] : []);
   waitSpinnerValue = signal(0, ...ngDevMode ? [{ debugName: "waitSpinnerValue" }] : []);
-  sideNavTopGap = signal(320, ...ngDevMode ? [{ debugName: "sideNavTopGap" }] : []);
+  sideNavTopGap = signal(0, ...ngDevMode ? [{ debugName: "sideNavTopGap" }] : []);
+  sideNavOpen = signal(false, ...ngDevMode ? [{ debugName: "sideNavOpen" }] : []);
+  sideNavTopDistance = signal(0, ...ngDevMode ? [{ debugName: "sideNavTopDistance" }] : []);
   editAllowed = computed(() => this.identityService.isAuthenticated() && this.identityService.userModel()?.roles.includes("Document_Admins"), ...ngDevMode ? [{ debugName: "editAllowed" }] : []);
   sortedElements = computed(() => this.documentTabModel().elements.sort((a, b) => {
     if (a.order > b.order)
@@ -72282,6 +72297,7 @@ var DocumentTab = class _DocumentTab {
     else
       return -1;
   }), ...ngDevMode ? [{ debugName: "sortedElements" }] : []);
+  sideNavContainer = viewChild.required("matSideNavContainer", { read: ElementRef });
   constructor() {
     this.viewPortObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -72306,12 +72322,26 @@ var DocumentTab = class _DocumentTab {
     this.windowService.nativeWindow.addEventListener("scroll", () => {
       let verticalScrollPosition = this.windowService.nativeWindow.scrollY;
       this.sideNavTopGap.update(() => {
-        let x = 320 - verticalScrollPosition;
+        let x = this.sideNavTopDistance() - verticalScrollPosition;
         if (x < 64)
           x = 64;
         return x;
       });
     });
+  }
+  /*handleViewportChange(e:MediaQueryListEvent) {
+    if (e.matches) {
+      this.sideNavOpen.set(false);
+    } else {
+      this.sideNavOpen.set(true);
+    }
+  }*/
+  toggleSideNav() {
+    this.sideNavOpen.update((o) => !o);
+    if (this.sideNavOpen()) {
+      this.sideNavTopDistance.set(this.sideNavContainer().nativeElement.getBoundingClientRect().top + this.windowService.nativeWindow.scrollY);
+      this.sideNavTopGap.set(this.sideNavContainer().nativeElement.getBoundingClientRect().top);
+    }
   }
   onHeadingInit(headingElement) {
     this.headingElements.update((elements) => [...elements, headingElement]);
@@ -72437,75 +72467,93 @@ var DocumentTab = class _DocumentTab {
   static \u0275fac = function DocumentTab_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DocumentTab)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DocumentTab, selectors: [["app-document-tab"]], inputs: { documentTabModel: [1, "documentTabModel"] }, decls: 30, vars: 5, consts: [["elementMenu", ""], ["id", "endSideNav", "mode", "side", "opened", "", "position", "end", "fixedInViewport", "", 3, "fixedTopGap"], [2, "font-weight", "500", "color", "var(--mat-sys-on-surface)", "margin", "3px"], [1, "actionDiv", "clearfix"], ["mat-menu-item", "", "matTooltipPosition", "left", "matTooltip", "Add a main heading", 3, "click"], ["mat-menu-item", "", "matTooltipPosition", "left", "matTooltip", "Add a paragraph", 3, "click"], ["mat-menu-item", "", "matTooltipPosition", "left", "matTooltip", "Add a code snippet", 3, "click"], ["mat-menu-item", "", "matTooltipPosition", "left", "matTooltip", "Add an image", 3, "click"], [3, "elementModel", "id"], [3, "value"], [3, "id", "paddingLeft", "style"], [3, "click", "id"], ["matButton", "elevated", "matTooltip", "Enter edit mode", 1, "noPaddingBtn"], ["matButton", "elevated", "matTooltip", "New element", 1, "noPaddingBtn", 3, "matMenuTriggerFor"], ["matButton", "elevated", "matTooltip", "Exit edit mode", 1, "noPaddingBtn", 3, "click"], ["matButton", "elevated", "matTooltip", "Enter edit mode", 1, "noPaddingBtn", 3, "click"], [3, "headingInitialized", "elementModel", "id"]], template: function DocumentTab_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DocumentTab, selectors: [["app-document-tab"]], viewQuery: function DocumentTab_Query(rf, ctx) {
+    if (rf & 1) {
+      \u0275\u0275viewQuerySignal(ctx.sideNavContainer, _c030, 5, ElementRef);
+    }
+    if (rf & 2) {
+      \u0275\u0275queryAdvance();
+    }
+  }, inputs: { documentTabModel: [1, "documentTabModel"] }, decls: 34, vars: 8, consts: [["matSideNavContainer", ""], ["elementMenu", ""], ["id", "endSideNav", "mode", "side", "position", "end", "fixedInViewport", "", 3, "opened", "fixedTopGap"], [2, "font-weight", "500", "color", "var(--mat-sys-on-surface)", "margin", "3px"], [1, "actionDiv", "clearfix"], ["matButton", "elevated", 1, "noPaddingBtn", 3, "click", "matTooltip"], ["mat-menu-item", "", "matTooltipPosition", "left", "matTooltip", "Add a main heading", 3, "click"], ["mat-menu-item", "", "matTooltipPosition", "left", "matTooltip", "Add a paragraph", 3, "click"], ["mat-menu-item", "", "matTooltipPosition", "left", "matTooltip", "Add a code snippet", 3, "click"], ["mat-menu-item", "", "matTooltipPosition", "left", "matTooltip", "Add an image", 3, "click"], [3, "elementModel", "id"], [3, "value"], [3, "id", "paddingLeft", "style"], [3, "click", "id"], ["matButton", "elevated", "matTooltip", "Enter edit mode", 1, "noPaddingBtn"], ["matButton", "elevated", "matTooltip", "Exit edit mode", 1, "noPaddingBtn", 3, "click"], ["matButton", "elevated", "matTooltip", "New element", 1, "noPaddingBtn", 3, "matMenuTriggerFor"], ["matButton", "elevated", "matTooltip", "Enter edit mode", 1, "noPaddingBtn", 3, "click"], [3, "headingInitialized", "elementModel", "id"]], template: function DocumentTab_Template(rf, ctx) {
     if (rf & 1) {
       const _r1 = \u0275\u0275getCurrentView();
-      \u0275\u0275elementStart(0, "mat-sidenav-container")(1, "mat-sidenav", 1)(2, "p", 2);
-      \u0275\u0275text(3, "Contents:");
+      \u0275\u0275elementStart(0, "mat-sidenav-container", null, 0)(2, "mat-sidenav", 2)(3, "p", 3);
+      \u0275\u0275text(4, "Contents:");
       \u0275\u0275elementEnd();
-      \u0275\u0275repeaterCreate(4, DocumentTab_For_5_Template, 1, 1, null, null, _forTrack02);
+      \u0275\u0275repeaterCreate(5, DocumentTab_For_6_Template, 1, 1, null, null, _forTrack02);
       \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(6, "mat-sidenav-content")(7, "div", 3);
-      \u0275\u0275conditionalCreate(8, DocumentTab_Conditional_8_Template, 2, 1);
+      \u0275\u0275elementStart(7, "mat-sidenav-content")(8, "div", 4)(9, "button", 5);
+      \u0275\u0275listener("click", function DocumentTab_Template_button_click_9_listener() {
+        \u0275\u0275restoreView(_r1);
+        return \u0275\u0275resetView(ctx.toggleSideNav());
+      });
+      \u0275\u0275elementStart(10, "mat-icon");
+      \u0275\u0275text(11);
+      \u0275\u0275elementEnd()();
+      \u0275\u0275conditionalCreate(12, DocumentTab_Conditional_12_Template, 2, 1);
       \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(9, "mat-menu", null, 0)(11, "button", 4);
-      \u0275\u0275listener("click", function DocumentTab_Template_button_click_11_listener() {
+      \u0275\u0275elementStart(13, "mat-menu", null, 1)(15, "button", 6);
+      \u0275\u0275listener("click", function DocumentTab_Template_button_click_15_listener() {
         \u0275\u0275restoreView(_r1);
         return \u0275\u0275resetView(ctx.addNewElement("h1"));
       });
-      \u0275\u0275elementStart(12, "mat-icon");
-      \u0275\u0275text(13, "format_h1");
+      \u0275\u0275elementStart(16, "mat-icon");
+      \u0275\u0275text(17, "format_h1");
       \u0275\u0275elementEnd();
-      \u0275\u0275text(14, " Main Heading ");
+      \u0275\u0275text(18, " Main Heading ");
       \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(15, "button", 5);
-      \u0275\u0275listener("click", function DocumentTab_Template_button_click_15_listener() {
+      \u0275\u0275elementStart(19, "button", 7);
+      \u0275\u0275listener("click", function DocumentTab_Template_button_click_19_listener() {
         \u0275\u0275restoreView(_r1);
         return \u0275\u0275resetView(ctx.addNewElement("p"));
       });
-      \u0275\u0275elementStart(16, "mat-icon");
-      \u0275\u0275text(17, "subject");
+      \u0275\u0275elementStart(20, "mat-icon");
+      \u0275\u0275text(21, "subject");
       \u0275\u0275elementEnd();
-      \u0275\u0275text(18, " Paragraph ");
+      \u0275\u0275text(22, " Paragraph ");
       \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(19, "button", 6);
-      \u0275\u0275listener("click", function DocumentTab_Template_button_click_19_listener() {
+      \u0275\u0275elementStart(23, "button", 8);
+      \u0275\u0275listener("click", function DocumentTab_Template_button_click_23_listener() {
         \u0275\u0275restoreView(_r1);
         return \u0275\u0275resetView(ctx.addNewElement("code"));
       });
-      \u0275\u0275elementStart(20, "mat-icon");
-      \u0275\u0275text(21, "code_blocks");
+      \u0275\u0275elementStart(24, "mat-icon");
+      \u0275\u0275text(25, "code_blocks");
       \u0275\u0275elementEnd();
-      \u0275\u0275text(22, " Code ");
+      \u0275\u0275text(26, " Code ");
       \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(23, "button", 7);
-      \u0275\u0275listener("click", function DocumentTab_Template_button_click_23_listener() {
+      \u0275\u0275elementStart(27, "button", 9);
+      \u0275\u0275listener("click", function DocumentTab_Template_button_click_27_listener() {
         \u0275\u0275restoreView(_r1);
         return \u0275\u0275resetView(ctx.addNewElement("img"));
       });
-      \u0275\u0275elementStart(24, "mat-icon");
-      \u0275\u0275text(25, "image");
+      \u0275\u0275elementStart(28, "mat-icon");
+      \u0275\u0275text(29, "image");
       \u0275\u0275elementEnd();
-      \u0275\u0275text(26, " Image ");
+      \u0275\u0275text(30, " Image ");
       \u0275\u0275elementEnd()();
-      \u0275\u0275repeaterCreate(27, DocumentTab_For_28_Template, 1, 2, "app-document-element", 8, _forTrack02);
-      \u0275\u0275conditionalCreate(29, DocumentTab_Conditional_29_Template, 1, 1, "app-wait-spinner", 9);
+      \u0275\u0275repeaterCreate(31, DocumentTab_For_32_Template, 1, 2, "app-document-element", 10, _forTrack02);
+      \u0275\u0275conditionalCreate(33, DocumentTab_Conditional_33_Template, 1, 1, "app-wait-spinner", 11);
       \u0275\u0275elementEnd()();
     }
     if (rf & 2) {
-      let tmp_4_0;
-      \u0275\u0275advance();
-      \u0275\u0275property("fixedTopGap", ctx.sideNavTopGap());
+      let tmp_8_0;
+      \u0275\u0275advance(2);
+      \u0275\u0275property("opened", ctx.sideNavOpen())("fixedTopGap", ctx.sideNavTopGap());
       \u0275\u0275advance(3);
       \u0275\u0275repeater(ctx.documentTabModel().elements);
       \u0275\u0275advance(2);
       \u0275\u0275classProp("editMode", ctx.documentPageService.editMode());
       \u0275\u0275advance(2);
-      \u0275\u0275conditional(((tmp_4_0 = ctx.identityService.userModel()) == null ? null : tmp_4_0.roles == null ? null : tmp_4_0.roles.includes("Document_Admins")) ? 8 : -1);
+      \u0275\u0275property("matTooltip", ctx.sideNavOpen() ? "Close right panel" : "Open right panel");
+      \u0275\u0275advance(2);
+      \u0275\u0275textInterpolate(ctx.sideNavOpen() ? "right_panel_close" : "right_panel_open");
+      \u0275\u0275advance();
+      \u0275\u0275conditional(((tmp_8_0 = ctx.identityService.userModel()) == null ? null : tmp_8_0.roles == null ? null : tmp_8_0.roles.includes("Document_Admins")) ? 12 : -1);
       \u0275\u0275advance(19);
       \u0275\u0275repeater(ctx.sortedElements());
       \u0275\u0275advance(2);
-      \u0275\u0275conditional(ctx.displayWaitSpinner() ? 29 : -1);
+      \u0275\u0275conditional(ctx.displayWaitSpinner() ? 33 : -1);
     }
   }, dependencies: [
     MatSidenavModule,
@@ -72535,10 +72583,11 @@ var DocumentTab = class _DocumentTab {
       DocumentElement,
       WaitSpinner,
       MatButton
-    ], template: `<mat-sidenav-container>\r
+    ], template: `<mat-sidenav-container #matSideNavContainer>\r
 \r
     <!--------------------- content overview -------------------->\r
-    <mat-sidenav id="endSideNav" mode="side" opened position="end" fixedInViewport="" [fixedTopGap]="sideNavTopGap()">\r
+    <mat-sidenav id="endSideNav" mode="side" [opened]="sideNavOpen()" position="end" fixedInViewport=""\r
+        [fixedTopGap]="sideNavTopGap()">\r
         <p style="font-weight: 500;color: var(--mat-sys-on-surface);margin: 3px;">Contents:</p>\r
         @for(element of documentTabModel().elements; track element.guid){\r
         @if(element.type === "h1" || element.type === "h2"){\r
@@ -72554,15 +72603,20 @@ var DocumentTab = class _DocumentTab {
 \r
         <!--------------------- top action box -------------------->\r
         <div class="actionDiv clearfix">\r
+            <button matButton="elevated" [matTooltip]="sideNavOpen()?'Close right panel':'Open right panel'"\r
+                class="noPaddingBtn" (click)="toggleSideNav()">\r
+                <mat-icon>{{sideNavOpen()?'right_panel_close':'right_panel_open'}}</mat-icon>\r
+            </button>\r
+\r
             @if(identityService.userModel()?.roles?.includes("Document_Admins")){\r
             @if(documentPageService.editMode()){\r
+            <button matButton="elevated" matTooltip="Exit edit mode" class="noPaddingBtn" (click)="toggleEditMode()">\r
+                <mat-icon>edit_off</mat-icon>\r
+            </button>\r
             <button matButton="elevated" [matMenuTriggerFor]="elementMenu" matTooltip="New element"\r
                 class="noPaddingBtn">\r
                 <mat-icon>dashboard_customize</mat-icon>\r
                 <mat-icon>arrow_drop_down</mat-icon>\r
-            </button>\r
-            <button matButton="elevated" matTooltip="Exit edit mode" class="noPaddingBtn" (click)="toggleEditMode()">\r
-                <mat-icon>edit_off</mat-icon>\r
             </button>\r
             }\r
             @else {\r
@@ -72571,7 +72625,6 @@ var DocumentTab = class _DocumentTab {
             </button>\r
             }\r
             }\r
-\r
         </div>\r
 \r
         <!--------------------- matmenu -------------------->\r
@@ -72617,7 +72670,7 @@ var DocumentTab = class _DocumentTab {
     </mat-sidenav-content>\r
 \r
 </mat-sidenav-container>`, styles: ["/* src/app/document/document-tab/document-tab.css */\nmat-sidenav#endSideNav {\n  width: 250px;\n  border-left: 2px solid var(--mat-sys-outline);\n  border-radius: 0;\n  padding: 16px 8px;\n  height: fit-content;\n}\nmat-sidenav#endSideNav a {\n  font-size: 12px;\n  display: block;\n  text-decoration: none;\n  color: var(--mat-sys-secondary);\n  padding: 5px;\n  line-height: 14px;\n  cursor: pointer;\n}\nmat-sidenav#endSideNav a:hover,\nmat-sidenav#endSideNav a.active {\n  color: var(--mat-sys-primary);\n  font-weight: 600;\n}\nmat-sidenav-content {\n  padding: 8px 32px 50px 32px;\n}\ndiv.actionDiv button {\n  float: right;\n}\n/*# sourceMappingURL=document-tab.css.map */\n"] }]
-  }], () => [], { documentTabModel: [{ type: Input, args: [{ isSignal: true, alias: "documentTabModel", required: true }] }] });
+  }], () => [], { documentTabModel: [{ type: Input, args: [{ isSignal: true, alias: "documentTabModel", required: true }] }], sideNavContainer: [{ type: ViewChild, args: ["matSideNavContainer", __spreadProps(__spreadValues({}, { read: ElementRef }), { isSignal: true })] }] });
 })();
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DocumentTab, { className: "DocumentTab", filePath: "src/app/document/document-tab/document-tab.ts", lineNumber: 31 });
@@ -72824,7 +72877,7 @@ var DocumentPageModel = class {
 };
 
 // src/app/patient/patient-profile/patient-profile.ts
-var _c030 = (a0) => ["/patient-profile-settings", a0];
+var _c031 = (a0) => ["/patient-profile-settings", a0];
 function PatientProfile_Conditional_3_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275element(0, "img", 2);
@@ -72851,7 +72904,7 @@ function PatientProfile_Conditional_15_Template(rf, ctx) {
   }
   if (rf & 2) {
     const ctx_r0 = \u0275\u0275nextContext();
-    \u0275\u0275property("routerLink", \u0275\u0275pureFunction1(1, _c030, ctx_r0.patientGuid()));
+    \u0275\u0275property("routerLink", \u0275\u0275pureFunction1(1, _c031, ctx_r0.patientGuid()));
   }
 }
 function PatientProfile_Conditional_16_Template(rf, ctx) {
@@ -73754,7 +73807,7 @@ var MatPaginatorModule = class _MatPaginatorModule {
 })();
 
 // src/app/patient/admin/patient-list/patient-list.ts
-var _c031 = () => ["/new-patient"];
+var _c032 = () => ["/new-patient"];
 var _c118 = () => [10, 20, 50, 100];
 var _c210 = (a0) => ["/patient-profile-settings", a0];
 function PatientList_th_7_Template(rf, ctx) {
@@ -74034,7 +74087,7 @@ var PatientList = class _PatientList {
     }
     if (rf & 2) {
       \u0275\u0275advance();
-      \u0275\u0275property("routerLink", \u0275\u0275pureFunction0(8, _c031));
+      \u0275\u0275property("routerLink", \u0275\u0275pureFunction0(8, _c032));
       \u0275\u0275advance(4);
       \u0275\u0275property("dataSource", ctx.dataSource());
       \u0275\u0275advance(19);
@@ -74315,6 +74368,9 @@ var PatientProfileSettings = class _PatientProfileSettings {
         value: this.patientModel().nationalId
       } }).afterClosed().subscribe((result) => {
         if (result) {
+          if (result.value.trim() === "") {
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.patientService.requestChangeNationalId(this.patientGuid(), result.value).subscribe({
             next: (res) => {
@@ -74351,6 +74407,9 @@ var PatientProfileSettings = class _PatientProfileSettings {
         persian: true
       } }).afterClosed().subscribe((result) => {
         if (result) {
+          if (result.value.trim() === "") {
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.patientService.requestChangeFullName(this.patientGuid(), result.value).subscribe({
             next: (res) => {
@@ -74387,6 +74446,9 @@ var PatientProfileSettings = class _PatientProfileSettings {
         persian: true
       } }).afterClosed().subscribe((result) => {
         if (result) {
+          if (result.value.trim() === "") {
+            result.value = "_";
+          }
           this.displayWaitSpinner.set(true);
           this.patientService.requestChangeDescription(this.patientGuid(), result.value).subscribe({
             next: (res) => {
@@ -74418,7 +74480,7 @@ var PatientProfileSettings = class _PatientProfileSettings {
   static \u0275fac = function PatientProfileSettings_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _PatientProfileSettings)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _PatientProfileSettings, selectors: [["app-patient-profile-settings"]], decls: 27, vars: 5, consts: [["appearance", "outlined"], [2, "float", "inline-start", "position", "relative"], ["matIconButton", "", "matTooltip", "Edit Patient Image", 1, "edit-btn", 2, "position", "absolute", "bottom", "0", "left", "-8px", 3, "click"], ["priority", "", "width", "100", "height", "100", "alt", "patient image", "id", "patient-profile-img", 3, "ngSrc"], [2, "font-size", "100px", "width", "100px", "height", "100px"], [1, "persian-font", 2, "margin", "0"], ["matIconButton", "", "matTooltip", "Edit Full Name", 1, "edit-btn", 2, "transform", "translateY(-4px)", "float", "right", 3, "click"], ["matIconButton", "", "matTooltip", "Edit National Id", 1, "edit-btn", 3, "click"], [1, "clearfix"], [1, "persian-font"], ["matIconButton", "", "matTooltip", "Edit Description", 1, "edit-btn", 2, "transform", "translateY(-16px)", "float", "right", 3, "click"]], template: function PatientProfileSettings_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _PatientProfileSettings, selectors: [["app-patient-profile-settings"]], decls: 27, vars: 5, consts: [["appearance", "outlined"], [2, "float", "inline-start", "position", "relative"], ["matIconButton", "", "matTooltip", "Edit Patient Image", 1, "edit-btn", 2, "position", "absolute", "bottom", "0", "left", "-8px", 3, "click"], ["priority", "", "width", "100", "height", "100", "alt", "patient image", "id", "patient-profile-img", 3, "ngSrc"], [2, "font-size", "100px", "width", "100px", "height", "100px"], [1, "persian-font", 2, "margin", "0"], ["matIconButton", "", "matTooltip", "Edit Full Name", 1, "edit-btn", 2, "transform", "translateY(-4px)", "float", "right", 3, "click"], ["matIconButton", "", "matTooltip", "Edit National Id", 1, "edit-btn", 2, "transform", "translateY(-4px)", "float", "right", 3, "click"], [1, "clearfix"], [1, "persian-font"], ["matIconButton", "", "matTooltip", "Edit Description", 1, "edit-btn", 2, "transform", "translateY(-16px)", "float", "right", 3, "click"]], template: function PatientProfileSettings_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "mat-card", 0)(1, "mat-card-header")(2, "div", 1)(3, "button", 2);
       \u0275\u0275listener("click", function PatientProfileSettings_Template_button_click_3_listener() {
@@ -74475,12 +74537,12 @@ var PatientProfileSettings = class _PatientProfileSettings {
       \u0275\u0275advance(4);
       \u0275\u0275conditional(ctx.displayWaitSpinner() ? 26 : -1);
     }
-  }, dependencies: [MatCardModule, MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle, MatIcon, MatIconButton, MatTooltip, NgOptimizedImage, WaitSpinner], styles: ["\n\nmat-card[_ngcontent-%COMP%] {\n  width: 50vw;\n  min-width: 400px;\n  margin: 50px auto 0;\n  display: block;\n}\nimg#patient-profile-img[_ngcontent-%COMP%] {\n  width: 100px;\n  height: 100px;\n  object-fit: cover;\n  border-radius: 50%;\n  overflow: hidden;\n}\nmat-card-title[_ngcontent-%COMP%] {\n  margin: 0 16px;\n}\nmat-card-subtitle[_ngcontent-%COMP%] {\n  margin: 0 16px;\n}\n/*# sourceMappingURL=patient-profile-settings.css.map */"] });
+  }, dependencies: [MatCardModule, MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle, MatIcon, MatIconButton, MatTooltip, NgOptimizedImage, WaitSpinner], styles: ["\n\nmat-card[_ngcontent-%COMP%] {\n  width: 50vw;\n  min-width: 400px;\n  margin: 50px auto 0;\n  display: block;\n}\nimg#patient-profile-img[_ngcontent-%COMP%] {\n  width: 100px;\n  height: 100px;\n  object-fit: cover;\n  border-radius: 50%;\n  overflow: hidden;\n}\nmat-card-title[_ngcontent-%COMP%] {\n  margin: 0 16px;\n}\nmat-card-subtitle[_ngcontent-%COMP%] {\n  margin: 0 16px;\n  letter-spacing: 1px;\n}\n/*# sourceMappingURL=patient-profile-settings.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(PatientProfileSettings, [{
     type: Component,
-    args: [{ selector: "app-patient-profile-settings", imports: [MatCardModule, MatIcon, MatIconButton, MatTooltip, NgOptimizedImage, WaitSpinner], template: '<mat-card appearance="outlined">\r\n    <mat-card-header>\r\n        <div style="float: inline-start;position: relative;">\r\n            <button matIconButton class="edit-btn" style="position: absolute;bottom: 0;left: -8px;"\r\n                matTooltip="Edit Patient Image" (click)="openEditImageDialog()">\r\n                <mat-icon>edit</mat-icon>\r\n            </button>\r\n            @if(patientImgSrc()){\r\n            <img [ngSrc]="patientImgSrc()!" priority width="100" height="100" alt="patient image"\r\n                id="patient-profile-img">\r\n            }\r\n            @else {\r\n            <mat-icon style="font-size: 100px;width: 100px;height: 100px;">account_circle</mat-icon>\r\n            }\r\n        </div>\r\n\r\n        <div style="float: inline-start;position: relative;">\r\n            <mat-card-title>\r\n                <p class="persian-font" style="margin: 0;">\r\n                    {{patientModel()?.fullName}}\r\n                    <button matIconButton class="edit-btn" style="transform: translateY(-4px);float: right;"\r\n                        matTooltip="Edit Full Name" (click)="openEditFullNameDialog()">\r\n                        <mat-icon>edit</mat-icon>\r\n                    </button>\r\n                </p>\r\n            </mat-card-title>\r\n\r\n            <mat-card-subtitle>\r\n                {{patientModel()?.nationalId}}\r\n                <button matIconButton class="edit-btn" matTooltip="Edit National Id"\r\n                    (click)="openEditNationalIdDialog()">\r\n                    <mat-icon>edit</mat-icon>\r\n                </button>\r\n            </mat-card-subtitle>\r\n\r\n        </div>\r\n\r\n    </mat-card-header>\r\n\r\n    <mat-card-content class="clearfix">\r\n        <pre class="persian-font">{{patientModel()?.description ?? "About patient ..."}}</pre>\r\n        <button matIconButton class="edit-btn" style="transform: translateY(-16px);float: right;"\r\n            matTooltip="Edit Description" (click)="openEditDescriptionDialog()">\r\n            <mat-icon>edit</mat-icon>\r\n        </button>\r\n    </mat-card-content>\r\n\r\n    @if(displayWaitSpinner()){\r\n    <app-wait-spinner></app-wait-spinner>\r\n    }\r\n\r\n</mat-card>', styles: ["/* src/app/patient/admin/patient-profile-settings/patient-profile-settings.css */\nmat-card {\n  width: 50vw;\n  min-width: 400px;\n  margin: 50px auto 0;\n  display: block;\n}\nimg#patient-profile-img {\n  width: 100px;\n  height: 100px;\n  object-fit: cover;\n  border-radius: 50%;\n  overflow: hidden;\n}\nmat-card-title {\n  margin: 0 16px;\n}\nmat-card-subtitle {\n  margin: 0 16px;\n}\n/*# sourceMappingURL=patient-profile-settings.css.map */\n"] }]
+    args: [{ selector: "app-patient-profile-settings", imports: [MatCardModule, MatIcon, MatIconButton, MatTooltip, NgOptimizedImage, WaitSpinner], template: '<mat-card appearance="outlined">\r\n    <mat-card-header>\r\n        <div style="float: inline-start;position: relative;">\r\n            <button matIconButton class="edit-btn" style="position: absolute;bottom: 0;left: -8px;"\r\n                matTooltip="Edit Patient Image" (click)="openEditImageDialog()">\r\n                <mat-icon>edit</mat-icon>\r\n            </button>\r\n            @if(patientImgSrc()){\r\n            <img [ngSrc]="patientImgSrc()!" priority width="100" height="100" alt="patient image"\r\n                id="patient-profile-img">\r\n            }\r\n            @else {\r\n            <mat-icon style="font-size: 100px;width: 100px;height: 100px;">account_circle</mat-icon>\r\n            }\r\n        </div>\r\n\r\n        <div style="float: inline-start;position: relative;">\r\n            <mat-card-title>\r\n                <p class="persian-font" style="margin: 0;">\r\n                    {{patientModel()?.fullName}}\r\n                    <button matIconButton class="edit-btn" style="transform: translateY(-4px);float: right;"\r\n                        matTooltip="Edit Full Name" (click)="openEditFullNameDialog()">\r\n                        <mat-icon>edit</mat-icon>\r\n                    </button>\r\n                </p>\r\n            </mat-card-title>\r\n\r\n            <mat-card-subtitle>\r\n                {{patientModel()?.nationalId}}\r\n                <button matIconButton class="edit-btn" matTooltip="Edit National Id"\r\n                    (click)="openEditNationalIdDialog()" style="transform: translateY(-4px);float: right;">\r\n                    <mat-icon>edit</mat-icon>\r\n                </button>\r\n            </mat-card-subtitle>\r\n\r\n        </div>\r\n\r\n    </mat-card-header>\r\n\r\n    <mat-card-content class="clearfix">\r\n        <pre class="persian-font">{{patientModel()?.description ?? "About patient ..."}}</pre>\r\n        <button matIconButton class="edit-btn" style="transform: translateY(-16px);float: right;"\r\n            matTooltip="Edit Description" (click)="openEditDescriptionDialog()">\r\n            <mat-icon>edit</mat-icon>\r\n        </button>\r\n    </mat-card-content>\r\n\r\n    @if(displayWaitSpinner()){\r\n    <app-wait-spinner></app-wait-spinner>\r\n    }\r\n\r\n</mat-card>', styles: ["/* src/app/patient/admin/patient-profile-settings/patient-profile-settings.css */\nmat-card {\n  width: 50vw;\n  min-width: 400px;\n  margin: 50px auto 0;\n  display: block;\n}\nimg#patient-profile-img {\n  width: 100px;\n  height: 100px;\n  object-fit: cover;\n  border-radius: 50%;\n  overflow: hidden;\n}\nmat-card-title {\n  margin: 0 16px;\n}\nmat-card-subtitle {\n  margin: 0 16px;\n  letter-spacing: 1px;\n}\n/*# sourceMappingURL=patient-profile-settings.css.map */\n"] }]
   }], () => [], null);
 })();
 (() => {
@@ -74542,7 +74604,7 @@ var BackupService = class _BackupService {
 })();
 
 // src/app/backup/backup/backup.ts
-var _c032 = () => ["/Restore"];
+var _c033 = () => ["/Restore"];
 function Backup_Conditional_2_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "mat-card-title");
@@ -74900,7 +74962,7 @@ var Backup = class _Backup {
       \u0275\u0275advance();
       \u0275\u0275conditional(((tmp_20_0 = ctx.backupStatus()) == null ? null : tmp_20_0.process) === "Not_Started" ? 37 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("routerLink", \u0275\u0275pureFunction0(24, _c032));
+      \u0275\u0275property("routerLink", \u0275\u0275pureFunction0(24, _c033));
     }
   }, dependencies: [MatCardModule, MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle, MatButton, RouterLink, MatIcon, DatePipe], styles: ["\n\nmat-card[_ngcontent-%COMP%] {\n  margin: 16px auto;\n  width: 50%;\n  min-width: 400px;\n}\n/*# sourceMappingURL=backup.css.map */"] });
 };
@@ -75003,7 +75065,7 @@ var backupAdminGuard = (route, state) => {
 };
 
 // src/app/backup/restore/restore.ts
-var _c033 = () => ["/Backup"];
+var _c034 = () => ["/Backup"];
 function Restore_Conditional_2_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "mat-card-title");
@@ -75340,7 +75402,7 @@ var Restore = class _Restore {
       \u0275\u0275advance();
       \u0275\u0275conditional(((tmp_17_0 = ctx.restoreStatus()) == null ? null : tmp_17_0.backup_File_Name) && ((tmp_17_0 = ctx.restoreStatus()) == null ? null : tmp_17_0.process) !== "Started" ? 31 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("routerLink", \u0275\u0275pureFunction0(19, _c033));
+      \u0275\u0275property("routerLink", \u0275\u0275pureFunction0(19, _c034));
     }
   }, dependencies: [MatCardModule, MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle, MatButton, RouterLink, MatIcon], styles: ["\n\nmat-card[_ngcontent-%COMP%] {\n  margin: 16px auto;\n  width: 50%;\n  min-width: 400px;\n}\n/*# sourceMappingURL=restore.css.map */"] });
 };
@@ -75472,7 +75534,7 @@ function SimpleSnackBar_Conditional_2_Template(rf, ctx) {
     \u0275\u0275textInterpolate1(" ", ctx_r1.data.action, " ");
   }
 }
-var _c034 = ["label"];
+var _c035 = ["label"];
 function MatSnackBarContainer_ng_template_4_Template(rf, ctx) {
 }
 var MAX_TIMEOUT = Math.pow(2, 31) - 1;
@@ -75883,7 +75945,7 @@ var MatSnackBarContainer = class _MatSnackBarContainer extends BasePortalOutlet 
     selectors: [["mat-snack-bar-container"]],
     viewQuery: function MatSnackBarContainer_Query(rf, ctx) {
       if (rf & 1) {
-        \u0275\u0275viewQuery(CdkPortalOutlet, 7)(_c034, 7);
+        \u0275\u0275viewQuery(CdkPortalOutlet, 7)(_c035, 7);
       }
       if (rf & 2) {
         let _t;
@@ -76248,7 +76310,7 @@ var IconService = class _IconService {
 })();
 
 // node_modules/@angular/material/fesm2022/toolbar.mjs
-var _c035 = ["*", [["mat-toolbar-row"]]];
+var _c036 = ["*", [["mat-toolbar-row"]]];
 var _c119 = ["*", "mat-toolbar-row"];
 var MatToolbarRow = class _MatToolbarRow {
   static \u0275fac = function MatToolbarRow_Factory(__ngFactoryType__) {
@@ -76327,7 +76389,7 @@ var MatToolbar = class _MatToolbar {
     vars: 0,
     template: function MatToolbar_Template(rf, ctx) {
       if (rf & 1) {
-        \u0275\u0275projectionDef(_c035);
+        \u0275\u0275projectionDef(_c036);
         \u0275\u0275projection(0);
         \u0275\u0275projection(1, 1);
       }
@@ -76505,7 +76567,7 @@ var SingletonService = class _SingletonService {
 })();
 
 // src/app/nav-bar/nav-bar.ts
-var _c036 = () => ["/"];
+var _c037 = () => ["/"];
 var _c120 = (a0) => ["/user-profile", a0];
 var _c211 = () => ["/user-list"];
 var _c39 = () => ["/Backup"];
@@ -76646,7 +76708,7 @@ var NavBar = class _NavBar {
       const account_r5 = \u0275\u0275reference(9);
       \u0275\u0275classProp("shadow", ctx.displayShadow());
       \u0275\u0275advance();
-      \u0275\u0275property("routerLink", \u0275\u0275pureFunction0(6, _c036));
+      \u0275\u0275property("routerLink", \u0275\u0275pureFunction0(6, _c037));
       \u0275\u0275advance(4);
       \u0275\u0275conditional(ctx.singleton.darkMode() ? 5 : 6);
       \u0275\u0275advance(2);

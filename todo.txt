@@ -1,4 +1,2 @@
-- rename search component to patient-search
 - define persian date pipe
-- resize images in dialog if they are too big for profile
 - 
