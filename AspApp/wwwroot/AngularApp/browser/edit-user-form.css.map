@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/identity/admin/edit-user-form/edit-user-form.css"],
+  "sourcesContent": [":host{\r\n    display: block;\r\n    margin: 50px auto 0;\r\n    width: 400px;\r\n}\r\nmat-form-field{\r\n    display: flex;\r\n    width: 100%;\r\n}\r\n#submit-btn{\r\n    display: flex;\r\n    margin: auto;\r\n}"],
+  "mappings": ";AAAA;AACI,WAAS;AACT,UAAQ,KAAK,KAAK;AAClB,SAAO;AACX;AACA;AACI,WAAS;AACT,SAAO;AACX;AACA,CAAC;AACG,WAAS;AACT,UAAQ;AACZ;",
+  "names": []
+}

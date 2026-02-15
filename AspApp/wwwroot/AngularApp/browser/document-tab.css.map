@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/document/document-tab/document-tab.css"],
+  "sourcesContent": ["mat-sidenav#endSideNav{\r\n    width: 250px;\r\n    border-left: 2px solid var(--mat-sys-outline);\r\n    border-radius: 0;\r\n    padding: 16px 8px;\r\n    height: fit-content;\r\n}\r\n\r\nmat-sidenav#endSideNav a{\r\n    font-size: 12px;\r\n    display: block;\r\n    text-decoration: none;\r\n    color: var(--mat-sys-secondary);\r\n    padding: 5px;\r\n    line-height: 14px;\r\n    cursor: pointer;\r\n}\r\nmat-sidenav#endSideNav a:hover,\r\nmat-sidenav#endSideNav a.active{\r\n    /*color: var(--mat-sys-on-primary-container);*/\r\n    color: var(--mat-sys-primary);\r\n    font-weight: 600;\r\n}\r\n\r\nmat-sidenav-content{\r\n    padding: 8px 32px 50px 32px;\r\n}\r\n\r\ndiv.actionDiv button{\r\n    float: right;\r\n}\r\n"],
+  "mappings": ";AAAA,WAAW,CAAC;AACR,SAAO;AACP,eAAa,IAAI,MAAM,IAAI;AAC3B,iBAAe;AACf,WAAS,KAAK;AACd,UAAQ;AACZ;AAEA,WAAW,CARC,WAQW;AACnB,aAAW;AACX,WAAS;AACT,mBAAiB;AACjB,SAAO,IAAI;AACX,WAAS;AACT,eAAa;AACb,UAAQ;AACZ;AACA,WAAW,CAjBC,WAiBW,CAAC;AACxB,WAAW,CAlBC,WAkBW,CAAC,CAAC;AAErB,SAAO,IAAI;AACX,eAAa;AACjB;AAEA;AACI,WAAS,IAAI,KAAK,KAAK;AAC3B;AAEA,GAAG,CAAC,UAAU;AACV,SAAO;AACX;",
+  "names": []
+}

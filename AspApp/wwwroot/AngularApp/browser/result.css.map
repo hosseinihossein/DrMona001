@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/dialogs/result/result.css"],
+  "sourcesContent": ["mat-dialog-content{\r\n    width: 50vw;\r\n    min-width: 400px;\r\n}"],
+  "mappings": ";AAAA;AACI,SAAO;AACP,aAAW;AACf;",
+  "names": []
+}

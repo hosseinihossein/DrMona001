@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/identity/login/login.css"],
+  "sourcesContent": [":host{\r\n    display: block;\r\n    margin: 100px auto 0;\r\n    width: fit-content;\r\n}\r\nform{\r\n    width: 100%;\r\n}\r\nmat-form-field{\r\n    display: flex;\r\n    width: 100%;\r\n}\r\n#login-btn{\r\n    display: flex;\r\n    margin: auto;\r\n}\r\n\r\nimg{\r\n    width: 200px;\r\n    height: 300px;\r\n    float: left;\r\n    object-fit: cover;\r\n}\r\n"],
+  "mappings": ";AAAA;AACI,WAAS;AACT,UAAQ,MAAM,KAAK;AACnB,SAAO;AACX;AACA;AACI,SAAO;AACX;AACA;AACI,WAAS;AACT,SAAO;AACX;AACA,CAAC;AACG,WAAS;AACT,UAAQ;AACZ;AAEA;AACI,SAAO;AACP,UAAQ;AACR,SAAO;AACP,cAAY;AAChB;",
+  "names": []
+}

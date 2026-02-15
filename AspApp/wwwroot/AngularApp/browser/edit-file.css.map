@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/dialogs/edit-file/edit-file.css"],
+  "sourcesContent": ["mat-form-field{\r\n    width: 100%;\r\n}\r\nmat-dialog-content{\r\n    width: 400px;\r\n}\r\nbutton#selectButton{\r\n    margin: 8px;\r\n}\r\n#file-box{\r\n    margin: 4px auto;\r\n    width: fit-content;\r\n}"],
+  "mappings": ";AAAA;AACI,SAAO;AACX;AACA;AACI,SAAO;AACX;AACA,MAAM,CAAC;AACH,UAAQ;AACZ;AACA,CAAC;AACG,UAAQ,IAAI;AACZ,SAAO;AACX;",
+  "names": []
+}

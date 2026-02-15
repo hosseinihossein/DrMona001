@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/patient/search/search.css"],
+  "sourcesContent": [":host{\r\n    display: block;\r\n    margin: auto;\r\n    width: 400px;\r\n}\r\nform{\r\n    width: 100%;\r\n}\r\nmat-form-field{\r\n    display: flex;\r\n    width: 100%;\r\n}\r\n#login-btn{\r\n    display: flex;\r\n    margin: auto;\r\n}"],
+  "mappings": ";AAAA;AACI,WAAS;AACT,UAAQ;AACR,SAAO;AACX;AACA;AACI,SAAO;AACX;AACA;AACI,WAAS;AACT,SAAO;AACX;AACA,CAAC;AACG,WAAS;AACT,UAAQ;AACZ;",
+  "names": []
+}

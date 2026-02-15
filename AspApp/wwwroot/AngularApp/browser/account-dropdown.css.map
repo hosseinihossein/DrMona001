@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/nav-bar/account-dropdown/account-dropdown.css"],
+  "sourcesContent": ["button{\r\n    margin: 0;\r\n    overflow: hidden;\r\n}\r\n\r\nbutton img{\r\n    width: 40px;\r\n    height: 40px;\r\n    margin: 0;\r\n    padding: 0;\r\n}"],
+  "mappings": ";AAAA;AACI,UAAQ;AACR,YAAU;AACd;AAEA,OAAO;AACH,SAAO;AACP,UAAQ;AACR,UAAQ;AACR,WAAS;AACb;",
+  "names": []
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/dialogs/edit-textarea/edit-textarea.css"],
+  "sourcesContent": ["mat-form-field{\r\n    width: 100%;\r\n}\r\nmat-dialog-content{\r\n    width: 60vw;\r\n    min-width: 400px;\r\n}\r\n@media screen and (max-width:800px) {\r\n    mat-dialog-content{\r\n        width: 80vw;\r\n    }\r\n}\r\n"],
+  "mappings": ";AAAA;AACI,SAAO;AACX;AACA;AACI,SAAO;AACP,aAAW;AACf;AACA,OAAO,YAAW,WAAW;AACzB;AACI,WAAO;AACX;AACJ;",
+  "names": []
+}

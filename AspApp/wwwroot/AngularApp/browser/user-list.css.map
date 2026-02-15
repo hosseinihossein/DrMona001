@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/identity/admin/user-list/user-list.css"],
+  "sourcesContent": [":host{\r\n    width: fit-content;\r\n    display: block;\r\n    margin: 50px auto 0;\r\n}\r\n\r\nimg.userProfileImage{\r\n    width: 56px;\r\n    height: 56px;\r\n    border-radius: 50%;\r\n    overflow: hidden;\r\n    object-fit: contain;\r\n}\r\n\r\nth,td{\r\n    text-align: center;\r\n}\r\ntr:hover{\r\n    /*border: 1px solid var(--mat-sys-outline);*/\r\n    background-color: var(--mat-sys-secondary);\r\n    color: var(--mat-sys-on-secondary);\r\n}"],
+  "mappings": ";AAAA;AACI,SAAO;AACP,WAAS;AACT,UAAQ,KAAK,KAAK;AACtB;AAEA,GAAG,CAAC;AACA,SAAO;AACP,UAAQ;AACR,iBAAe;AACf,YAAU;AACV,cAAY;AAChB;AAEA;AAAG;AACC,cAAY;AAChB;AACA,EAAE;AAEE,oBAAkB,IAAI;AACtB,SAAO,IAAI;AACf;",
+  "names": []
+}

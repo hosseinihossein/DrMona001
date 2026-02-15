@@ -2,7 +2,7 @@
 todo.txt
 TempFiles/*
 Storage/*
-wwwroot/AngularApp/*
+#wwwroot/AngularApp/*
 appsettings.Development.json
 
 ## Ignore Visual Studio temporary files, build results, and

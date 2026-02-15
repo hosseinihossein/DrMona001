@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/dialogs/large-img/large-img.css"],
+  "sourcesContent": ["mat-dialog-content{\r\n    max-height: 95vh;\r\n    position: relative;\r\n}\r\n@media screen and (max-width:800px) {\r\n    mat-dialog-content{\r\n        max-height: 80vh;\r\n    }\r\n}\r\nimg{\r\n    display: block;\r\n    width: fit-content;\r\n    height: fit-content;\r\n    margin: auto;\r\n    object-fit: contain;\r\n    cursor: zoom-out;\r\n}\r\n/*img.zoomedIn{\r\n    min-width: calc(90vw - 48px);\r\n}*/\r\nimg.fitTo90{\r\n    width: calc(90vw - 48px);\r\n}\r\n\r\ndiv.buttons-box{\r\n    float: right;\r\n    position: sticky;\r\n    top: 0;\r\n    right: 0;\r\n    left: calc(100% - 40px);\r\n    width: 40px;\r\n}\r\ndiv.buttons-box div.background{\r\n    background-color: var(--mat-sys-background);\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    bottom: 0;\r\n    right: 0;\r\n    opacity: 0.5;\r\n}"],
+  "mappings": ";AAAA;AACI,cAAY;AACZ,YAAU;AACd;AACA,OAAO,YAAW,WAAW;AACzB;AACI,gBAAY;AAChB;AACJ;AACA;AACI,WAAS;AACT,SAAO;AACP,UAAQ;AACR,UAAQ;AACR,cAAY;AACZ,UAAQ;AACZ;AAIA,GAAG,CAAC;AACA,SAAO,KAAK,KAAK,EAAE;AACvB;AAEA,GAAG,CAAC;AACA,SAAO;AACP,YAAU;AACV,OAAK;AACL,SAAO;AACP,QAAM,KAAK,KAAK,EAAE;AAClB,SAAO;AACX;AACA,GAAG,CARC,YAQY,GAAG,CAAC;AAChB,oBAAkB,IAAI;AACtB,YAAU;AACV,OAAK;AACL,QAAM;AACN,UAAQ;AACR,SAAO;AACP,WAAS;AACb;",
+  "names": []
+}

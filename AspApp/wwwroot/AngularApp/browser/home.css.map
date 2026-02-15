@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/home/home.css"],
+  "sourcesContent": ["img#drmona-logo{\r\n    width: 150px;\r\n    height: 150px;\r\n    display: block;\r\n    margin: auto;\r\n    object-fit: cover;\r\n}"],
+  "mappings": ";AAAA,GAAG,CAAC;AACA,SAAO;AACP,UAAQ;AACR,WAAS;AACT,UAAQ;AACR,cAAY;AAChB;",
+  "names": []
+}

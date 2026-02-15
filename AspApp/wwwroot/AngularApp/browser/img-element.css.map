@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/document/document-element/img-element/img-element.css"],
+  "sourcesContent": ["\r\nimg{\r\n    display: block;\r\n    max-width: 70%;\r\n    max-height: 90vh;\r\n    width: fit-content;\r\n    height: fit-content;\r\n    margin: auto;\r\n    cursor: zoom-in;\r\n    border: 3px solid var(--mat-sys-outline-variant);\r\n    border-radius: 5px;\r\n    transition: box-shadow 200ms;\r\n    object-fit: contain;\r\n}\r\n\r\nimg:hover{\r\n    box-shadow: 0px 5px 10px 0 var(--mat-sys-outline);\r\n}\r\n"],
+  "mappings": ";AACA;AACI,WAAS;AACT,aAAW;AACX,cAAY;AACZ,SAAO;AACP,UAAQ;AACR,UAAQ;AACR,UAAQ;AACR,UAAQ,IAAI,MAAM,IAAI;AACtB,iBAAe;AACf,cAAY,WAAW;AACvB,cAAY;AAChB;AAEA,GAAG;AACC,cAAY,IAAI,IAAI,KAAK,EAAE,IAAI;AACnC;",
+  "names": []
+}
