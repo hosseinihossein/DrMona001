@@ -14,10 +14,11 @@ import { EditImage } from '../../../dialogs/edit-image/edit-image';
 import { Result } from '../../../dialogs/result/result';
 import { EditInput } from '../../../dialogs/edit-input/edit-input';
 import { EditTextarea } from '../../../dialogs/edit-textarea/edit-textarea';
+import { ConfirmDelete } from '../../../dialogs/confirm-delete/confirm-delete';
 
 @Component({
   selector: 'app-patient-profile-settings',
-  imports: [MatCardModule,MatIcon,MatIconButton,MatTooltip,NgOptimizedImage,WaitSpinner],
+  imports: [MatCardModule,MatIcon,MatIconButton,MatTooltip,NgOptimizedImage,WaitSpinner,MatFabButton],
   templateUrl: './patient-profile-settings.html',
   styleUrl: './patient-profile-settings.css',
 })
@@ -244,6 +245,36 @@ export class PatientProfileSettings {
                   JSON.stringify(err),
                 ],
               }});
+              throw(err);
+            }
+          });
+        }
+      });
+    }
+  }
+  openConfirmDeletePatient(){
+    if(this.patientGuid() && this.patientModel()){
+      this.dialog.open(ConfirmDelete,{data:{
+        title:this.patientModel()!.fullName,
+        type: "patient"
+      }}).afterClosed().subscribe(result=>{
+        if(result && result === true){
+          this.displayWaitSpinner.set(true);
+          this.patientService.requestDeletePatient(this.patientGuid()!).subscribe({
+            next: res => {
+              this.displayWaitSpinner.set(false);
+              if(res && res.success){
+                this.dialog.open(Result,{data:{
+                  status:"success",
+                  title:"Delete Patient",
+                  description:[
+                    `Patient '${this.patientModel()!.fullName}' deleted successfully.`,
+                  ],
+                }}).afterClosed().subscribe(()=>this.router.navigate(['/']));
+              }
+            },
+            error: err => {
+              this.displayWaitSpinner.set(false);
               throw(err);
             }
           });

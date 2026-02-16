@@ -56873,7 +56873,7 @@ var Login = class _Login {
   static \u0275fac = function Login_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _Login)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _Login, selectors: [["app-login"]], decls: 26, vars: 16, consts: [["ngSrc", "MedicalStaff200_300.png", "width", "200", "height", "300", "priority", "", "alt", "a nurse image"], [2, "float", "right", "margin", "50px 0 0", 3, "keydown.enter"], ["type", "text", "matInput", "", "required", "", 3, "formControl"], ["matInput", "", "required", "", 3, "type", "formControl"], ["type", "button", "matIconButton", "", "matSuffix", "", 3, "click"], ["matButton", "elevated", "id", "login-btn", "type", "button", 3, "click", "disabled"]], template: function Login_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _Login, selectors: [["app-login"]], decls: 26, vars: 16, consts: [["ngSrc", "MedicalStaff200_300.png", "width", "200", "height", "300", "priority", "", "alt", "a nurse image"], ["id", "form-div", 3, "keydown.enter"], ["type", "text", "matInput", "", "required", "", 3, "formControl"], ["matInput", "", "required", "", 3, "type", "formControl"], ["type", "button", "matIconButton", "", "matSuffix", "", 3, "click"], ["matButton", "elevated", "id", "login-btn", "type", "button", 3, "click", "disabled"]], template: function Login_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275element(0, "img", 0);
       \u0275\u0275elementStart(1, "div", 1);
@@ -56962,7 +56962,7 @@ var Login = class _Login {
     MatSuffix,
     WaitSpinner,
     NgOptimizedImage
-  ], styles: ["\n\n[_nghost-%COMP%] {\n  display: block;\n  margin: 100px auto 0;\n  width: fit-content;\n}\nform[_ngcontent-%COMP%] {\n  width: 100%;\n}\nmat-form-field[_ngcontent-%COMP%] {\n  display: flex;\n  width: 100%;\n}\n#login-btn[_ngcontent-%COMP%] {\n  display: flex;\n  margin: auto;\n}\nimg[_ngcontent-%COMP%] {\n  width: 200px;\n  height: 300px;\n  float: left;\n  object-fit: cover;\n}\n/*# sourceMappingURL=login.css.map */"] });
+  ], styles: ["\n\n[_nghost-%COMP%] {\n  display: block;\n  margin: 100px auto 0;\n  width: fit-content;\n}\nform[_ngcontent-%COMP%] {\n  width: 100%;\n}\nmat-form-field[_ngcontent-%COMP%] {\n  display: flex;\n  width: 100%;\n}\n#login-btn[_ngcontent-%COMP%] {\n  display: flex;\n  margin: auto;\n}\nimg[_ngcontent-%COMP%] {\n  width: 200px;\n  height: 300px;\n  float: left;\n  object-fit: cover;\n}\n#form-div[_ngcontent-%COMP%] {\n  float: right;\n  margin: 50px 0 0;\n}\n@media screen and (max-width: 450px) {\n  img[_ngcontent-%COMP%] {\n    float: none;\n    margin: auto;\n    display: block;\n  }\n  #form-div[_ngcontent-%COMP%] {\n    float: none;\n    margin: auto;\n  }\n}\n/*# sourceMappingURL=login.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Login, [{
@@ -56981,7 +56981,7 @@ var Login = class _Login {
       NgOptimizedImage
     ], template: `<img ngSrc="MedicalStaff200_300.png" width="200" height="300" priority="" alt="a nurse image">\r
 \r
-<div style="float: right;margin: 50px 0 0;" (keydown.enter)="login()">\r
+<div id="form-div" (keydown.enter)="login()">\r
     <h1>Please Login</h1>\r
     <!--form (ngSubmit)="login()"-->\r
     <mat-form-field>\r
@@ -57037,7 +57037,7 @@ var Login = class _Login {
 \r
 @if(displayWaitSpinner()){\r
 <app-wait-spinner></app-wait-spinner>\r
-}`, styles: ["/* src/app/identity/login/login.css */\n:host {\n  display: block;\n  margin: 100px auto 0;\n  width: fit-content;\n}\nform {\n  width: 100%;\n}\nmat-form-field {\n  display: flex;\n  width: 100%;\n}\n#login-btn {\n  display: flex;\n  margin: auto;\n}\nimg {\n  width: 200px;\n  height: 300px;\n  float: left;\n  object-fit: cover;\n}\n/*# sourceMappingURL=login.css.map */\n"] }]
+}`, styles: ["/* src/app/identity/login/login.css */\n:host {\n  display: block;\n  margin: 100px auto 0;\n  width: fit-content;\n}\nform {\n  width: 100%;\n}\nmat-form-field {\n  display: flex;\n  width: 100%;\n}\n#login-btn {\n  display: flex;\n  margin: auto;\n}\nimg {\n  width: 200px;\n  height: 300px;\n  float: left;\n  object-fit: cover;\n}\n#form-div {\n  float: right;\n  margin: 50px 0 0;\n}\n@media screen and (max-width: 450px) {\n  img {\n    float: none;\n    margin: auto;\n    display: block;\n  }\n  #form-div {\n    float: none;\n    margin: auto;\n  }\n}\n/*# sourceMappingURL=login.css.map */\n"] }]
   }], () => [], null);
 })();
 (() => {
@@ -74253,7 +74253,23 @@ function PatientProfileSettings_Conditional_7_Template(rf, ctx) {
     \u0275\u0275elementEnd();
   }
 }
-function PatientProfileSettings_Conditional_26_Template(rf, ctx) {
+function PatientProfileSettings_Conditional_27_Template(rf, ctx) {
+  if (rf & 1) {
+    const _r2 = \u0275\u0275getCurrentView();
+    \u0275\u0275elementStart(0, "button", 13);
+    \u0275\u0275listener("click", function PatientProfileSettings_Conditional_27_Template_button_click_0_listener() {
+      \u0275\u0275restoreView(_r2);
+      const ctx_r0 = \u0275\u0275nextContext();
+      return \u0275\u0275resetView(ctx_r0.openConfirmDeletePatient());
+    });
+    \u0275\u0275elementStart(1, "mat-icon");
+    \u0275\u0275text(2, "delete");
+    \u0275\u0275elementEnd();
+    \u0275\u0275text(3, " Delete Patient ");
+    \u0275\u0275elementEnd();
+  }
+}
+function PatientProfileSettings_Conditional_28_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275element(0, "app-wait-spinner");
   }
@@ -74477,10 +74493,40 @@ var PatientProfileSettings = class _PatientProfileSettings {
       });
     }
   }
+  openConfirmDeletePatient() {
+    if (this.patientGuid() && this.patientModel()) {
+      this.dialog.open(ConfirmDelete, { data: {
+        title: this.patientModel().fullName,
+        type: "patient"
+      } }).afterClosed().subscribe((result) => {
+        if (result && result === true) {
+          this.displayWaitSpinner.set(true);
+          this.patientService.requestDeletePatient(this.patientGuid()).subscribe({
+            next: (res) => {
+              this.displayWaitSpinner.set(false);
+              if (res && res.success) {
+                this.dialog.open(Result, { data: {
+                  status: "success",
+                  title: "Delete Patient",
+                  description: [
+                    `Patient '${this.patientModel().fullName}' deleted successfully.`
+                  ]
+                } }).afterClosed().subscribe(() => this.router.navigate(["/"]));
+              }
+            },
+            error: (err) => {
+              this.displayWaitSpinner.set(false);
+              throw err;
+            }
+          });
+        }
+      });
+    }
+  }
   static \u0275fac = function PatientProfileSettings_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _PatientProfileSettings)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _PatientProfileSettings, selectors: [["app-patient-profile-settings"]], decls: 27, vars: 5, consts: [["appearance", "outlined"], [2, "float", "inline-start", "position", "relative"], ["matIconButton", "", "matTooltip", "Edit Patient Image", 1, "edit-btn", 2, "position", "absolute", "bottom", "0", "left", "-8px", 3, "click"], ["priority", "", "width", "100", "height", "100", "alt", "patient image", "id", "patient-profile-img", 3, "ngSrc"], [2, "font-size", "100px", "width", "100px", "height", "100px"], [1, "persian-font", 2, "margin", "0"], ["matIconButton", "", "matTooltip", "Edit Full Name", 1, "edit-btn", 2, "transform", "translateY(-4px)", "float", "right", 3, "click"], ["matIconButton", "", "matTooltip", "Edit National Id", 1, "edit-btn", 2, "transform", "translateY(-4px)", "float", "right", 3, "click"], [1, "clearfix"], [1, "persian-font"], ["matIconButton", "", "matTooltip", "Edit Description", 1, "edit-btn", 2, "transform", "translateY(-16px)", "float", "right", 3, "click"]], template: function PatientProfileSettings_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _PatientProfileSettings, selectors: [["app-patient-profile-settings"]], decls: 29, vars: 6, consts: [["appearance", "outlined"], [2, "float", "inline-start", "position", "relative"], ["matIconButton", "", "matTooltip", "Edit Patient Image", 1, "edit-btn", 2, "position", "absolute", "bottom", "0", "left", "-8px", 3, "click"], ["priority", "", "width", "100", "height", "100", "alt", "patient image", "id", "patient-profile-img", 3, "ngSrc"], [2, "font-size", "100px", "width", "100px", "height", "100px"], [1, "persian-font", 2, "margin", "0"], ["matIconButton", "", "matTooltip", "Edit Full Name", 1, "edit-btn", 2, "transform", "translateY(-4px)", "float", "right", 3, "click"], ["matIconButton", "", "matTooltip", "Edit National Id", 1, "edit-btn", 2, "transform", "translateY(-4px)", "float", "right", 3, "click"], [1, "clearfix"], [1, "persian-font"], ["matIconButton", "", "matTooltip", "Edit Description", 1, "edit-btn", 2, "transform", "translateY(-16px)", "float", "right", 3, "click"], ["align", "start"], ["matFab", "", "extended", "", 2, "color", "var(--mat-sys-on-error-container)", "background-color", "var(--mat-sys-error-container)"], ["matFab", "", "extended", "", 2, "color", "var(--mat-sys-on-error-container)", "background-color", "var(--mat-sys-error-container)", 3, "click"]], template: function PatientProfileSettings_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "mat-card", 0)(1, "mat-card-header")(2, "div", 1)(3, "button", 2);
       \u0275\u0275listener("click", function PatientProfileSettings_Template_button_click_3_listener() {
@@ -74519,13 +74565,17 @@ var PatientProfileSettings = class _PatientProfileSettings {
       \u0275\u0275elementStart(24, "mat-icon");
       \u0275\u0275text(25, "edit");
       \u0275\u0275elementEnd()()();
-      \u0275\u0275conditionalCreate(26, PatientProfileSettings_Conditional_26_Template, 1, 0, "app-wait-spinner");
+      \u0275\u0275elementStart(26, "mat-card-actions", 11);
+      \u0275\u0275conditionalCreate(27, PatientProfileSettings_Conditional_27_Template, 4, 0, "button", 12);
+      \u0275\u0275elementEnd();
+      \u0275\u0275conditionalCreate(28, PatientProfileSettings_Conditional_28_Template, 1, 0, "app-wait-spinner");
       \u0275\u0275elementEnd();
     }
     if (rf & 2) {
       let tmp_1_0;
       let tmp_2_0;
       let tmp_3_0;
+      let tmp_4_0;
       \u0275\u0275advance(6);
       \u0275\u0275conditional(ctx.patientImgSrc() ? 6 : 7);
       \u0275\u0275advance(5);
@@ -74534,19 +74584,21 @@ var PatientProfileSettings = class _PatientProfileSettings {
       \u0275\u0275textInterpolate1(" ", (tmp_2_0 = ctx.patientModel()) == null ? null : tmp_2_0.nationalId, " ");
       \u0275\u0275advance(6);
       \u0275\u0275textInterpolate(((tmp_3_0 = ctx.patientModel()) == null ? null : tmp_3_0.description) ?? "About patient ...");
-      \u0275\u0275advance(4);
-      \u0275\u0275conditional(ctx.displayWaitSpinner() ? 26 : -1);
+      \u0275\u0275advance(5);
+      \u0275\u0275conditional(((tmp_4_0 = ctx.identityService.userModel()) == null ? null : tmp_4_0.roles == null ? null : tmp_4_0.roles.includes("Patient_Admins")) && ((tmp_4_0 = ctx.identityService.userModel()) == null ? null : tmp_4_0.roles == null ? null : tmp_4_0.roles.includes("Document_Admins")) ? 27 : -1);
+      \u0275\u0275advance();
+      \u0275\u0275conditional(ctx.displayWaitSpinner() ? 28 : -1);
     }
-  }, dependencies: [MatCardModule, MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle, MatIcon, MatIconButton, MatTooltip, NgOptimizedImage, WaitSpinner], styles: ["\n\nmat-card[_ngcontent-%COMP%] {\n  width: 50vw;\n  min-width: 400px;\n  margin: 50px auto 0;\n  display: block;\n}\nimg#patient-profile-img[_ngcontent-%COMP%] {\n  width: 100px;\n  height: 100px;\n  object-fit: cover;\n  border-radius: 50%;\n  overflow: hidden;\n}\nmat-card-title[_ngcontent-%COMP%] {\n  margin: 0 16px;\n}\nmat-card-subtitle[_ngcontent-%COMP%] {\n  margin: 0 16px;\n  letter-spacing: 1px;\n}\n/*# sourceMappingURL=patient-profile-settings.css.map */"] });
+  }, dependencies: [MatCardModule, MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle, MatIcon, MatIconButton, MatTooltip, NgOptimizedImage, WaitSpinner, MatFabButton], styles: ["\n\nmat-card[_ngcontent-%COMP%] {\n  width: 50vw;\n  min-width: 400px;\n  margin: 50px auto 0;\n  display: block;\n}\nimg#patient-profile-img[_ngcontent-%COMP%] {\n  width: 100px;\n  height: 100px;\n  object-fit: cover;\n  border-radius: 50%;\n  overflow: hidden;\n}\nmat-card-title[_ngcontent-%COMP%] {\n  margin: 0 16px;\n}\nmat-card-subtitle[_ngcontent-%COMP%] {\n  margin: 0 16px;\n  letter-spacing: 1px;\n}\n/*# sourceMappingURL=patient-profile-settings.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(PatientProfileSettings, [{
     type: Component,
-    args: [{ selector: "app-patient-profile-settings", imports: [MatCardModule, MatIcon, MatIconButton, MatTooltip, NgOptimizedImage, WaitSpinner], template: '<mat-card appearance="outlined">\r\n    <mat-card-header>\r\n        <div style="float: inline-start;position: relative;">\r\n            <button matIconButton class="edit-btn" style="position: absolute;bottom: 0;left: -8px;"\r\n                matTooltip="Edit Patient Image" (click)="openEditImageDialog()">\r\n                <mat-icon>edit</mat-icon>\r\n            </button>\r\n            @if(patientImgSrc()){\r\n            <img [ngSrc]="patientImgSrc()!" priority width="100" height="100" alt="patient image"\r\n                id="patient-profile-img">\r\n            }\r\n            @else {\r\n            <mat-icon style="font-size: 100px;width: 100px;height: 100px;">account_circle</mat-icon>\r\n            }\r\n        </div>\r\n\r\n        <div style="float: inline-start;position: relative;">\r\n            <mat-card-title>\r\n                <p class="persian-font" style="margin: 0;">\r\n                    {{patientModel()?.fullName}}\r\n                    <button matIconButton class="edit-btn" style="transform: translateY(-4px);float: right;"\r\n                        matTooltip="Edit Full Name" (click)="openEditFullNameDialog()">\r\n                        <mat-icon>edit</mat-icon>\r\n                    </button>\r\n                </p>\r\n            </mat-card-title>\r\n\r\n            <mat-card-subtitle>\r\n                {{patientModel()?.nationalId}}\r\n                <button matIconButton class="edit-btn" matTooltip="Edit National Id"\r\n                    (click)="openEditNationalIdDialog()" style="transform: translateY(-4px);float: right;">\r\n                    <mat-icon>edit</mat-icon>\r\n                </button>\r\n            </mat-card-subtitle>\r\n\r\n        </div>\r\n\r\n    </mat-card-header>\r\n\r\n    <mat-card-content class="clearfix">\r\n        <pre class="persian-font">{{patientModel()?.description ?? "About patient ..."}}</pre>\r\n        <button matIconButton class="edit-btn" style="transform: translateY(-16px);float: right;"\r\n            matTooltip="Edit Description" (click)="openEditDescriptionDialog()">\r\n            <mat-icon>edit</mat-icon>\r\n        </button>\r\n    </mat-card-content>\r\n\r\n    @if(displayWaitSpinner()){\r\n    <app-wait-spinner></app-wait-spinner>\r\n    }\r\n\r\n</mat-card>', styles: ["/* src/app/patient/admin/patient-profile-settings/patient-profile-settings.css */\nmat-card {\n  width: 50vw;\n  min-width: 400px;\n  margin: 50px auto 0;\n  display: block;\n}\nimg#patient-profile-img {\n  width: 100px;\n  height: 100px;\n  object-fit: cover;\n  border-radius: 50%;\n  overflow: hidden;\n}\nmat-card-title {\n  margin: 0 16px;\n}\nmat-card-subtitle {\n  margin: 0 16px;\n  letter-spacing: 1px;\n}\n/*# sourceMappingURL=patient-profile-settings.css.map */\n"] }]
+    args: [{ selector: "app-patient-profile-settings", imports: [MatCardModule, MatIcon, MatIconButton, MatTooltip, NgOptimizedImage, WaitSpinner, MatFabButton], template: '<mat-card appearance="outlined">\r\n    <mat-card-header>\r\n        <div style="float: inline-start;position: relative;">\r\n            <button matIconButton class="edit-btn" style="position: absolute;bottom: 0;left: -8px;"\r\n                matTooltip="Edit Patient Image" (click)="openEditImageDialog()">\r\n                <mat-icon>edit</mat-icon>\r\n            </button>\r\n            @if(patientImgSrc()){\r\n            <img [ngSrc]="patientImgSrc()!" priority width="100" height="100" alt="patient image"\r\n                id="patient-profile-img">\r\n            }\r\n            @else {\r\n            <mat-icon style="font-size: 100px;width: 100px;height: 100px;">account_circle</mat-icon>\r\n            }\r\n        </div>\r\n\r\n        <div style="float: inline-start;position: relative;">\r\n            <mat-card-title>\r\n                <p class="persian-font" style="margin: 0;">\r\n                    {{patientModel()?.fullName}}\r\n                    <button matIconButton class="edit-btn" style="transform: translateY(-4px);float: right;"\r\n                        matTooltip="Edit Full Name" (click)="openEditFullNameDialog()">\r\n                        <mat-icon>edit</mat-icon>\r\n                    </button>\r\n                </p>\r\n            </mat-card-title>\r\n\r\n            <mat-card-subtitle>\r\n                {{patientModel()?.nationalId}}\r\n                <button matIconButton class="edit-btn" matTooltip="Edit National Id"\r\n                    (click)="openEditNationalIdDialog()" style="transform: translateY(-4px);float: right;">\r\n                    <mat-icon>edit</mat-icon>\r\n                </button>\r\n            </mat-card-subtitle>\r\n\r\n        </div>\r\n\r\n    </mat-card-header>\r\n\r\n    <mat-card-content class="clearfix">\r\n        <pre class="persian-font">{{patientModel()?.description ?? "About patient ..."}}</pre>\r\n        <button matIconButton class="edit-btn" style="transform: translateY(-16px);float: right;"\r\n            matTooltip="Edit Description" (click)="openEditDescriptionDialog()">\r\n            <mat-icon>edit</mat-icon>\r\n        </button>\r\n    </mat-card-content>\r\n\r\n    <mat-card-actions align="start">\r\n        @if(identityService.userModel()?.roles?.includes("Patient_Admins") &&\r\n        identityService.userModel()?.roles?.includes("Document_Admins")){\r\n        <button matFab extended (click)="openConfirmDeletePatient()"\r\n            style="color:var(--mat-sys-on-error-container);background-color: var(--mat-sys-error-container);">\r\n            <mat-icon>delete</mat-icon>\r\n            Delete Patient\r\n        </button>\r\n        }\r\n    </mat-card-actions>\r\n\r\n    @if(displayWaitSpinner()){\r\n    <app-wait-spinner></app-wait-spinner>\r\n    }\r\n\r\n</mat-card>', styles: ["/* src/app/patient/admin/patient-profile-settings/patient-profile-settings.css */\nmat-card {\n  width: 50vw;\n  min-width: 400px;\n  margin: 50px auto 0;\n  display: block;\n}\nimg#patient-profile-img {\n  width: 100px;\n  height: 100px;\n  object-fit: cover;\n  border-radius: 50%;\n  overflow: hidden;\n}\nmat-card-title {\n  margin: 0 16px;\n}\nmat-card-subtitle {\n  margin: 0 16px;\n  letter-spacing: 1px;\n}\n/*# sourceMappingURL=patient-profile-settings.css.map */\n"] }]
   }], () => [], null);
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(PatientProfileSettings, { className: "PatientProfileSettings", filePath: "src/app/patient/admin/patient-profile-settings/patient-profile-settings.ts", lineNumber: 24 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(PatientProfileSettings, { className: "PatientProfileSettings", filePath: "src/app/patient/admin/patient-profile-settings/patient-profile-settings.ts", lineNumber: 25 });
 })();
 
 // src/app/patient/patient-routes.ts
