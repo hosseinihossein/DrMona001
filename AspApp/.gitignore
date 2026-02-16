@@ -2,6 +2,7 @@
 todo.txt
 TempFiles/*
 Storage/*
+Certs/*
 #wwwroot/AngularApp/*
 #appsettings.Development.json
 appsettings.json

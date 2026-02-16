@@ -1,10 +1,12 @@
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using AspApp.Filters;
 using AspApp.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +28,17 @@ public class Program
         {
             options.Listen(IPAddress.Any, 5443, listenOptions =>
             {
-                listenOptions.UseHttps(/*"certFileName.pfx"*/);//user default certs
+                string pemFilePath = Path.Combine(builder.Environment.ContentRootPath, "Certs", "DrMonaApp.com.pem");
+                string keyFilePath = Path.Combine(builder.Environment.ContentRootPath, "Certs", "DrMonaApp.com.key");
+                if (System.IO.File.Exists(pemFilePath) && System.IO.File.Exists(keyFilePath))
+                {
+                    X509Certificate2 x509Certificate2 = X509Certificate2.CreateFromPemFile(pemFilePath, keyFilePath);
+                    listenOptions.UseHttps(x509Certificate2);
+                }
+                else
+                {
+                    listenOptions.UseHttps();
+                }
             });
 
             options.Limits.MaxRequestBodySize = 16 * 1024;// 16 KB
