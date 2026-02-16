@@ -205,6 +205,7 @@ export class DocumentTab implements AfterViewInit {
       else if(type === "img"){
         const dialogRef = this.dialog.open(EditImage, {data:{
           title:"New Image Title", 
+          displayTitle:true,
           value:"",
           imageSize:20 * 1024 * 1024,//20 MB
         }});
@@ -251,9 +252,18 @@ export class DocumentTab implements AfterViewInit {
             this.waitSpinnerValue.set(Math.round((100 * event.loaded) / event.total));
           }
           if(event.type === HttpEventType.Response && event.body){
-            //console.log("new element added: ",JSON.stringify(event));
-            this.documentTabModel().elements.push(event.body);
-            //this.documentPageService.documentPageModel.update(dpm => new DocumentPageModel(dpm!));
+            this.documentPageService.documentPageModel.update(dpm => {
+              let tab = dpm!.tabs.find(t=>t.name === this.documentTabModel().name);
+              if(tab){
+                tab.elements.push(event.body!);
+              }
+              else{
+                tab = new DocumentTabModel(this.documentTabModel());
+                tab.elements.push(event.body!);
+                dpm!.tabs.push(tab);
+              }
+              return new DocumentPageModel(dpm!)
+            });
             
             setTimeout(()=>{
               this.goToElement(event.body!.guid);

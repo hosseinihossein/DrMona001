@@ -6,10 +6,11 @@ import { LargeImg } from '../../../dialogs/large-img/large-img';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { DocumentService } from '../../document-service';
 import { WindowService } from '../../../shared/services/window-service';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-img-element',
-  imports: [/*NgOptimizedImage*/],
+  imports: [MatTooltip/*NgOptimizedImage*/],
   templateUrl: './img-element.html',
   styleUrl: './img-element.css',
 })

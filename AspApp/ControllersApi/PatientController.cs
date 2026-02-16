@@ -11,6 +11,7 @@ public class PatientController : ControllerBase
 {
     readonly Patient_DbContext patientDb;
     readonly DirectoryInfo Storage_Patients;
+    readonly DirectoryInfo Storage_Elements;
 
 
 
@@ -20,6 +21,7 @@ public class PatientController : ControllerBase
     {
         this.patientDb = patientDb;
         Storage_Patients = patientProcess.Storage_Patients;
+        Storage_Elements = patientProcess.Storage_Elements;
     }
 
 
@@ -56,6 +58,20 @@ public class PatientController : ControllerBase
             return BadRequest(ModelState);
         }
 
+        Guid[] fileElementsGuids = await patientDb.Patients
+        .Where(p => p.Guid == patientGuid)
+        .SelectMany(p => p.Documents)
+        .SelectMany(d => d.Elements)
+        .Where(el => el.Type == "file" || el.Type == "img")
+        .Select(el => el.Guid)
+        .ToArrayAsync();
+
+        /*Guid[] fileElementsGuids = await patientDb.Elements
+        .Where(el => el.Document.Patient.Guid == patientGuid &&
+            (el.Type == "file" || el.Type == "img"))
+        .Select(el => el.Guid)
+        .ToArrayAsync();*/
+
         int deletedPatients = await patientDb.Patients.Where(p => p.Guid == patientGuid).ExecuteDeleteAsync();
         if (deletedPatients > 0)
         {
@@ -63,6 +79,19 @@ public class PatientController : ControllerBase
             if (Directory.Exists(patientDirectoryPath))
             {
                 Directory.Delete(patientDirectoryPath, true);
+            }
+
+            if (fileElementsGuids.Length > 0)
+            {
+                foreach (Guid elGuid in fileElementsGuids)
+                {
+                    string elementDirPath =
+                    Path.Combine(Storage_Elements.FullName, elGuid.ToString("N"));
+                    if (Directory.Exists(elementDirPath))
+                    {
+                        Directory.Delete(elementDirPath, true);
+                    }
+                }
             }
         }
 

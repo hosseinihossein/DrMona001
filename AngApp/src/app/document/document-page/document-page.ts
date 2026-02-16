@@ -26,7 +26,7 @@ export class DocumentPage {
   tabPI = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "PI") ?? new DocumentTabModel({name:"PI",elements:[]}));
   tabPHE = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "PHE") ?? new DocumentTabModel({name:"PHE",elements:[]}));
   tabPlan = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "Plan") ?? new DocumentTabModel({name:"Plan",elements:[]}));
-  tabResults = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "Results") ?? new DocumentTabModel({name:"Result",elements:[]}));
+  tabResults = computed(()=>this.documentPageService.documentPageModel()?.tabs.find(t=>t.name === "Results") ?? new DocumentTabModel({name:"Results",elements:[]}));
 
   constructor(){
     /*this.activatedRoute.paramMap.subscribe(params=>{
