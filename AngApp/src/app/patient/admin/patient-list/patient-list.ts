@@ -22,7 +22,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 })
 export class PatientList {
   dataSource = signal<Patient_PatientListModel[]>([]);
-  displayedColumns = signal<string[]>(["PatientImage","FullName","NationalId","Guid","CreatedAt",
+  displayedColumns = signal<string[]>(["PatientImage","FullName","NationalId","CreatedAt",
     "Actions"
   ]);
   numberOfAllPatients = signal<number>(0);

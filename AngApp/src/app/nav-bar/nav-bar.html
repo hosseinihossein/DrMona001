@@ -35,6 +35,12 @@
             Medical Staff
         </a>
         }
+        @if(identityService.userModel()?.roles?.includes("Patient_Admins")){
+        <a mat-menu-item [routerLink]="['/patient-list']">
+            <mat-icon>patient_list</mat-icon>
+            Patient List
+        </a>
+        }
         @if(identityService.userModel()?.roles?.includes("Backup_Admins")){
         <a mat-menu-item [routerLink]="['/Backup']">
             <mat-icon>settings_backup_restore</mat-icon>
