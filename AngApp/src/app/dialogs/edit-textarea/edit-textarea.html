@@ -23,7 +23,7 @@
     <mat-dialog-actions align="end" style="float:inline-end;">
         <button matButton mat-dialog-close>Cancel</button>
         <button matButton="filled" [mat-dialog-close]="{value:myText.value,persian:isPersian()}"
-            [disabled]="data.value === myText.value || myText.invalid">
+            [disabled]="(data.value === myText.value && data.persian === isPersian()) || myText.invalid">
             Submit
         </button>
     </mat-dialog-actions>

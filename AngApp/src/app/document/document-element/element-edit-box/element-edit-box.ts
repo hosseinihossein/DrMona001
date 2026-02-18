@@ -52,6 +52,7 @@ export class ElementEditBox {
       label:"Edit Heading",
       value:this.elementModel().value, 
       enableDelete:true,
+      persian: this.elementModel().persian,
     }});
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
@@ -80,6 +81,7 @@ export class ElementEditBox {
       label:"Edit Paragraph",
       value:this.elementModel().value, 
       enableDelete:true,
+      persian: this.elementModel().persian,
     }});
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
@@ -107,7 +109,8 @@ export class ElementEditBox {
     const dialogRef = this.dialog.open(EditTextarea,{data:{
       title:"Edit Code",
       value:this.elementModel().value, 
-      enableDelete:true
+      enableDelete:true,
+      persian: this.elementModel().persian,
     }});
     dialogRef.afterClosed().subscribe(result=>{
       if(result){

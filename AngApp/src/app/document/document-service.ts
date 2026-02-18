@@ -62,8 +62,11 @@ export class DocumentService {
     if(value){
       httpParams = httpParams.set("value",value);
     }
-    if(persian){
-      httpParams = httpParams.set("persian",persian);
+    if(persian && persian === true){
+      httpParams = httpParams.set("persian",true);
+    }
+    else{
+      httpParams = httpParams.set("persian",false);
     }
     if(title){
       httpParams = httpParams.set("title",title);
