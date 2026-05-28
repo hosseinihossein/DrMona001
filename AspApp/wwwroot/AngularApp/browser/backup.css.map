@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/backup/backup/backup.css"],
+  "sourcesContent": ["mat-card{\r\n    margin: 16px auto;\r\n    width: 50%;\r\n    min-width: 400px;\r\n}"],
+  "mappings": ";AAAA;AACI,UAAQ,KAAK;AACb,SAAO;AACP,aAAW;AACf;",
+  "names": []
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/document/document-element/element-edit-box/element-edit-box.css"],
+  "sourcesContent": ["\r\nbutton{\r\n    margin: 4px 2px;\r\n}\r\n\r\n"],
+  "mappings": ";AACA;AACI,UAAQ,IAAI;AAChB;",
+  "names": []
+}

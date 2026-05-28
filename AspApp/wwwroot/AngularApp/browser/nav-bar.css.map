@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/nav-bar/nav-bar.css"],
+  "sourcesContent": [".full-spacer{\r\n    flex: 1 1 auto;\r\n}\r\n\r\nmat-toolbar{\r\n    /*border-bottom: 1px solid var(--mat-sys-secondary-container);*/\r\n    position: fixed;\r\n    width: 100%;\r\n    height: 56px;\r\n    z-index: 10;\r\n    top: 0;\r\n}\r\n\r\nmat-toolbar.shadow{\r\n    box-shadow: 0px 0px 5px 0px var(--mat-sys-outline-variant);\r\n}\r\n\r\n#mainMenu{\r\n    display: block;\r\n}\r\n\r\n#littleMenu{\r\n    display: none;\r\n}\r\n\r\n/*@media screen and (max-width:500px) {\r\n    #mainMenu{\r\n        display: none;\r\n    }\r\n    \r\n    #littleMenu{\r\n    display: block;\r\n    }\r\n}*/\r\n\r\n.lightDarkBtn{\r\n    margin: 0px 20px 0px 0;\r\n}\r\n\r\n@media screen and (max-width:600px) {\r\n    .lightDarkBtn{\r\n        margin: 0px 0px 0px 0;\r\n    }\r\n}\r\n\r\n/*img#drmona-logo{\r\n    width: 40px;\r\n    height: 40px;\r\n    border-radius: 50%;\r\n    overflow: hidden;\r\n    object-fit: cover;\r\n}*/\r\n"],
+  "mappings": ";AAAA,CAAC;AACG,QAAM,EAAE,EAAE;AACd;AAEA;AAEI,YAAU;AACV,SAAO;AACP,UAAQ;AACR,WAAS;AACT,OAAK;AACT;AAEA,WAAW,CAAC;AACR,cAAY,IAAI,IAAI,IAAI,IAAI,IAAI;AACpC;AAEA,CAAC;AACG,WAAS;AACb;AAEA,CAAC;AACG,WAAS;AACb;AAYA,CAAC;AACG,UAAQ,IAAI,KAAK,IAAI;AACzB;AAEA,OAAO,YAAW,WAAW;AACzB,GALH;AAMO,YAAQ,IAAI,IAAI,IAAI;AACxB;AACJ;",
+  "names": []
+}

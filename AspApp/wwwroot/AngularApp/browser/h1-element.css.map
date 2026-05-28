@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/document/document-element/h1-element/h1-element.css"],
+  "sourcesContent": ["\r\n.headerSection{\r\n    font-weight: 400;\r\n    font-size: 24px;\r\n    margin-top: 40px;\r\n    line-height: 24px;\r\n}\r\n"],
+  "mappings": ";AACA,CAAC;AACG,eAAa;AACb,aAAW;AACX,cAAY;AACZ,eAAa;AACjB;",
+  "names": []
+}

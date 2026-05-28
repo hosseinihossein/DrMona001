@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/document/document-element/document-element.css"],
+  "sourcesContent": ["div.mainDiv{\r\n    position: relative;\r\n}\r\n\r\ndiv.mainDiv.editMode{\r\n    border: 1px solid var(--mat-sys-outline-variant);\r\n    border-radius: 16px;\r\n    padding: 3px;\r\n    margin: 4px;\r\n    transition: /*box-shadow*/all 200ms;\r\n}\r\ndiv.mainDiv.editMode:hover{\r\n    /*background-color: var(--mat-sys-outline-variant);*/\r\n    box-shadow: 0 1px 5px var(--mat-sys-outline);\r\n}"],
+  "mappings": ";AAAA,GAAG,CAAC;AACA,YAAU;AACd;AAEA,GAAG,CAJC,OAIO,CAAC;AACR,UAAQ,IAAI,MAAM,IAAI;AACtB,iBAAe;AACf,WAAS;AACT,UAAQ;AACR,cAA0B,IAAI;AAClC;AACA,GAAG,CAXC,OAWO,CAPC,QAOQ;AAEhB,cAAY,EAAE,IAAI,IAAI,IAAI;AAC9B;",
+  "names": []
+}

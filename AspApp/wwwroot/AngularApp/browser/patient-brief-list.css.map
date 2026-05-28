@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/dialogs/patient-brief-list/patient-brief-list.css"],
+  "sourcesContent": ["\r\na{\r\n    text-decoration: none;\r\n}\r\n#user-div{\r\n    display: flex;\r\n    align-items: center;\r\n    border-bottom: 1px solid var(--mat-sys-outline-variant);\r\n    margin: 4px auto;\r\n    color: var(--mat-sys-primary);\r\n}\r\n#user-div:hover{\r\n    background-color: var(--mat-sys-outline-variant);\r\n}\r\n\r\nmat-card{\r\n    width: 100%;\r\n    margin: 4px auto;\r\n    display: block;\r\n}\r\nmat-card:hover{\r\n    border-color: var(--mat-sys-on-primary-container);\r\n}\r\nmat-card-header{\r\n    padding: 8px;\r\n}\r\n\r\nimg.patient-img{\r\n    width: 48px;\r\n    height: 48px;\r\n    object-fit: cover;\r\n    border-radius: 50%;\r\n    overflow: hidden;\r\n}\r\n\r\nmat-card-title{\r\n    margin: 0 16px;\r\n    font-size: 16px;\r\n}\r\nmat-card-subtitle{\r\n    margin: 0 16px;\r\n    letter-spacing: 1px;\r\n}"],
+  "mappings": ";AACA;AACI,mBAAiB;AACrB;AACA,CAAC;AACG,WAAS;AACT,eAAa;AACb,iBAAe,IAAI,MAAM,IAAI;AAC7B,UAAQ,IAAI;AACZ,SAAO,IAAI;AACf;AACA,CAPC,QAOQ;AACL,oBAAkB,IAAI;AAC1B;AAEA;AACI,SAAO;AACP,UAAQ,IAAI;AACZ,WAAS;AACb;AACA,QAAQ;AACJ,gBAAc,IAAI;AACtB;AACA;AACI,WAAS;AACb;AAEA,GAAG,CAAC;AACA,SAAO;AACP,UAAQ;AACR,cAAY;AACZ,iBAAe;AACf,YAAU;AACd;AAEA;AACI,UAAQ,EAAE;AACV,aAAW;AACf;AACA;AACI,UAAQ,EAAE;AACV,kBAAgB;AACpB;",
+  "names": []
+}

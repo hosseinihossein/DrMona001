@@ -1,0 +1,172 @@
+import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { MatDialogContent, MatDialogActions, MatDialogClose, MatDialogContainer } from "@angular/material/dialog";
+import { MatButton, MatFabButton, MatIconButton } from "@angular/material/button";
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { MatCard, MatCardHeader, MatCardContent } from "@angular/material/card";
+import { MatIcon } from "@angular/material/icon";
+import { WindowService } from '../../shared/services/window-service';
+
+@Component({
+  selector: 'app-edit-hand-draw',
+  imports: [MatDialogContent, MatDialogActions, MatButton, MatDialogClose, MatSlider, MatCard,
+    MatCardContent, MatIcon, MatSliderThumb, MatFabButton],
+  templateUrl: './edit-hand-draw.html',
+  styleUrl: './edit-hand-draw.css',
+})
+export class EditHandDraw implements AfterViewInit {
+  windowService = inject(WindowService);
+
+  dialogContent = viewChild.required(MatDialogContent,{read:ElementRef<Element>});
+  canvasPointer = viewChild.required<ElementRef<HTMLDivElement>>("pointerDiv");
+  myCanvas = viewChild.required<ElementRef<HTMLCanvasElement>>("myCanvas");
+  ctx = signal<CanvasRenderingContext2D|null>(null);
+  
+  // State
+  isDrawing = signal(false);
+  drawMode = signal<"draw"|"erase">("draw");
+  
+  // last smoothed point
+  smoothX = signal(0);
+  smoothY = signal(0);
+
+  // Set default brush size
+  brushSize = signal(2);
+  
+  //
+  //dialogX = signal(0);
+  //dialogY = signal(0);
+
+  constructor(){}
+  ngAfterViewInit(): void {
+    //const dialogRect = this.dialogContent().nativeElement.getBoundingClientRect();
+    //this.dialogX.set(dialogRect.left);
+    //this.dialogY.set(dialogRect.top);
+    
+    this.myCanvas().nativeElement.width = Math.floor(this.windowService.nativeWindow.innerWidth * 7 / 10);
+    this.myCanvas().nativeElement.height = Math.floor(this.windowService.nativeWindow.innerHeight * 6 / 10);
+    
+    this.ctx.set(this.myCanvas().nativeElement.getContext('2d'));
+    if(this.ctx()){
+      //this.ctx()!.lineWidth = this.brushSize();
+      this.ctx()!.lineCap = "round";
+      this.ctx()!.lineJoin = "round";
+      this.ctx()!.strokeStyle = "#333";
+    }
+  }
+
+  // Button handlers
+  toggleDraw() {
+    if(this.drawMode() === "draw"){
+      this.drawMode.set("erase");
+      this.setBrushSize(10);
+    }
+    else{
+      this.drawMode.set("draw");
+      this.setBrushSize(2);
+    }
+  };
+  clearCanvas() {
+    this.ctx()?.reset();
+  };
+
+  setBrushSize(size:number){
+    this.brushSize.set(size <= 0 ? 1 : size);
+    //console.log(this.brushSize());
+  }
+
+  // Pointer position helper
+  getPos(evt:PointerEvent) {
+    const rect = this.myCanvas().nativeElement.getBoundingClientRect();
+    const clientX = evt.clientX;
+    const clientY = evt.clientY;
+
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+      cx: clientX -  rect.left + this.myCanvas().nativeElement.offsetLeft,
+      cy: clientY -  rect.top + this.myCanvas().nativeElement.offsetTop
+    };
+  }
+
+  start(evt:PointerEvent) {
+    evt.preventDefault();
+    this.isDrawing.set(true);
+
+    this.canvasPointer().nativeElement.style.visibility = "visible";
+
+    const pos = this.getPos(evt);
+
+    // Initialize smoothed coords
+    this.smoothX.set(pos.x);
+    this.smoothY.set(pos.y);
+
+    //pointer location
+    this.canvasPointer().nativeElement.style.left = (pos.cx) + "px";
+    this.canvasPointer().nativeElement.style.top = (pos.cy) + "px";
+    //pointer brush size
+    this.canvasPointer().nativeElement.style.width = this.brushSize() + "px";
+    this.canvasPointer().nativeElement.style.height = this.brushSize() + "px";
+
+    // Set draw or erase behavior
+    if (this.drawMode() === "draw") {
+      if(this.ctx()){
+        this.ctx()!.globalCompositeOperation = "source-over";
+        this.ctx()!.strokeStyle = "#333";
+        this.ctx()!.lineWidth = this.brushSize();
+      }
+    } else {
+      if(this.ctx()){
+        this.ctx()!.globalCompositeOperation = "destination-out";  // real erase technique
+        this.ctx()!.strokeStyle = "rgba(0,0,0,1)";
+        this.ctx()!.lineWidth = this.brushSize();
+      }
+    }
+
+    this.ctx()?.beginPath();
+    this.ctx()?.moveTo(pos.x, pos.y);
+  }
+
+  stop(evt:PointerEvent) {
+    evt.preventDefault();
+    this.isDrawing.set(false);
+    this.canvasPointer().nativeElement.style.visibility = "hidden";
+    this.ctx()?.beginPath();
+  }
+
+  draw(evt:PointerEvent) {
+    if (!this.isDrawing()) return;
+    evt.preventDefault();
+
+    const pos = this.getPos(evt);
+
+    // Smooth the movement:
+    this.smoothX.set(this.smoothX() + (pos.x - this.smoothX()) * 0.50);//smoothing
+    this.smoothY.set(this.smoothY() + (pos.y - this.smoothY()) * 0.50);//smoothing
+
+    this.canvasPointer().nativeElement.style.left = (pos.cx) + "px";
+    this.canvasPointer().nativeElement.style.top = (pos.cy) + "px";
+
+    // Draw a quadratic curve toward the smoothed point
+    this.ctx()?.quadraticCurveTo(this.smoothX(), this.smoothY(), this.smoothX(), this.smoothY()); // valid Canvas API [cite:2,4]
+    this.ctx()?.stroke();
+  }
+
+  erase(evt:PointerEvent){
+    if (!this.isDrawing()) return;
+    evt.preventDefault();
+
+    const pos = this.getPos(evt);
+
+    this.canvasPointer().nativeElement.style.left = (pos.cx) + "px";
+    this.canvasPointer().nativeElement.style.top = (pos.cy) + "px";
+
+    this.ctx()?.lineTo(pos.x, pos.y);
+    this.ctx()?.stroke();
+  }
+
+  onPointerLeave(evt:PointerEvent){
+    this.canvasPointer().nativeElement.style.visibility = "hidden";
+    this.isDrawing.set(false);
+  }
+
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/document/document-element/code-element/code-element.css"],
+  "sourcesContent": [":host{\r\n    display: block;\r\n    width: 98%;\r\n}\r\n.codeSection{\r\n    padding: 0px 20px;\r\n    border: 1px solid var(--mat-sys-outline-variant);\r\n    border-radius: 20px;\r\n    position: relative;\r\n    margin: 16px auto;\r\n}\r\n\r\n.codeSection pre{\r\n    overflow: auto;\r\n    padding: 10px 0;\r\n    max-height: 80vh;\r\n}\r\n\r\n.codeSection .copyBtn{\r\n    position: absolute;\r\n    top: -16px;\r\n    right: -16px;\r\n    background-color: var(--mat-sys-surface);\r\n}"],
+  "mappings": ";AAAA;AACI,WAAS;AACT,SAAO;AACX;AACA,CAAC;AACG,WAAS,IAAI;AACb,UAAQ,IAAI,MAAM,IAAI;AACtB,iBAAe;AACf,YAAU;AACV,UAAQ,KAAK;AACjB;AAEA,CARC,YAQY;AACT,YAAU;AACV,WAAS,KAAK;AACd,cAAY;AAChB;AAEA,CAdC,YAcY,CAAC;AACV,YAAU;AACV,OAAK;AACL,SAAO;AACP,oBAAkB,IAAI;AAC1B;",
+  "names": []
+}

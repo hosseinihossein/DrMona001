@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/document/document-element/file-element/file-element.css"],
+  "sourcesContent": ["\r\na{\r\n    display: flex;\r\n    width: fit-content;\r\n    margin: 10px;\r\n    overflow: hidden;\r\n}\r\n"],
+  "mappings": ";AACA;AACI,WAAS;AACT,SAAO;AACP,UAAQ;AACR,YAAU;AACd;",
+  "names": []
+}

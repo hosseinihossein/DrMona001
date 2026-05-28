@@ -19,6 +19,7 @@ import { DocumentPageModel } from '../document-page/document-page';
 import { WindowService } from '../../shared/services/window-service';
 import { HttpEventType } from '@angular/common/http';
 import { MatButton } from '@angular/material/button';
+import { EditHandDraw } from '../../dialogs/edit-hand-draw/edit-hand-draw';
 
 @Component({
   selector: 'app-document-tab',
@@ -143,7 +144,7 @@ export class DocumentTab implements AfterViewInit {
     }
   }
 
-  addNewElement(type:"h1" | "p" | "img" | "code"/* | "file"*/){
+  addNewElement(type:"h1" | "p" | "img" | "code" | "draw"/* | "file"*/){
     if(this.editAllowed() && this.documentPageService.documentPageModel()){
 
       let newElementFormModel: NewElementFormModel|null = null;
@@ -216,6 +217,30 @@ export class DocumentTab implements AfterViewInit {
               Tab:this.documentTabModel().name,
               Type: type,
               Title: result.title,
+              File: result.file,
+            };
+            this.requestForNewElement(newElementFormModel);
+          }
+        });
+      }
+      else if(type === "draw"){
+        const dialogRef = this.dialog.open(EditHandDraw, {
+          panelClass:"my-dialog-panel",
+          maxHeight:"80vh",
+          /*data:{
+          title:"New Image Title", 
+          displayTitle:true,
+          value:"",
+          imageSize:20 * 1024 * 1024,//20 MB
+          }*/
+        });
+        dialogRef.afterClosed().subscribe(result=>{
+          if(result){
+            newElementFormModel = {
+              DocumentGuid: this.documentPageService.documentPageModel()!.guid,
+              Tab:this.documentTabModel().name,
+              Type: "img",
+              Title: "free hand writting",
               File: result.file,
             };
             this.requestForNewElement(newElementFormModel);
