@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { MatDialogContent, MatDialogActions, MatDialogClose, MatDialogContainer } from "@angular/material/dialog";
+import { MatDialogContent, MatDialogActions, MatDialogClose, MatDialogContainer, MatDialogRef } from "@angular/material/dialog";
 import { MatButton, MatFabButton, MatIconButton } from "@angular/material/button";
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { MatCard, MatCardHeader, MatCardContent } from "@angular/material/card";
@@ -14,6 +14,7 @@ import { WindowService } from '../../shared/services/window-service';
   styleUrl: './edit-hand-draw.css',
 })
 export class EditHandDraw implements AfterViewInit {
+  readonly dialogRef = inject(MatDialogRef<EditHandDraw>);
   windowService = inject(WindowService);
 
   dialogContent = viewChild.required(MatDialogContent,{read:ElementRef<Element>});
@@ -32,16 +33,11 @@ export class EditHandDraw implements AfterViewInit {
   // Set default brush size
   brushSize = signal(2);
   
-  //
-  //dialogX = signal(0);
-  //dialogY = signal(0);
+  //drawing image file
+  imageFile = signal<File|null>(null);
 
   constructor(){}
   ngAfterViewInit(): void {
-    //const dialogRect = this.dialogContent().nativeElement.getBoundingClientRect();
-    //this.dialogX.set(dialogRect.left);
-    //this.dialogY.set(dialogRect.top);
-    
     this.myCanvas().nativeElement.width = Math.floor(this.windowService.nativeWindow.innerWidth * 7 / 10);
     this.myCanvas().nativeElement.height = Math.floor(this.windowService.nativeWindow.innerHeight * 6 / 10);
     
@@ -64,11 +60,10 @@ export class EditHandDraw implements AfterViewInit {
       this.drawMode.set("draw");
       this.setBrushSize(2);
     }
-  };
+  }
   clearCanvas() {
     this.ctx()?.reset();
-  };
-
+  }
   setBrushSize(size:number){
     this.brushSize.set(size <= 0 ? 1 : size);
     //console.log(this.brushSize());
@@ -167,6 +162,23 @@ export class EditHandDraw implements AfterViewInit {
   onPointerLeave(evt:PointerEvent){
     this.canvasPointer().nativeElement.style.visibility = "hidden";
     this.isDrawing.set(false);
+  }
+
+  onSubmitImage(){
+    if(this.myCanvas()){
+      this.myCanvas().nativeElement.toBlob((blob)=>{
+        if(blob){
+          let file = new File([blob], "freeHandDraw.webp", {
+            type: blob.type || "application/octet-stream",
+            lastModified: Date.now()
+          });
+          this.imageFile.set(file);
+          if(this.imageFile()){
+            this.dialogRef.close({file:this.imageFile()});
+          }
+        }
+      },"image/webp");
+    }
   }
 
 }

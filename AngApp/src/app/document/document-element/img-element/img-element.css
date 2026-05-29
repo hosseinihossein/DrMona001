@@ -11,6 +11,7 @@ img{
     border-radius: 5px;
     transition: box-shadow 200ms;
     object-fit: contain;
+    background-color: white;
 }
 
 img:hover{

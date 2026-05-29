@@ -225,8 +225,6 @@ export class DocumentTab implements AfterViewInit {
       }
       else if(type === "draw"){
         const dialogRef = this.dialog.open(EditHandDraw, {
-          panelClass:"my-dialog-panel",
-          maxHeight:"80vh",
           /*data:{
           title:"New Image Title", 
           displayTitle:true,
@@ -240,7 +238,7 @@ export class DocumentTab implements AfterViewInit {
               DocumentGuid: this.documentPageService.documentPageModel()!.guid,
               Tab:this.documentTabModel().name,
               Type: "img",
-              Title: "free hand writting",
+              Title: "Written in '" + new Date().toLocaleString("fa-IR") + "'",
               File: result.file,
             };
             this.requestForNewElement(newElementFormModel);

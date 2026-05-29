@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/dialogs/edit-hand-draw/edit-hand-draw.css"],
-  "sourcesContent": ["/*mat-dialog-content{\r\n    width: fit-content;\r\n    height: 100%;\r\n}*/\r\n.mat-mdc-dialog-content {\r\n  max-height: 80vh;\r\n}\r\n\r\n#pointer {\r\n    position: absolute;\r\n    width: 10px; /* default, will update */\r\n    height: 10px;\r\n    border: 1px solid black;\r\n    border-radius: 50%;\r\n    pointer-events: none;  /* so it doesn't block drawing */\r\n    transform: translate(-50%, -50%);\r\n    visibility: hidden;\r\n    /*background-color:black;*/\r\n}\r\n\r\ncanvas#board { \r\n    border: 1px solid var(--mat-sys-on-surface); \r\n    touch-action: none; \r\n    background-color: white;\r\n    /*width: 70vw;\r\n    height: 60vh;*/\r\n}"],
-  "mappings": ";AAIA,CAAC;AACC,cAAY;AACd;AAEA,CAAC;AACG,YAAU;AACV,SAAO;AACP,UAAQ;AACR,UAAQ,IAAI,MAAM;AAClB,iBAAe;AACf,kBAAgB;AAChB,aAAW,UAAU,IAAI,EAAE;AAC3B,cAAY;AAEhB;AAEA,MAAM,CAAC;AACH,UAAQ,IAAI,MAAM,IAAI;AACtB,gBAAc;AACd,oBAAkB;AAGtB;",
-  "names": []
-}

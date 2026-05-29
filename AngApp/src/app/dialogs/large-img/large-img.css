@@ -14,6 +14,7 @@ img{
     margin: auto;
     object-fit: contain;
     cursor: zoom-out;
+    background-color: white;
 }
 /*img.zoomedIn{
     min-width: calc(90vw - 48px);
